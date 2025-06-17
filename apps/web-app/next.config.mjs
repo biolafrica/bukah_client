@@ -1,4 +1,2 @@
-/** @type {import('next').NextConfig} */
-const nextConfig = {};
-
-export default nextConfig;
+import common from "../../next.config.mjs";
+export default common;
