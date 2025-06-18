@@ -5,7 +5,7 @@ import { BaseRepository } from "./baseRepository";
 export class OrderRepository extends BaseRepository{
 
   constructor(restaurantId){
-    super("orders", restaurantId)
+    super("Orders", restaurantId)
   }
 
   async findAllWithFK({searchId = "", branchId = null, status = null, channel = null, dateRange = null, range =[0,9]} = {}){
@@ -42,7 +42,7 @@ export class OrderRepository extends BaseRepository{
     }
 
     query = query.range(range[0], range[1])
-    
+
 
     const statusCountsQuery = supabase
     .from(this.table)

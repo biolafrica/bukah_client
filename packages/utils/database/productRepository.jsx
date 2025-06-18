@@ -4,7 +4,7 @@ import { BaseRepository } from "./baseRepository";
 export class ProductRepository extends BaseRepository{
 
   constructor (restaurantId){
-    super("products", restaurantId)
+    super("Products", restaurantId)
   }
 
   async findAllWithFK({searchTerm="", categoryId = null, branchId=null, range=[0,9]}={}){
@@ -56,5 +56,5 @@ export class ProductRepository extends BaseRepository{
     if(error) throw new Error(`[products] findWithFKById failed: ${error.message}`)
     return data
   }
-  
+
 }
