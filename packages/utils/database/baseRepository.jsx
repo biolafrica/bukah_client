@@ -1,6 +1,4 @@
-import { createClient } from "../supabase/server";
-
-
+import { supabase } from "./supabaseClient"
 
 export class BaseRepository{
 
@@ -9,14 +7,10 @@ export class BaseRepository{
     this.restaurantId = restaurantId
   }
 
-  async supabase(){
-    return await createClient()
-  }
-
   async findAll({filters = {}, range=[0,9], select="*", count = false, search = null, orderBy = null}={}){
-    let query = this.supabase
-    .from(this.table).
-    select(select, count?{count:"exact"}: undefined)
+    let query = supabase
+    .from(this.table)
+    .select(select, count?{count:"exact"}: undefined)
 
     const fullFilter = {...filters}
     if(this.restaurantId)fullFilter.restaurant_id = this.restaurantId
@@ -44,7 +38,7 @@ export class BaseRepository{
   }
 
   async findById(id){
-    const {data, error} = await this.supabase
+    const {data, error} = await supabase
     .from(this.table)
     .select("*")
     .eq("id", id)
@@ -55,7 +49,7 @@ export class BaseRepository{
   }
 
   async create(payload){
-    const {data, error} = await this.supabase
+    const {data, error} = await supabase
     .from(this.table)
     .insert([payload])
     .single()
@@ -65,7 +59,7 @@ export class BaseRepository{
   }
 
   async update(id, payload){
-    const {data, error} = await this.supabase
+    const {data, error} = await supabase
     .from(this.table)
     .update(payload)
     .eq("id", id)
@@ -76,7 +70,7 @@ export class BaseRepository{
   }
 
   async delete(id){
-    const {data, error} = await this.supabase
+    const {data, error} = await supabase
     .from(this.table)
     .delete()
     .eq("id", id)
