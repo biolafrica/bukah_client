@@ -1,0 +1,89 @@
+import { createClient } from "../supabase/server";
+
+
+
+export class BaseRepository{
+
+  constructor(table, restaurantId=null){
+    this.table = table
+    this.restaurantId = restaurantId
+  }
+
+  async supabase(){
+    return await createClient()
+  }
+
+  async findAll({filters = {}, range=[0,9], select="*", count = false, search = null, orderBy = null}={}){
+    let query = this.supabase
+    .from(this.table).
+    select(select, count?{count:"exact"}: undefined)
+
+    const fullFilter = {...filters}
+    if(this.restaurantId)fullFilter.restaurant_id = this.restaurantId
+
+    for(const [key,value]of Object.entries(fullFilter)){
+      query =query.eq(key, value)
+    }
+
+    if(search && search.key && search.value){
+      query = query.ilike(search.key, `%${search.value}%`)
+    }
+
+    if(orderBy && orderBy.key){
+      query = query.order(orderBy.key, {ascending: orderBy.ascending ?? true})
+    }
+
+    if(range){
+      query= query.range(range[0], range[1])
+    }
+
+    const {data, error} = await query
+    if(error) throw new Error(`[${this.table}] findAll failed: ${error.message}`)
+    return data
+
+  }
+
+  async findById(id){
+    const {data, error} = await this.supabase
+    .from(this.table)
+    .select("*")
+    .eq("id", id)
+    .maybeSingle()
+
+    if(error) throw new Error((`[${this.table}] findby ${id} failed: ${error.message}`))
+    return data
+  }
+
+  async create(payload){
+    const {data, error} = await this.supabase
+    .from(this.table)
+    .insert([payload])
+    .single()
+
+    if(error) throw new Error((`[${this.table}] item creation failed: ${error.message}`))
+    return data
+  }
+
+  async update(id, payload){
+    const {data, error} = await this.supabase
+    .from(this.table)
+    .update(payload)
+    .eq("id", id)
+    .single()
+
+    if(error) throw new Error((`[${this.table}] item update failed: ${error.message}`))
+    return data
+  }
+
+  async delete(id){
+    const {data, error} = await this.supabase
+    .from(this.table)
+    .delete()
+    .eq("id", id)
+
+    if(error) throw new Error((`[${this.table}] item ${id} delete failed: ${error.message}`))
+    return data
+  }
+
+
+}
