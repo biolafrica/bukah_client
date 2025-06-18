@@ -54,6 +54,7 @@ export class OrderRepository extends BaseRepository{
     if (dateRange) {
       filters.placed_at = { start: dateRange.start, end: dateRange.end }
     }
+    
 
     return await this.countByGroup('status', filters)
   }

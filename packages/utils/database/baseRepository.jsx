@@ -53,10 +53,17 @@ export class BaseRepository{
 
     if(this.restaurantId)filters.restaurant_id = this.restaurantId
 
-    for(const [key, value] of Object.entries(filters)){
-      if(Array.isArray(value)) query = query.in(key, value)
-      else query = query.eq(key, value)
+    for (const [key, value] of Object.entries(filters)) {
+      if (Array.isArray(value)) {
+        query = query.in(key, value)
+      } else if (value && typeof value === 'object' && ('start' in value || 'end' in value)) {
+        if (value.start) query = query.gte(key, value.start)
+        if (value.end) query = query.lte(key, value.end)
+      } else {
+        query = query.eq(key, value)
+      }
     }
+
 
     if(searchOr.length){
       const orCondition = searchOr.map(field => `${field}.ilike.%${search.value}%`).join(",")
@@ -132,7 +139,7 @@ export class BaseRepository{
   async countByGroup(field, filters= {}){
     let query = supabase.from(this.table).select(`${field}, count:id`, {groupBy: field})
 
-    if(this.restaurantId) filters.restaurant_id =this.restaurantId
+    if(this.restaurantId) filters.restaurant_id= this.restaurantId
     for(const[key, value] of Object.entries(filters)){
       query = query.eq(key, value)
     }
