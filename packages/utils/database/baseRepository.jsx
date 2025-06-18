@@ -79,5 +79,4 @@ export class BaseRepository{
     return data
   }
 
-
 }
