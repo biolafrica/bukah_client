@@ -4,19 +4,22 @@ import { BaseRepository } from "./baseRepository";
 export class ProductRepository extends BaseRepository{
 
   constructor (restaurantId){
-    super("Products", restaurantId)
+    super("products", restaurantId)
   }
 
-  async findAllWithFK({searchTerm="", categoryId = null, branchId=null, range=[0,9]}={}){
+  async findAllWithFK({searchTerm= "", categoryId = null, branchId= null, range= [0,9]} = {}){
 
     const filters = {}
     if(branchId)filters.branch_id = branchId
     if(categoryId)filters.category_id = categoryId
 
-    return await this.findAllWithFKJoin({
-      joins: {branch: "branches(name", category:"product_categories(name)"},
+    return await super.findAllWithFKJoin({
+      joins: {
+        branch: "branches(name)", 
+        category: "product_categories(name)"
+      },
       filters,
-      search: searchTerm? {key: "name", value: searchTerm}:null,
+      search: searchTerm? {key: "name", value: searchTerm} : null,
       range
     })
     
@@ -24,8 +27,8 @@ export class ProductRepository extends BaseRepository{
 
   async findWithFKById(id){
     return await this.findWithFKByIdJoin(id, {
-      branch:"branches(name)",
-      category:"product_categories(name)" 
+      branch: "branches(name)",
+      category: "product_categories(name)" 
     })
   }
 

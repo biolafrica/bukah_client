@@ -4,7 +4,7 @@ import { BaseRepository } from "./baseRepository";
 export class OrderRepository extends BaseRepository{
 
   constructor(restaurantId){
-    super("Orders", restaurantId)
+    super("orders", restaurantId)
   }
 
   async findAllWithFK({
@@ -37,13 +37,13 @@ export class OrderRepository extends BaseRepository{
   }
 
   async findWithFKById(id){
-    return await this.findWithFKByIdJoin(id, {
+    return await super.findWithFKByIdJoin(id, {
       branch: 'branches(name)',
       customer: 'customers(name)',
       accepted_by: 'users(name)',
       processed_by: 'users(name)',
       terminal: 'terminals(name)',
-      order_items: 'order_items(id, quantity, price, product:products(name, price))'
+      order_items: 'order_items(id, quantity, price, product: products(name, price))'
     })
   }
 

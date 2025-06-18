@@ -4,7 +4,7 @@ import { BaseRepository } from "./baseRepository";
 export class UserRepository extends BaseRepository{
 
   constructor(restaurantId){
-    super("Users", restaurantId)
+    super("users", restaurantId)
   }
 
   async findAllWithFK({searchTerm = "", branchId = null, isActive = null, role=null, range = [0, 9]}={}){
@@ -25,7 +25,7 @@ export class UserRepository extends BaseRepository{
   }
 
   async findWithFKById(id){
-    return await this.findWithFKByIdJoin(id, {branch:"branches(name"})
+    return await super.findWithFKByIdJoin(id, { branch:"branches(name)" })
   }
 
   async deactivateUser(id){
