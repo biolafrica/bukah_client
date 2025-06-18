@@ -37,6 +37,42 @@ export class BaseRepository{
 
   }
 
+  async findAllWithFKJoin({
+    joins = {},
+    filters = {},
+    search = null,
+    range = [0,9],
+    count = true,
+    searchOr = []
+  }={}){
+    const selectFields = ["*", ...Object.entries(joins).map(([alias,join])=>`${alias}:${join}`)].join(",")
+
+    let query = supabase
+    .from(this.table)
+    .select(selectFields, count? {count: "exact"}: undefined)
+
+    if(this.restaurantId)filters.restaurant_id = this.restaurantId
+
+    for(const [key, value] of Object.entries(filters)){
+      if(Array.isArray(value)) query = query.in(key, value)
+      else query = query.eq(key, value)
+    }
+
+    if(searchOr.length){
+      const orCondition = searchOr.map(field => `${field}.ilike.%${search.value}%`).join(",")
+      query = query.or(orCondition)
+    }else if(search?.key && search?.value){
+      query = query.ilike(search.key, `%${search.value}%`)
+    }
+
+    query = query.range(range[0], range[1])
+
+    const {data, error, count: total} = await query
+    if(error) throw new Error(`[${this.table}] findAllWithFKJoin failed: ${error.message}`)
+    return {data, count: total}
+    
+  }
+
   async findById(id){
     const {data, error} = await supabase
     .from(this.table)
@@ -46,6 +82,20 @@ export class BaseRepository{
 
     if(error) throw new Error((`[${this.table}] findby ${id} failed: ${error.message}`))
     return data
+  }
+
+  async findWithFKByIdJoin(id, joins){
+    const selectFields = ["*", ...Object.entries(joins).map(([alias,join])=>`${alias}:${join}`)].join(",")
+
+    const {data, error} = await supabase
+    .from(this.table)
+    .select(selectFields)
+    .eq("id", id)
+    .maybeSingle()
+
+    if(error) throw new Error (`[${this.table}] findWithFKById failed: ${error.message}`)
+    return data
+ 
   }
 
   async create(payload){
@@ -76,6 +126,19 @@ export class BaseRepository{
     .eq("id", id)
 
     if(error) throw new Error((`[${this.table}] item ${id} delete failed: ${error.message}`))
+    return data
+  }
+
+  async countByGroup(field, filters= {}){
+    let query = supabase.from(this.table).select(`${field}, count:id`, {groupBy: field})
+
+    if(this.restaurantId) filters.restaurant_id =this.restaurantId
+    for(const[key, value] of Object.entries(filters)){
+      query = query.eq(key, value)
+    }
+
+    const {data, error} = await query
+    if(error) throw new Error (`[${this.table}] countByGroup failed: ${error.message}`)
     return data
   }
 
