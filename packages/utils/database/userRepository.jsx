@@ -27,7 +27,7 @@ export class UserRepository extends BaseRepository{
     })
 
   }
-
+    
   async findWithFKById(id){
     return await super.findWithFKByIdJoin(id, { branch:"branches(name, id)" })
   }

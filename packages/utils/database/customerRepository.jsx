@@ -32,7 +32,7 @@ export class CustomerRepository extends BaseRepository{
       filters.created_at = { start: dateRange.start, end: dateRange.end }
     }
 
-    const search = searchTerm ? { key: 'name', value: searchTerm } : null
+    const search = searchTerm ? ['name', searchTerm] : [];
 
     // Main list
     const { data, count } = await this.findAllWithFKJoin({
@@ -43,17 +43,12 @@ export class CustomerRepository extends BaseRepository{
     })
 
     // Aggregated counts
-    const statusCounts = await this.countByGroup('is_registered')
+    const registeredCounts = await this.countByGroup('is_registered', true)
 
     const stats = {
       total_customers: count,
-      registered_customers: 0,
-      guest_customers: 0
-    }
-
-    for (const row of statusCounts) {
-      if (row.is_registered === true) stats.registered_customers = row.count
-      if (row.is_registered === false) stats.guest_customers = row.count
+      registered_customers: registeredCounts,
+      guest_customers: count - registeredCounts
     }
     
     return { data, count, stats }
@@ -71,36 +66,7 @@ export class CustomerRepository extends BaseRepository{
 
   }
 
-  async getCustomerOrders(customerId, range = [0, 9]){
-    const {data, error} = await supabase
-    .from("orders")
-    .select(`
-      id,
-      total_amount,
-      status,
-      placed_at,
-      order_channel,
-      branch: branches(name),
-      accepted_by: users(name)
-    `, { count: 'exact' })
-    .eq("customer_id", customerId)
-    .order("placed_at", {ascending: false})
-    .range(range[0], range[1])
-
-    if (error) throw new Error (`[customer] getCustomerOrders failed: ${error.message}`)
-    return data
-  }
-
-  async getCustomerFeedbacks(customerId, range = [0, 9]){
-    const {data, error} = await supabase
-    .from("feedbacks")
-    .select("*", { count: 'exact' })
-    .eq("customer_id", customerId)
-    .order("created_at", {ascending: false})
-    .range(range[0], range[1])
-
-    if(error) throw new Error(`[customers] getCustomerFeedbacks failed: ${error.message}`)
-    return data
-  }
+  // Fetch getOrders by a specific customer in Order REpository
+  // Fetch getFeedbacks by a specific customer in Feedback Repository
 
 }

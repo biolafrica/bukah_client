@@ -141,17 +141,26 @@ export class BaseRepository{
     return data
   }
 
-  async countByGroup(field, filters= {}){
-    let query = supabase.from(this.table).select(`${field}, count:id`, {groupBy: field})
-
-    if(this.restaurantId) filters.restaurant_id= this.restaurantId
-    for(const[key, value] of Object.entries(filters)){
-      query = query.eq(key, value)
+  async countByGroup(groupKey, groupValue, extraFilters = {}) {
+    if (this.restaurantId) {
+      extraFilters.restaurant_id = this.restaurantId;
     }
 
-    const {data, error} = await query
-    if(error) throw new Error (`[${this.table}] countByGroup failed: ${error.message}`)
-    return data
+    let query = supabase
+    .from(this.table)
+    .select('*', { count: 'exact', head: true })
+    .eq(groupKey, groupValue);
+
+  
+    for (const [key, value] of Object.entries(extraFilters)) {
+      query = query.eq(key, value);
+    }
+
+    const { count, error } = await query;
+    if (error) {
+      throw new Error(`[${this.table}] countByGroup failed: ${error.message}`);
+    }
+    return count;
   }
 
 }
