@@ -7,7 +7,12 @@ export class UserRepository extends BaseRepository{
     super("users", restaurantId)
   }
 
-  async findAllWithFK({searchTerm = "", branchId = null, isActive = null, role=null, range = [0, 9]}={}){
+  async findAllWithFK({
+    searchTerm = "", 
+    branchId = null, 
+    isActive = null, 
+    role=null, 
+    range = [0, 9]}={}){
 
     const filters = {}
     if (branchId) filters.branch_id = branchId
@@ -15,17 +20,16 @@ export class UserRepository extends BaseRepository{
     if (role) filters.role = role
 
     return await this.findAllWithFKJoin({
-      joins: { branch: 'branches(name)' },
+      joins: { branch: 'branches(name, id)' },
       filters,
-      search: searchTerm ? { key: 'first_name', value: searchTerm } : null,
-      searchOr: ['first_name', 'last_name'],
+      search: searchTerm ? ['first_name', "last_name", searchTerm] : [],
       range
     })
 
   }
 
   async findWithFKById(id){
-    return await super.findWithFKByIdJoin(id, { branch:"branches(name)" })
+    return await super.findWithFKByIdJoin(id, { branch:"branches(name, id)" })
   }
 
   async deactivateUser(id){

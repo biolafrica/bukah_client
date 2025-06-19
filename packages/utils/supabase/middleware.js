@@ -1,7 +1,7 @@
 import { createServer } from "./server";
 import { NextResponse } from "next/server";
 
-export async function withAuth(request) {
+/*export async function withAuth(request) {
   let res = NextResponse.next();
   const supabase = await createServer(request);
 
@@ -14,4 +14,4 @@ export async function withAuth(request) {
   }
 
   return res;
-}
+}*/

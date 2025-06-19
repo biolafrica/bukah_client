@@ -40,10 +40,9 @@ export class BaseRepository{
   async findAllWithFKJoin({
     joins = {},
     filters = {},
-    search = null,
+    search = [],
     range = [0,9],
     count = true,
-    searchOr = []
   }={}){
     const selectFields = ["*", ...Object.entries(joins).map(([alias,join])=>`${alias}:${join}`)].join(",")
 
@@ -64,15 +63,21 @@ export class BaseRepository{
       }
     }
 
+    if(search.length === 2){
+      query = query.ilike(
+        `${search[0]}`, `%${search[1]}%`
+      )
+    }
 
-    if(searchOr.length){
-      const orCondition = searchOr.map(field => `${field}.ilike.%${search.value}%`).join(",")
-      query = query.or(orCondition)
-    }else if(search?.key && search?.value){
-      query = query.ilike(search.key, `%${search.value}%`)
+    if(search.length === 3){
+      query= query.or(
+        `${search[0]}.ilike.%${search[2]}%,`+ 
+        `${search[1]}.ilike.%${search[2]}%`
+      )
     }
 
     query = query.range(range[0], range[1])
+
 
     const {data, error, count: total} = await query
     if(error) throw new Error(`[${this.table}] findAllWithFKJoin failed: ${error.message}`)
