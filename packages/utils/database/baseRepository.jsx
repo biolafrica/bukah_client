@@ -166,4 +166,26 @@ export class BaseRepository{
     return count;
   }
 
+  async deactivate(id){
+    const {data, error} = await supabase
+    .from(this.table)
+    .update({is_active: false})
+    .eq("id", id)
+    .single()
+
+    if(error) throw new Error(`[users] deactivateUser failed: ${error.message}`)
+    return data
+  }
+
+  async reactivate(id){
+    const {data, error} = await supabase
+    .from(this.table)
+    .update({is_active: true})
+    .eq("id", id)
+    .single()
+
+    if(error) throw new Error(`[users] reactivateUser failed: ${error.message}`)
+    return data
+  }
+
 }

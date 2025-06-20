@@ -1,4 +1,3 @@
-import { supabase } from "./supabaseClient";
 import { BaseRepository } from "./baseRepository";
 
 export class BranchRepository extends BaseRepository{
