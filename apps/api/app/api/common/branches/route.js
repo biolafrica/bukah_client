@@ -1,25 +1,27 @@
-import {BranchRepository} from "../../../../../../packages/utils/database/branchRepository";
-import { NextResponse } from "next/server"
+import { NextResponse } from "next/server";
+import * as service from "@/apps/api/src/branches/service"
+import { getBranchesQuerySchema } from "@/apps/api/src/branches/schema";
+import { ZodError } from "zod";
 
-const branch = new BranchRepository(process.env.NEXT_PUBLIC_RESTAURANT_ID)
 
 //Fetch all branches
 export async function GET(request){
   try {
+    const url = new URL(request.url)
+    const raw = Object.fromEntries(url.searchParams.entries())
+    const query = getBranchesQuerySchema.parse(raw)
 
-    const branchData = await request.json();
-    console.log("branch_data", branchData)
-    if(!branchData){
-      return NextResponse.json({error : "invalid branch data"}, {status : 402})
-    }
-
-    const data = await  branch.findAll(branchData)
-    return NextResponse.json({data}, {status : 200})
+    const data = await service.getAllBranches(query)
+    return NextResponse.json({data}, {status: 201})
   
-  } catch (error) {
-      
-    console.error(`error fetching all branches `, error.message)
-    return NextResponse.json({error : "server error"}, {status : 500})
+  } catch (err) {
+
+    if (err instanceof ZodError) {
+      return NextResponse.json({ error: err.errors },{ status: 400 })
+    }
+  
+    console.error("Error fetching branches", err.message)
+    return NextResponse.json({error: "Internal Server Error"}, {status: 500})
     
   }
 
