@@ -19,7 +19,7 @@ export class ProductRepository extends BaseRepository{
         category: "product_categories(name)"
       },
       filters,
-      search: searchTerm? {key: "name", value: searchTerm} : null,
+      search: searchTerm ? ['name', searchTerm] : [],
       range
     })
     

@@ -44,6 +44,7 @@ export class BaseRepository{
     range = [0,9],
     count = true,
   }={}){
+
     const selectFields = ["*", ...Object.entries(joins).map(([alias,join])=>`${alias}:${join}`)].join(",")
 
     let query = supabase
@@ -55,9 +56,11 @@ export class BaseRepository{
     for (const [key, value] of Object.entries(filters)) {
       if (Array.isArray(value)) {
         query = query.in(key, value)
+
       } else if (value && typeof value === 'object' && ('start' in value || 'end' in value)) {
         if (value.start) query = query.gte(key, value.start)
         if (value.end) query = query.lte(key, value.end)
+          
       } else {
         query = query.eq(key, value)
       }

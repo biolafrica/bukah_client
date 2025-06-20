@@ -8,7 +8,7 @@ export class OrderRepository extends BaseRepository{
   }
 
   async findAllWithFK({
-    searchId = "", 
+    searchTerm = "",  
     branchId = null, 
     status = null, 
     channel = null, 
@@ -27,10 +27,11 @@ export class OrderRepository extends BaseRepository{
       joins: {
         branch: 'branches(name)',
         customer: 'customers(name)',
-        accepted_by: 'users(name)'
+        accepted_by: 'users(first_name)',
+    
       },
       filters,
-      search: searchId ? { key: 'id', value: searchId } : null,
+      search: searchTerm ? ['order_code', searchTerm] : [],
       range
     })
 
@@ -40,22 +41,12 @@ export class OrderRepository extends BaseRepository{
     return await super.findWithFKByIdJoin(id, {
       branch: 'branches(name)',
       customer: 'customers(name)',
-      accepted_by: 'users(name)',
-      processed_by: 'users(name)',
+      accepted_by: 'users(first_name)',
+      processed_by: 'users(last_name)',
       terminal: 'terminals(name)',
       order_items: 'order_items(id, quantity, price, product: products(name, price))'
     })
   }
 
-  async fetchStatusCounts(branchId = null, channel = null, dateRange = null) {
-    const filters = {}
-    if (branchId) filters.branch_id = branchId
-    if (channel) filters.order_channel = channel
-    if (dateRange) {
-      filters.placed_at = { start: dateRange.start, end: dateRange.end }
-    }
-    
 
-    return await this.countByGroup('status', filters)
-  }
 }
