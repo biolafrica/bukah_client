@@ -35,36 +35,18 @@ export const updateBranchSchema = createBranchSchema
 })
 
 //schema for querying branches 
-export const getBranchesQuerySchema = z
-.object({
-  page: z
-  .string()
-  .optional()
-  .transform((val) => Number(val) || 1)
-  .refine((n) => n > 0, { message: "page must be >= 1" }),
-
-  perPage: z
-  .string()
-  .optional()
-  .transform((val) => Number(val) || 10)
-  .refine((n) => n > 0 && n <= 100, {
-    message: "perPage must be between 1 and 100",
-  }),
-
-  filter: z
+export const getBranchesQuerySchema = z.object({
+  searchTerm: z.string().optional().default(''),
+  range: z
   .string()
   .optional()
   .transform((str) => {
-    try {
-      return JSON.parse(str)
-    } catch {
-      return undefined
+    if (!str) return [0, 9]
+    const parts = str.split(',').map((n) => Number(n.trim()))
+    if (parts.length !== 2 || parts.some(isNaN)) {
+      throw new Error('range must be two numbers, e.g. "0,9"')
     }
-  })
-  .optional(), 
-
-  searchTerm: z.string().optional(),
-  sortBy: z.string().optional(),
-  sortOrder: z.enum(["asc", "desc"]).optional().default("asc"),
-  
+    return parts
+  }),
 })
+

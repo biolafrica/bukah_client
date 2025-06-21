@@ -2,12 +2,26 @@ import {BranchRepository} from"@/packages/utils/database/branchRepository";
 
 const repo = new BranchRepository(process.env.NEXT_PUBLIC_RESTAURANT_ID)
 
-export async function getAllBranches({query}){
-  return repo.findAll({query})
+export async function getAllBranches({ searchTerm = '', range = [0, 9] } = {}){
+  const [start, end] = range
+  return repo.findAll({
+    skip: start,
+    take: end - start + 1,
+    where: {
+      name: { contains: searchTerm, mode: 'insensitive' }
+    }
+  })
 }
 
-export async function getAllBranchesWithSupervisor({query}){
-  return repo.findAllWithSupervisor({query})
+export async function getAllBranchesWithSupervisor({ searchTerm = '', range = [0, 9] } = {}){
+  const [start, end] = range
+  return repo.findAllWithSupervisor({
+    skip: start,
+    take: end - start + 1,
+    where: {
+      name: { contains: searchTerm, mode: 'insensitive' }
+    }
+  })
 }
 
 export async function getBranchById(branchId){
