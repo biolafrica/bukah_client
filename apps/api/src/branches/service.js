@@ -13,6 +13,7 @@ export async function getAllBranches({ searchTerm = '', range = [0, 9] } = {}){
   })
 }
 
+
 export async function getAllBranchesWithSupervisor({ searchTerm = '', range = [0, 9] } = {}){
   const [start, end] = range
   return repo.findAllWithSupervisor({
@@ -24,25 +25,31 @@ export async function getAllBranchesWithSupervisor({ searchTerm = '', range = [0
   })
 }
 
+
 export async function getBranchById(branchId){
   return repo.findWithSupervisorById(branchId)
 }
+
 
 export async function createBranch(data){
   return repo.create(data)
 }
 
+
 export async function updateBranch(branchId, data){
   return repo.update(branchId, data)
 }
+
 
 export async function deleteBranch(branchId){
   return repo.delete(branchId)
 }
 
+
 export async function deactivateBranch(branchId){
   return repo.deactivate(branchId)
 }
+
 
 export async function activateBranch(branchId){
   return repo.reactivate(branchId)
