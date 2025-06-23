@@ -1,8 +1,9 @@
 import {z} from "zod";
 
-//schema for creating a branch 
-export const createBranchSchema = z.object({
+// The base branch payload, exactly matching the incoming JSON
+export const branchBaseSchema = z.object({
   restaurant_id: z.string().uuid("Invalid restaurant ID"),
+  supervisor_id: z.string().uuid("Invalid supervisor ID"),
   name: z.string().min(1, "Branch name is required"),
   address: z.string().min(2, "Branch address is required"),
   phone: z
@@ -15,12 +16,13 @@ export const createBranchSchema = z.object({
   eatin_charge: z.number().positive("Eat-in charge must be > 0").optional(),
   is_active: z.boolean(),
 })
-.refine(
+
+//schema for creating a branch 
+export const createBranchSchema = branchBaseSchema.refine(
   (data) =>
     data.offers_pickup ? typeof data.pickup_charge === 'number' : true,
   { message: "pickup charge is required when offer pickup is true", path: ['pickup_charge'] }
-)
-.refine(
+).refine(
   (data) =>
     data.offers_eatin ? typeof data.eatin_charge === 'number' : true,
   { message: "eatin charge is required when offers eatin is true", path: ['eatin_charge'] }
@@ -28,9 +30,8 @@ export const createBranchSchema = z.object({
 
 
 //schema for updating a branch (partial but at least one field)
-export const updateBranchSchema = createBranchSchema
-.partial()
-.refine((obj) => Object.keys(obj).length > 0, {
+export const updateBranchSchema = branchBaseSchema.partial().refine(
+  (obj) => Object.keys(obj).length > 0, {
   message: "At least one field must be provided",
 })
 
@@ -46,8 +47,7 @@ const rangeString = z
 export const getBranchesQuerySchema = z.object({
   searchTerm: z.string().optional().default(''),
   range: rangeString,
-})
-.transform(
+}).transform(
   (obj) =>{
     const [start, end] = obj.range.split(',').map((n) => parseInt(n, 10))
     return {
@@ -55,8 +55,7 @@ export const getBranchesQuerySchema = z.object({
       range: [start, end],
     }
   }
-)
-.refine(
+).refine(
   (q) =>
     Number.isInteger(q.range[0]) &&
     Number.isInteger(q.range[1]) &&

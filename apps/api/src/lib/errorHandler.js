@@ -10,13 +10,13 @@ export function handleServerErrorWithZod(err, context) {
     )
   }
 
-  handleServerError(err, context)
+  return handleServerError(err, context)
 }
 
 export function handleServerError(err, context) {
   console.error(`Unexpected error ${context}:`, err.message || err)
   return NextResponse.json(
-    { error: 'Internal Server Error' },
+    { error: err.message },
     { status: 500 }
   )
 }

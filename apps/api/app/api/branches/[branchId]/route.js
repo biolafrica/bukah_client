@@ -1,15 +1,15 @@
 import { NextResponse } from "next/server";
-import { requireRole } from "@/apps/api/middleware/requireRole";
-import { updateBranchSchema } from "@/apps/api/src/branches/schema";
-import * as service from "@/apps/api/src/branches/service"
-import * as error from "@/apps/api/src/lib/errorHandler";
+//import { requireRole } from "@/apps/api/middleware/requireRole";
+import { updateBranchSchema } from "../../../../src/branches/schema";
+import * as service from "../../../../src/branches/service"
+import * as error from "../../../../src/lib/errorHandler";
 
 
-export const middleware = requireRole(["admin", "supervisor"])
+//export const middleware = requireRole(["admin", "supervisor"])
 
-export async function GET({params}){
+export async function GET(___,{params}){
   const {branchId} = params;
-  error.handleParamIdError(branchId, "branch id")
+  error.handleParamIdError(branchId, "branch ID")
 
   try {
     const branch = await service.getBranchById(branchId)
@@ -20,15 +20,14 @@ export async function GET({params}){
     return NextResponse.json({branch},{status : 201})
     
   } catch (err) {
-    error.handleServerError(err, "fetching branch")
+    return error.handleServerError(err, "fetching branch")
     
   }
 }
 
-
 export async function PUT(request, {params}){
   const {branchId} = params;
-  error.handleParamIdError(branchId, "branch id")
+  error.handleParamIdError(branchId, "branch ID")
  
   try {
     const body = await request.json();
@@ -43,17 +42,17 @@ export async function PUT(request, {params}){
 
 }
 
-
-export async function DELETE({params}){
-  const {branchId} = params;
-  error.handleParamIdError(branchId, "branch id")
+export async function DELETE(__, {params}){
+  const {branchId} = await params;
+  error.handleParamIdError(branchId, "branch ID")
  
   try {
     await service.deleteBranch(branchId)
     return NextResponse.json({message : "Branch deleted"}, {status: 201})
     
   } catch (err) {
-    error.handleServerError(err, "deleting branch")
+    return error.handleServerError(err, "deleting branch")
+    // manage deleting branch with active order in frontend
   }
 
 }

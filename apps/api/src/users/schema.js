@@ -18,10 +18,6 @@ export const createUserSchema = z.object({
     "sales" 
   ], "Invalid Role"),
   branch_id:   z.string().uuid("Invalid Restaurant ID"),
-  last_login: z.preprocess(
-    (val) => (typeof val === 'string' ? new Date(val) : val),
-    z.date()
-  ),
   is_active:   z.boolean(),
 })
 
@@ -38,9 +34,11 @@ const rangeString = z
   message: 'range must be two integers, e.g. "0,9"',
 })
 
+
 export const getUsersQuerySchema = z.object({
   searchTerm: z.string().optional().default(''),
   branchId: z.string().optional().default(''),
+  isActive: z.string().optional(),
   role: z.enum(
     [
       'admin',
@@ -58,6 +56,9 @@ export const getUsersQuerySchema = z.object({
     const [start, end] = obj.range.split(',').map((n) => parseInt(n, 10))
     return {
       searchTerm: obj.searchTerm,
+      branchId:   obj.branchId,
+      role:       obj.role,
+      isActive: obj.isActive,
       range: [start, end],
     }
   }

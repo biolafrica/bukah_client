@@ -1,12 +1,12 @@
 import { NextResponse } from "next/server";
-import { requireRole } from "@/apps/api/middleware/requireRole";
-import * as service from "@/apps/api/src/branches/service"
-import * as error from "@/apps/api/src/lib/errorHandler";
+//import { requireRole } from "@/apps/api/middleware/requireRole";
+import * as service from "../../../../../src/branches/service"
+import * as error from "../../../../../src/lib/errorHandler";
 
-export const middleware = requireRole(["admin", "supervisor"])
+//export const middleware = requireRole(["admin"])
 
 // Close branch
-export async function POST({params}){
+export async function POST(__,{params}){
   const {branchId} = params;
   error.handleParamIdError(branchId, "branch id")
  
