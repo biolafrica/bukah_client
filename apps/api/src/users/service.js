@@ -1,6 +1,8 @@
 import {UserRepository} from "../../../../packages/utils/database/userRepository";
+import {BaseRepository} from "../../../../packages/utils/database/baseRepository"
 
 const repo = new UserRepository(process.env.NEXT_PUBLIC_RESTAURANT_ID)
+const sessionRepo = new BaseRepository("user_sessions", process.env.NEXT_PUBLIC_RESTAURANT_ID)
 
 
 export async function getAllStaffWithBranches({searchTerm =null, branchId = null, role =null, isActive = null,  range = [0,9]}){
@@ -35,4 +37,8 @@ export async function suspendStaff(userId){
 export async function reinstateStaff(userId){
   return repo.reactivate(userId)
 
+}
+
+export async function getStaffSessions({filters = {user_id: userId}, count= true}){
+  return sessionRepo.findAll({filters, count})
 }

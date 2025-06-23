@@ -14,6 +14,6 @@ export async function POST(__, {params}){
     return NextResponse.json({data},{status: 201})
     
   } catch (err) {
-    error.handleServerError(err, "reinstating staff")
+    return error.handleServerError(err, "reinstating staff")
   }
 }

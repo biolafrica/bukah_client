@@ -14,9 +14,10 @@ export class BaseRepository{
 
     const fullFilter = {...filters}
     if(this.restaurantId)fullFilter.restaurant_id = this.restaurantId
+    console.log("full filter", fullFilter)
 
     for(const [key,value]of Object.entries(fullFilter)){
-      query =query.eq(key, value)
+      query = query.eq(key, value)
     }
 
     if(search && search.key && search.value){
@@ -31,9 +32,9 @@ export class BaseRepository{
       query= query.range(range[0], range[1])
     }
 
-    const {data, error} = await query
+    const {data, error, count:total} = await query
     if(error) throw new Error(`[${this.table}] findAll failed: ${error.message}`)
-    return data
+    return {data, count:total}
 
   }
 
