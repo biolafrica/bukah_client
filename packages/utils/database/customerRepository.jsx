@@ -34,6 +34,7 @@ export class CustomerRepository extends BaseRepository{
 
     const search = searchTerm ? ['name', searchTerm] : [];
 
+  
     // Main list
     const { data, count } = await this.findAllWithFKJoin({
       filters,
@@ -43,7 +44,7 @@ export class CustomerRepository extends BaseRepository{
     })
 
     // Aggregated counts
-    const registeredCounts = await this.countByGroup('is_registered', true)
+    const registeredCounts = await this.countByGroup('is_registered', true, filters)
 
     const stats = {
       total_customers: count,
@@ -66,7 +67,6 @@ export class CustomerRepository extends BaseRepository{
 
   }
 
-  // Fetch getOrders by a specific customer in Order REpository
-  // Fetch getFeedbacks by a specific customer in Feedback Repository
+  // effect of search and dateRange on count
 
 }

@@ -7,6 +7,7 @@ const feedbackRepo = new BaseRepository("feedbacks", process.env.NEXT_PUBLIC_RES
 
 export async function getAllCustomersWithCounts({searchTerm = "", type = null, dateRange = null, range=[0,9]}){
   return repo.findAllWithCounts({searchTerm, type, dateRange,range})
+  
 }
 
 export async function getAllTopCustomers(){
@@ -25,6 +26,7 @@ export async function getCustomerOrders({filters = {customer_id : customerId}, c
   return orderRepo.findAll({filters, count})
 }
 
+//web
 export async function editCustomerDetails({}){
   return repo.update()
 }

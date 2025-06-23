@@ -61,7 +61,7 @@ export const dateRangeSchema = z
 export const getCustomersQuerySchema = z
 .object({
   searchTerm: z.string().optional().default(''),
-  type:       z.boolean().optional(),
+  type:       z.string().optional(),
   range:      rangeString,
   dateRange:  dateRangeSchema,    // ← optional [Date,Date] or null
 })

@@ -1,8 +1,34 @@
+import { getCustomersQuerySchema } from "../../../src/customers/schema";
+import { getAllCustomersWithCounts } from "../../../src/customers/service";
+import { handleServerErrorWithZod } from "../../../src/lib/errorHandler";
+import { NextResponse } from "next/server";
+//import { requireRole } from "@/apps/api/middleware/requireRole";
+
+//export const middleware = requireRole(["admin", "supervisor"])
+
 export async function GET(request){
   try {
+    const url = new URL(request.url)
+    const raw = Object.fromEntries(url.searchParams.entries())
+    const {
+      searchTerm, 
+      dateRange, 
+      range, 
+      type
+    } = getCustomersQuerySchema.parse(raw)
+
+    const data = await getAllCustomersWithCounts({
+      searchTerm,
+      dateRange,
+      range,
+      type
+    })
     
-  } catch (error) {
+    return NextResponse.json({data},{status: 201})
     
+  } catch (err) {
+    return handleServerErrorWithZod(err, "fetching customers")
+  
   }
 
 }

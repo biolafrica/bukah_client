@@ -13,9 +13,12 @@ export async function GET(__, {params}){
 
     const filters = {user_id : userId}
     const count = true;
-    console.log("filters", filters)
 
     const sessions = await getStaffSessions({filters, count})
+    if(!sessions){
+      return NextResponse.json({error : "sessions not found"}, {status : 404})
+    }
+
     return NextResponse.json({sessions},{status: 201})
     
   } catch (err) {

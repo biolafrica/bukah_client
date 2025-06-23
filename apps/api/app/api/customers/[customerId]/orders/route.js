@@ -1,0 +1,27 @@
+import { getCustomerOrders } from "../../../../../src/customers/service";
+import { NextResponse } from "next/server";
+import * as error from "../../../../../src/lib/errorHandler"
+//import { requireRole } from "@/apps/api/middleware/requireRole";
+
+//export const middleware = requireRole(["admin", "supervisor"])
+
+export async function GET(__, {params}){
+  const {customerId} = params;
+  error.handleParamIdError(customerId, "customer ID")
+
+  try {
+    const filters = {customer_id : customerId};
+    const count = true;
+
+    const orders = await getCustomerOrders({filters, count})
+    if(!orders){
+      return NextResponse.json({error : "customer orders not found"}, {status : 404})
+    }
+
+    return NextResponse.json({orders}, {status: 201})
+    
+  } catch (err) {
+    return error.handleServerError(err, "fetching customer orders")
+  }
+
+}

@@ -185,7 +185,7 @@ export class BaseRepository{
     return data
   }
 
-  
+
   async reactivate(id){
     const {data, error} = await supabase
     .from(this.table)
