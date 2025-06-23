@@ -30,9 +30,5 @@ export async function POST(request){
     
   } catch (err) {
     return handleServerErrorWithZod(err, "adding user")
-    
   }
 }
-
-//suspend and re assign employee
-//fetch user_sessions for that user  

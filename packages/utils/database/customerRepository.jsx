@@ -8,11 +8,11 @@ export class CustomerRepository extends BaseRepository{
 
   async findTopByField(field, limit = 5) {
     const { data, error } = await supabase
-      .from(this.table)
-      .select('*')
-      .eq('restaurant_id', this.restaurantId)
-      .order(field, { ascending: false })
-      .limit(limit)
+    .from(this.table)
+    .select('*')
+    .eq('restaurant_id', this.restaurantId)
+    .order(field, { ascending: false })
+    .limit(limit)
 
     if (error) throw new Error(`[customers] findTopByField(${field}) failed: ${error.message}`)
     return data

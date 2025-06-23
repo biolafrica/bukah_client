@@ -89,6 +89,7 @@ export class BaseRepository{
     
   }
 
+
   async findById(id){
     const {data, error} = await supabase
     .from(this.table)
@@ -100,6 +101,7 @@ export class BaseRepository{
     return data
   }
 
+  
   async findWithFKByIdJoin(id, joins){
     const selectFields = ["*", ...Object.entries(joins).map(([alias,join])=>`${alias}:${join}`)].join(",")
 
@@ -114,6 +116,7 @@ export class BaseRepository{
  
   }
 
+
   async create(payload){
     const {data, error} = await supabase
     .from(this.table)
@@ -123,6 +126,7 @@ export class BaseRepository{
     if(error) throw new Error((`[${this.table}] item creation failed: ${error.message}`))
     return data
   }
+
 
   async update(id, payload){
     const {data, error} = await supabase
@@ -135,6 +139,7 @@ export class BaseRepository{
     return data
   }
 
+
   async delete(id){
     const {data, error} = await supabase
     .from(this.table)
@@ -144,6 +149,7 @@ export class BaseRepository{
     if(error) throw new Error((`[${this.table}] item ${id} delete failed: ${error.message}`))
     return data
   }
+
 
   async countByGroup(groupKey, groupValue, extraFilters = {}) {
     if (this.restaurantId) {
@@ -167,6 +173,7 @@ export class BaseRepository{
     return count;
   }
 
+
   async deactivate(id){
     const {data, error} = await supabase
     .from(this.table)
@@ -178,6 +185,7 @@ export class BaseRepository{
     return data
   }
 
+  
   async reactivate(id){
     const {data, error} = await supabase
     .from(this.table)

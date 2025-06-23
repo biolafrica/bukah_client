@@ -7,15 +7,16 @@ export const branchBaseSchema = z.object({
   name: z.string().min(1, "Branch name is required"),
   address: z.string().min(2, "Branch address is required"),
   phone: z
-    .string()
-    .length(11, "Phone must be exactly 11 digits")
-    .regex(/^\d+$/, "Phone can only contain digits"),
+  .string()
+  .length(11, "Phone must be exactly 11 digits")
+  .regex(/^\d+$/, "Phone can only contain digits"),
   offers_pickup: z.boolean(),
   pickup_charge: z.number().positive("Pickup charge must be > 0").optional(),
   offers_eatin: z.boolean(),
   eatin_charge: z.number().positive("Eat-in charge must be > 0").optional(),
   is_active: z.boolean(),
 })
+
 
 //schema for creating a branch 
 export const createBranchSchema = branchBaseSchema.refine(
@@ -27,7 +28,6 @@ export const createBranchSchema = branchBaseSchema.refine(
     data.offers_eatin ? typeof data.eatin_charge === 'number' : true,
   { message: "eatin charge is required when offers eatin is true", path: ['eatin_charge'] }
 )
-
 
 //schema for updating a branch (partial but at least one field)
 export const updateBranchSchema = branchBaseSchema.partial().refine(
@@ -42,6 +42,7 @@ const rangeString = z
 .refine((s) => /^\d+,\d+$/.test(s), {
   message: 'range must be two integers, e.g. "0,9"',
 })
+
 
 //schema for querying branches 
 export const getBranchesQuerySchema = z.object({
