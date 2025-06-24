@@ -59,8 +59,8 @@ export class BaseRepository{
         query = query.in(key, value)
 
       } else if (value && typeof value === 'object' && ('start' in value || 'end' in value)) {
-        if (value.start) query = query.gte(key, value.start)
-        if (value.end) query = query.lte(key, value.end)
+        if (value.start) query = query.gte(key, value.start.toISOString())
+        if (value.end) query = query.lte(key, value.end.toISOString())
           
       } else {
         query = query.eq(key, value)

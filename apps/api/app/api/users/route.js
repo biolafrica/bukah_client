@@ -10,9 +10,9 @@ export async function GET(request){
   try {
     const url = new URL(request.url)
     const raw = Object.fromEntries(url.searchParams.entries())
-    const {searchTerm, role, searchId, range, isActive} = getUsersQuerySchema.parse(raw)
+    const {searchTerm, role, range, isActive} = getUsersQuerySchema.parse(raw)
 
-    const data = await service.getAllStaffWithBranches({searchTerm, role, searchId, range, isActive})
+    const data = await service.getAllStaffWithBranches({searchTerm, role, range, isActive})
     return NextResponse.json({data}, {status: 201})
 
   } catch (err) {

@@ -29,7 +29,7 @@ export class TransactionRepository extends BaseRepository{
         order: 'orders(id)',
       },
       filters,
-      search: searchId ? ['id', searchId] : [],
+      search: searchId ? ['reference_id', searchId] : [],
       range
     })
 

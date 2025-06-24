@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { makeQuerySchema } from "../lib/queryBuilder";
 
 export const createCustomerSchema = z.object({
   restaurant_id: z.string().uuid("Invalid restaurant ID"),
@@ -21,67 +22,12 @@ export const updateCustomerSchema = createCustomerSchema
   message: "At least one field must be provided"
 })
 
-
-// 1) your existing rangeString
-const rangeString = z
-.string()
-.default('0,9')
-.refine((s) => /^\d+,\d+$/.test(s), {
-  message: 'range must be two integers, e.g. "0,9"',
-})
-
-// 2) the optional dateRangeSchema we defined earlier
-const dateRangeTuple = z
-.string()
-.refine(
-  (s) => /^\d{4}-\d{2}-\d{2},\d{4}-\d{2}-\d{2}$/.test(s),
-  {
-    message:
-    'dateRange must be two dates in YYYY-MM-DD format, e.g. "2025-06-01,2025-06-30"',
-  }
-)
-.transform((s) => {
-  const [startStr, endStr] = s.split(',')
-  return [new Date(startStr), new Date(endStr)]
-})
-.refine(
-  ([start, end]) => !isNaN(start.getTime()) && !isNaN(end.getTime()),
-  { message: 'One or both dates are invalid' }
-)
-.refine(
-  ([start, end]) => start <= end,
-  { message: 'Start date must be before or equal to end date' }
-)
-
-export const dateRangeSchema = z
-.union([dateRangeTuple, z.null()])
-.default(null)
-
-// 3) updated getCustomersQuerySchema
-export const getCustomersQuerySchema = z
-.object({
+const customerFields = {
   searchTerm: z.string().optional().default(''),
   type:       z.string().optional(),
-  range:      rangeString,
-  dateRange:  dateRangeSchema,  // ← optional [Date,Date] or null
-})
-.transform((obj) => {
-  const [start, end] = obj.range.split(',').map((n) => parseInt(n, 10))
-  return {
-    searchTerm: obj.searchTerm,
-    type:       obj.type,
-    range:      [start, end],
-    dateRange:  obj.dateRange, // carries over your [Date,Date] or null
-  }
-})
-.refine(
-  (q) =>
-    Number.isInteger(q.range[0]) &&
-    Number.isInteger(q.range[1]) &&
-    q.range[0] >= 0 &&
-    q.range[1] > q.range[0],
-  {
-    message: 'range values must be non-negative integers with end > start',
-    path: ['range'],
-  }
-)
+}
+
+
+export const getCustomersQuerySchema = makeQuerySchema(customerFields, {withDateRange : true})
+
+

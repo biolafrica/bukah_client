@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { makeQuerySchema } from "../lib/queryBuilder";
 
 export const createUserSchema = z.object({
   restaurant_id:   z.string().uuid("Invalid Restaurant ID"),
@@ -27,51 +28,19 @@ export const updateUserSchema = createUserSchema
   message: "At least one field must be provided"
 })
 
-const rangeString = z
-.string()
-.default('0,9')   
-.refine((s) => /^\d+,\d+$/.test(s), {
-  message: 'range must be two integers, e.g. "0,9"',
-})
-
-
-export const getUsersQuerySchema = z.object({
+const userFields={
   searchTerm: z.string().optional().default(''),
-  branchId: z.string().optional().default(''),
+  branchId: z.string().optional(),
   isActive: z.string().optional(),
-  role: z.enum(
-    [
-      'admin',
-      'supervisor',
-      'waiter',
-      'chef',
-      'bartender',
-      'sales',
-    ]
-  ).optional(),
-  range: rangeString
-})
-.transform(
-  (obj) =>{
-    const [start, end] = obj.range.split(',').map((n) => parseInt(n, 10))
-    return {
-      searchTerm: obj.searchTerm,
-      branchId:   obj.branchId,
-      role:       obj.role,
-      isActive: obj.isActive,
-      range: [start, end],
-    }
-  }
-)
-.refine(
-  (q) =>
-    Number.isInteger(q.range[0]) &&
-    Number.isInteger(q.range[1]) &&
-    q.range[0] >= 0 &&
-    q.range[1] > q.range[0],
-  {
-    message: 'range values must be non-negative integers with end > start',
-    path: ['range'],
-  }
-)
+  role: z.enum([
+    'admin',
+    'supervisor',
+    'waiter',
+    'chef',
+    'bartender',
+    'sales',
+  ]).optional(),
 
+}
+
+export const getUsersQuerySchema = makeQuerySchema(userFields)

@@ -9,8 +9,10 @@ import { NextResponse } from "next/server";
 export async function GET(request){
   try {
     const url = new URL(request.url)
+
     const raw = Object.fromEntries(url.searchParams.entries())
-      const {
+    console.log("raw", raw)
+    const {
       searchTerm, 
       branchId, 
       status, 
@@ -18,6 +20,9 @@ export async function GET(request){
       dateRange, 
       range
     } = getOrdersQuerySchema.parse(raw)
+
+    console.log("dateRange", dateRange)
+    console.log("branch_id", branchId)
 
     const data = await getAllOrders({searchTerm, branchId,status,channel,dateRange, range})
     return NextResponse.json({data},{status: 201})

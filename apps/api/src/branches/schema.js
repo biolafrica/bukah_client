@@ -1,6 +1,7 @@
 import {z} from "zod";
+import { makeQuerySchema } from "../lib/queryBuilder";
 
-// The base branch payload, exactly matching the incoming JSON
+// The base branch payload
 export const branchBaseSchema = z.object({
   restaurant_id: z.string().uuid("Invalid restaurant ID"),
   supervisor_id: z.string().uuid("Invalid supervisor ID"),
@@ -18,7 +19,6 @@ export const branchBaseSchema = z.object({
 })
 
 
-//schema for creating a branch 
 export const createBranchSchema = branchBaseSchema.refine(
   (data) =>
     data.offers_pickup ? typeof data.pickup_charge === 'number' : true,
@@ -29,44 +29,15 @@ export const createBranchSchema = branchBaseSchema.refine(
   { message: "eatin charge is required when offers eatin is true", path: ['eatin_charge'] }
 )
 
-//schema for updating a branch (partial but at least one field)
+
 export const updateBranchSchema = branchBaseSchema.partial().refine(
   (obj) => Object.keys(obj).length > 0, {
   message: "At least one field must be provided",
 })
 
 
-const rangeString = z
-.string()
-.default('0,9')   
-.refine((s) => /^\d+,\d+$/.test(s), {
-  message: 'range must be two integers, e.g. "0,9"',
-})
+export const branchesFields = {
+  searchTerm: z.string().optional().default('')
+}
 
-
-//schema for querying branches 
-export const getBranchesQuerySchema = z.object({
-  searchTerm: z.string().optional().default(''),
-  range: rangeString,
-}).transform(
-  (obj) =>{
-    const [start, end] = obj.range.split(',').map((n) => parseInt(n, 10))
-    return {
-      searchTerm: obj.searchTerm,
-      range: [start, end],
-    }
-  }
-).refine(
-  (q) =>
-    Number.isInteger(q.range[0]) &&
-    Number.isInteger(q.range[1]) &&
-    q.range[0] >= 0 &&
-    q.range[1] > q.range[0],
-  {
-    message: 'range values must be non-negative integers with end > start',
-    path: ['range'],
-  }
-)
-
-
-
+export const getBranchesQuerySchema = makeQuerySchema(branchesFields)
