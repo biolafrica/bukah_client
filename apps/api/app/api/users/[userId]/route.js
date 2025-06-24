@@ -6,10 +6,10 @@ import { NextResponse } from "next/server";
 //export const middleware = requireRole(["admin", "supervisor"])
 
 export async function GET(__, {params}){
-  const {userId} = params;
-  error.handleParamIdError(userId, "user ID")
-
   try {
+    const {userId} = await params;
+    error.handleParamIdError(userId, "user ID")
+
     const user = await service.getStaffById(userId)
     if(!user){
       return NextResponse.json({error : "user not found"}, {status : 404})

@@ -63,7 +63,7 @@ export const getCustomersQuerySchema = z
   searchTerm: z.string().optional().default(''),
   type:       z.string().optional(),
   range:      rangeString,
-  dateRange:  dateRangeSchema,    // ← optional [Date,Date] or null
+  dateRange:  dateRangeSchema,  // ← optional [Date,Date] or null
 })
 .transform((obj) => {
   const [start, end] = obj.range.split(',').map((n) => parseInt(n, 10))
@@ -71,7 +71,7 @@ export const getCustomersQuerySchema = z
     searchTerm: obj.searchTerm,
     type:       obj.type,
     range:      [start, end],
-    dateRange:  obj.dateRange,       // carries over your [Date,Date] or null
+    dateRange:  obj.dateRange, // carries over your [Date,Date] or null
   }
 })
 .refine(

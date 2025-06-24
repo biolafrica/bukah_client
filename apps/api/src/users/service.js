@@ -5,7 +5,13 @@ const repo = new UserRepository(process.env.NEXT_PUBLIC_RESTAURANT_ID)
 const sessionRepo = new BaseRepository("user_sessions", process.env.NEXT_PUBLIC_RESTAURANT_ID)
 
 
-export async function getAllStaffWithBranches({searchTerm =null, branchId = null, role =null, isActive = null,  range = [0,9]}){
+export async function getAllStaffWithBranches({
+  searchTerm =null, 
+  branchId = null, 
+  role =null, 
+  isActive = null,  
+  range = [0,9]
+}){
   return repo.findAllWithFK({searchTerm, branchId, role, range, isActive})
 }
 
