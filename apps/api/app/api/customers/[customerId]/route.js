@@ -11,9 +11,7 @@ export async function GET(__, {params}){
     error.handleParamIdError(customerId, "customer ID")
 
     const customer = await getCustomerById(customerId)
-    if(!customer){
-      return NextResponse.json({error : "customer not found"}, {status : 404})
-    }
+    error.handleFetchByIdError(customer, "customer not found")
 
     return NextResponse.json({customer},{status : 201})
     

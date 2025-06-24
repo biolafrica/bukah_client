@@ -2,14 +2,14 @@ import { updateProductCategoriesSchema } from "@/apps/api/src/product-categories
 import * as error from "../../../../src/lib/errorHandler"
 import * as service from "../../../../src/product-categories/service"
 import { NextResponse } from "next/server";
+import { schemaBodyParser } from "@/apps/api/src/lib/schemaParser";
 
 export async function PUT(request, {params}){
   const {categoryId} = params;
   error.handleParamIdError(categoryId, "category ID")
 
   try {
-    const body = await request.json();
-    const dto = updateProductCategoriesSchema.parse(body)
+    const dto = await schemaBodyParser(request, updateProductCategoriesSchema)
 
     const data = await service.editProductCategory(categoryId, dto)
     return NextResponse.json({data}, {status: 201})

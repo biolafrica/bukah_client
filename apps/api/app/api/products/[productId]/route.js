@@ -1,4 +1,5 @@
 import * as error from "@/apps/api/src/lib/errorHandler";
+import { schemaBodyParser } from "@/apps/api/src/lib/schemaParser";
 import { updateProductSchema } from "@/apps/api/src/products/schema";
 import * as service from "@/apps/api/src/products/service";
 import { NextResponse } from "next/server";
@@ -11,9 +12,7 @@ export async function GET(__,{params}){
     error.handleParamIdError(productId, "product ID")
 
     const product = await service.fetchProductById(productId)
-    if(!product){
-      return NextResponse.json({error : "product not found"}, {status : 404})
-    }
+    error.handleFetchByIdError(product, "product not found")
 
     return NextResponse.json({product},{status : 201})
     
@@ -28,8 +27,7 @@ export async function PUT(request,{params}){
   error.handleParamIdError(productId, "product ID")
 
   try {
-    const body = await request.json();
-    const dto = updateProductSchema(body)
+    const dto = await schemaBodyParser(request, updateProductSchema)
 
     const data = await service.editProduct(productId, dto)
     return NextResponse.json({data}, {status: 201})

@@ -12,9 +12,7 @@ export async function GET(__, {params}){
     error.handleParamIdError(transactionId, "transaction ID")
 
     const transaction = await getTransactionById(transactionId)
-    if(!transaction){
-      return NextResponse.json({error : "transaction not found"}, {status : 404})
-    }
+    error.handleFetchByIdError(transaction, "transaction not found")
 
     return NextResponse.json({transaction},{status : 201})
 

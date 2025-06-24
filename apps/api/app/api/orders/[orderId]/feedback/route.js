@@ -11,9 +11,7 @@ export async function GET(__, {params}){
     error.handleParamIdError(orderId, "order ID")
 
     const feedback = await getOrderFeedback(orderId)
-    if(!feedback){
-      return NextResponse.json({error : "order feedback not found"}, {status : 404})
-    }
+    error.handleFetchByIdError(feedback, "order feedback not found")
 
     return NextResponse.json({feedback},{status : 201})
 

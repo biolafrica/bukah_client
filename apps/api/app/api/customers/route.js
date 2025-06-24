@@ -1,3 +1,4 @@
+import { schemaUrlParser } from "@/apps/api/src/lib/schemaParser";
 import { getCustomersQuerySchema } from "../../../src/customers/schema";
 import { getAllCustomersWithCounts } from "../../../src/customers/service";
 import { handleServerErrorWithZod } from "../../../src/lib/errorHandler";
@@ -8,8 +9,7 @@ import { NextResponse } from "next/server";
 
 export async function GET(request){
   try {
-    const url = new URL(request.url)
-    const raw = Object.fromEntries(url.searchParams.entries())
+    const raw = schemaUrlParser(request)
     const {
       searchTerm, 
       dateRange, 

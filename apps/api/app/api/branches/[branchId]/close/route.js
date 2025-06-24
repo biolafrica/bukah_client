@@ -15,7 +15,7 @@ export async function POST(__,{params}){
     return NextResponse.json({data},{status : 201})
     
   } catch (err) {
-    error.handleServerError(err, "deactivating branch" )
+    return error.handleServerError(err, "deactivating branch" )
     
   }
 }

@@ -1,3 +1,4 @@
+import { schemaBodyParser, schemaUrlParser } from "@/apps/api/src/lib/schemaParser"
 import { handleServerErrorWithZod } from "../../../src/lib/errorHandler"
 import { createProductSchema, getProductQuerySchema } from "../../../src/products/schema"
 import * as service from "../../../src/products/service"
@@ -8,8 +9,7 @@ import { NextResponse } from "next/server"
 
 export async function POST(request){
   try {
-    const body = await request.json()
-    const dto = createProductSchema.parse(body)
+    const dto = await schemaBodyParser(request, createProductSchema)
 
     const data = await service.addProduct(dto)
     return NextResponse.json({data}, {status: 201})
@@ -22,8 +22,7 @@ export async function POST(request){
 
 export async function GET(request){
   try {
-    const url = new URL(request.url)
-    const raw = Object.fromEntries(url.searchParams.entries())
+    const raw = schemaUrlParser(request)
     const {
       searchTerm, 
       categoryId, 

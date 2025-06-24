@@ -11,9 +11,7 @@ export async function GET(__, {params}){
     error.handleParamIdError(orderId, "order ID")
 
     const order = await getOrderbyId(orderId)
-    if(!order){
-      return NextResponse.json({error : "order not found"}, {status : 404})
-    }
+    error.handleFetchByIdError(order, "order not found")
 
     return NextResponse.json({transaction},{status : 201})
 

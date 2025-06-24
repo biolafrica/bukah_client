@@ -6,19 +6,16 @@ import { NextResponse } from "next/server";
 //export const middleware = requireRole(["admin", "supervisor"])
 
 export async function GET(__, {params}){
-  const {customerId} = params;
-  error.handleParamIdError(customerId, "customer ID")
-
   try {
+    const {customerId} = await params;
+    error.handleParamIdError(customerId, "customer ID")
+
     const filters = {customer_id : customerId};
     const count = true;
-    console.log(filters)
 
     const feedbacks = await getCustomerFeedbacks({filters, count})
-    if(!feedbacks){
-      return NextResponse.json({error : "customer feedbacks not found"}, {status : 404})
-    }
-
+    error.handleFetchByIdError(feedbacks, "customer feedbacks not found")
+   
     return NextResponse.json({feedbacks}, {status: 201})
     
   } catch (err) {

@@ -15,9 +15,7 @@ export async function GET(__, {params}){
     const count = true;
 
     const sessions = await getStaffSessions({filters, count})
-    if(!sessions){
-      return NextResponse.json({error : "sessions not found"}, {status : 404})
-    }
+    error.handleFetchByIdError(sessions,"sessions not found")
 
     return NextResponse.json({sessions},{status: 201})
     

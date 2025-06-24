@@ -1,3 +1,4 @@
+import { schemaBodyParser } from "@/apps/api/src/lib/schemaParser";
 import * as error from "../../../../src/lib/errorHandler";
 import { updateUserSchema } from "../../../../src/users/schema";
 import * as service from "../../../../src/users/service"
@@ -11,9 +12,7 @@ export async function GET(__, {params}){
     error.handleParamIdError(userId, "user ID")
 
     const user = await service.getStaffById(userId)
-    if(!user){
-      return NextResponse.json({error : "user not found"}, {status : 404})
-    }
+    error.handleFetchByIdError(user, "user not found")
 
     return NextResponse.json({user},{status : 201})
     
@@ -28,8 +27,7 @@ export async function PUT(request, {params}){
   error.handleParamIdError(userId, "user ID")
 
   try {
-    const body = await request.json();
-    const dto = updateUserSchema.parse(body)
+    const dto = await schemaBodyParser(request, updateUserSchema)
 
     const data = await service.updateStaffDetails(userId, dto)
     return NextResponse.json({data}, {status: 201})

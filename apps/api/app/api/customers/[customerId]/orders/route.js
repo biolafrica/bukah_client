@@ -6,17 +6,15 @@ import * as error from "../../../../../src/lib/errorHandler"
 //export const middleware = requireRole(["admin", "supervisor"])
 
 export async function GET(__, {params}){
-  const {customerId} = params;
-  error.handleParamIdError(customerId, "customer ID")
-
   try {
+    const {customerId} = await params;
+    error.handleParamIdError(customerId, "customer ID")
+    
     const filters = {customer_id : customerId};
     const count = true;
 
     const orders = await getCustomerOrders({filters, count})
-    if(!orders){
-      return NextResponse.json({error : "customer orders not found"}, {status : 404})
-    }
+    error.handleFetchByIdError(orders,"customer orders not found")
 
     return NextResponse.json({orders}, {status: 201})
     

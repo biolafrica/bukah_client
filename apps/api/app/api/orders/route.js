@@ -1,4 +1,5 @@
 //import { requireRole } from "@/apps/api/middleware/requireRole";
+import { schemaUrlParser } from "@/apps/api/src/lib/schemaParser";
 import { handleServerError } from "../../../src/lib/errorHandler";
 import { getOrdersQuerySchema } from "../../../src/orders/schema";
 import { getAllOrders } from "../../../src/orders/service";
@@ -8,10 +9,7 @@ import { NextResponse } from "next/server";
 
 export async function GET(request){
   try {
-    const url = new URL(request.url)
-
-    const raw = Object.fromEntries(url.searchParams.entries())
-    console.log("raw", raw)
+    const raw = schemaUrlParser(request)
     const {
       searchTerm, 
       branchId, 
@@ -21,8 +19,6 @@ export async function GET(request){
       range
     } = getOrdersQuerySchema.parse(raw)
 
-    console.log("dateRange", dateRange)
-    console.log("branch_id", branchId)
 
     const data = await getAllOrders({searchTerm, branchId,status,channel,dateRange, range})
     return NextResponse.json({data},{status: 201})

@@ -26,3 +26,9 @@ export function handleParamIdError(branchId, context){
     return NextResponse.json({error : `${context} is required`}, {status : 400})
   }
 }
+
+export function handleFetchByIdError(user, context){
+  if(!user){
+    return NextResponse.json({error : `${context}`}, {status : 404})
+  }
+}

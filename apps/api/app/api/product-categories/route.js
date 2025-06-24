@@ -3,13 +3,13 @@ import * as service from "../../../src/product-categories/service"
 import { NextResponse } from "next/server"
 import { createProductCategoriesSchema, getProductCategoryQuerySchema } from "../../../src/product-categories/schema"
 import { handleServerErrorWithZod } from "@/apps/api/src/lib/errorHandler"
+import { schemaBodyParser, schemaUrlParser } from "@/apps/api/src/lib/schemaParser"
 
 //export const middleware = requireRole(["admin", "supervisor"])
 
 export async function GET(request){
   try {
-    const url = new URL(request.url)
-    const raw = Object.fromEntries(url.searchParams.entries())
+    const raw = schemaUrlParser(request)
     const { name, range } = getProductCategoryQuerySchema.parse(raw)
 
     const filters = {name}
@@ -26,9 +26,8 @@ export async function GET(request){
 
 export async function POST(request){
   try {
-    const body = await request.json()
-    const dto = createProductCategoriesSchema.parse(body)
-
+    const dto = await schemaBodyParser(request, createProductCategoriesSchema)
+  
     const data = await service.addProductCategory(dto)
     return NextResponse.json({data}, {status: 201})
     

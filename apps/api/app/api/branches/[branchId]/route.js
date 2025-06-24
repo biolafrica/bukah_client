@@ -3,6 +3,7 @@ import { NextResponse } from "next/server";
 import { updateBranchSchema } from "../../../../src/branches/schema";
 import * as service from "../../../../src/branches/service"
 import * as error from "../../../../src/lib/errorHandler";
+import { schemaBodyParser } from "@/apps/api/src/lib/schemaParser";
 
 
 //export const middleware = requireRole(["admin", "supervisor"])
@@ -13,9 +14,7 @@ export async function GET(___,{params}){
     error.handleParamIdError(branchId, "branch ID")
 
     const branch = await service.getBranchById(branchId)
-    if(!branch){
-      return NextResponse.json({error : "branch not found"}, {status : 404})
-    }
+    error.handleFetchByIdError(branch, "branch not found")
 
     return NextResponse.json({branch},{status : 201})
     
@@ -30,14 +29,13 @@ export async function PUT(request, {params}){
   error.handleParamIdError(branchId, "branch ID")
  
   try {
-    const body = await request.json();
-    const dto = updateBranchSchema.parse(body);
+    const dto = await schemaBodyParser(request, updateBranchSchema)
 
     const data = await service.updateBranch(branchId, dto);
     return NextResponse.json({data}, {status: 201})
     
   } catch (err) {
-    error.handleServerErrorWithZod(err, "updating branch")   
+    return error.handleServerErrorWithZod(err, "updating branch")   
   }
 
 }
