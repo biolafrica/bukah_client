@@ -36,8 +36,8 @@ export const updateBranchSchema = branchBaseSchema.partial().refine(
 })
 
 
-export const branchesFields = {
+export const branchFields = {
   searchTerm: z.string().optional().default('')
 }
 
-export const getBranchesQuerySchema = makeQuerySchema(branchesFields)
+export const getBranchesQuerySchema = makeQuerySchema(branchFields)
