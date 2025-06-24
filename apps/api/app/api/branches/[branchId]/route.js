@@ -8,10 +8,10 @@ import * as error from "../../../../src/lib/errorHandler";
 //export const middleware = requireRole(["admin", "supervisor"])
 
 export async function GET(___,{params}){
-  const {branchId} = params;
-  error.handleParamIdError(branchId, "branch ID")
-
   try {
+    const {branchId} = await params;
+    error.handleParamIdError(branchId, "branch ID")
+
     const branch = await service.getBranchById(branchId)
     if(!branch){
       return NextResponse.json({error : "branch not found"}, {status : 404})
