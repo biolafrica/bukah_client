@@ -1,4 +1,4 @@
-import { schemaBodyParser, schemaUrlParser } from "@/apps/api/src/lib/schemaParser"
+import { schemaBodyParser, schemaUrlParser } from "../../../src/lib/schemaParser"
 import { handleServerErrorWithZod } from "../../../src/lib/errorHandler"
 import { createProductSchema, getProductQuerySchema } from "../../../src/products/schema"
 import * as service from "../../../src/products/service"

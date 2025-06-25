@@ -9,10 +9,10 @@ import { NextResponse } from "next/server";
 export async function GET(__, {params}){
   try {
     const {transactionId} = await params;
-    error.handleParamIdError(transactionId, "transaction ID")
+    if(!transactionId)return NextResponse.json({error : "transaction ID is required"}, {status : 400})
 
     const transaction = await getTransactionById(transactionId)
-    error.handleFetchByIdError(transaction, "transaction not found")
+    if(!transaction)return NextResponse.json({error : "transaction not found"}, {status : 404})
 
     return NextResponse.json({transaction},{status : 201})
 

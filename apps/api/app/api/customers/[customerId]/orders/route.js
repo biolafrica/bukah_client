@@ -8,13 +8,13 @@ import * as error from "../../../../../src/lib/errorHandler"
 export async function GET(__, {params}){
   try {
     const {customerId} = await params;
-    error.handleParamIdError(customerId, "customer ID")
+    if(!customerId)return NextResponse.json({error : 'customer ID is required'}, {status : 400})
     
     const filters = {customer_id : customerId};
     const count = true;
 
     const orders = await getCustomerOrders({filters, count})
-    error.handleFetchByIdError(orders,"customer orders not found")
+    if(!orders)return NextResponse.json({error : "customer orders not found"}, {status : 404})
 
     return NextResponse.json({orders}, {status: 201})
     

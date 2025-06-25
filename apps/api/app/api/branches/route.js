@@ -3,7 +3,7 @@ import { NextResponse } from "next/server";
 import { createBranchSchema, getBranchesQuerySchema } from "../../../src/branches/schema";
 import * as service from "../../../src/branches/service"
 import { handleServerErrorWithZod } from "../../../src/lib/errorHandler";
-import { schemaBodyParser, schemaUrlParser } from "@/apps/api/src/lib/schemaParser";
+import { schemaBodyParser, schemaUrlParser } from "../../../src/lib/schemaParser";
 
 //export const middleware = requireRole(["admin", "supervisor"])
 

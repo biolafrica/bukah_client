@@ -8,13 +8,13 @@ import { NextResponse } from "next/server";
 export async function GET(__, {params}){
   try {
     const {customerId} = await params;
-    error.handleParamIdError(customerId, "customer ID")
+    if(!customerId)return NextResponse.json({error : 'customer ID is required'}, {status : 400})
 
     const filters = {customer_id : customerId};
     const count = true;
 
     const feedbacks = await getCustomerFeedbacks({filters, count})
-    error.handleFetchByIdError(feedbacks, "customer feedbacks not found")
+    if(!feedbacks)return NextResponse.json({error : "customer feedbacks not found"}, {status : 404})
    
     return NextResponse.json({feedbacks}, {status: 201})
     

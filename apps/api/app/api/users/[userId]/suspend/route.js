@@ -6,10 +6,10 @@ import { NextResponse } from "next/server";
 //export const middleware = requireRole(["admin"])
 
 export async function POST(__, {params}){
-  const {userId} = params;
-  error.handleParamIdError(userId, "user ID")
-
   try {
+    const {userId} = await params;
+    if(!userId)return NextResponse.json({error : 'user ID is required'}, {status : 400})
+    
     const data = await suspendStaff(userId)
     return NextResponse.json({data}, {status: 201})
     

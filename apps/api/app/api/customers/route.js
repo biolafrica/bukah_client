@@ -1,4 +1,4 @@
-import { schemaUrlParser } from "@/apps/api/src/lib/schemaParser";
+import { schemaUrlParser } from "../../../src/lib/schemaParser";
 import { getCustomersQuerySchema } from "../../../src/customers/schema";
 import { getAllCustomersWithCounts } from "../../../src/customers/service";
 import { handleServerErrorWithZod } from "../../../src/lib/errorHandler";

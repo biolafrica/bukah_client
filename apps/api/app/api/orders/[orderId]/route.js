@@ -8,10 +8,10 @@ import { NextResponse } from "next/server";
 export async function GET(__, {params}){
   try {
     const {orderId} = await params;
-    error.handleParamIdError(orderId, "order ID")
+    if(!orderId)return NextResponse.json({error : 'order ID is required'}, {status : 400})
 
     const order = await getOrderbyId(orderId)
-    error.handleFetchByIdError(order, "order not found")
+    if(!order)return NextResponse.json({error : "order not found"}, {status : 404})
 
     return NextResponse.json({transaction},{status : 201})
 

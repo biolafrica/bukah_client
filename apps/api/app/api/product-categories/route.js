@@ -2,8 +2,8 @@
 import * as service from "../../../src/product-categories/service"
 import { NextResponse } from "next/server"
 import { createProductCategoriesSchema, getProductCategoryQuerySchema } from "../../../src/product-categories/schema"
-import { handleServerErrorWithZod } from "@/apps/api/src/lib/errorHandler"
-import { schemaBodyParser, schemaUrlParser } from "@/apps/api/src/lib/schemaParser"
+import { handleServerErrorWithZod } from "../../../src/lib/errorHandler"
+import { schemaBodyParser, schemaUrlParser } from "../../../src/lib/schemaParser"
 
 //export const middleware = requireRole(["admin", "supervisor"])
 
@@ -12,9 +12,9 @@ export async function GET(request){
     const raw = schemaUrlParser(request)
     const { name, range } = getProductCategoryQuerySchema.parse(raw)
 
-    const filters = {name}
+    const filters = name ? {name} : null
 
-    const data = await service.fetchAllProductCategory({ filters, range })
+    const data = await service.fetchAllProductCategory({filters, range })
 
     return NextResponse.json({data}, {status: 201})
 

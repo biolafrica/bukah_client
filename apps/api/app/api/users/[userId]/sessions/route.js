@@ -6,16 +6,15 @@ import { NextResponse } from "next/server";
 //export const middleware = requireRole(["admin", "supervisor"])
 
 export async function GET(__, {params}){
- 
   try {
     const {userId} = await params;
-    error.handleParamIdError(userId, "user ID")
-
+    if(!userId)return NextResponse.json({error : 'user ID is required'}, {status : 400})
+  
     const filters = {user_id : userId}
     const count = true;
 
     const sessions = await getStaffSessions({filters, count})
-    error.handleFetchByIdError(sessions,"sessions not found")
+    if(!user)return NextResponse.json({error : "user session not found"}, {status : 404})
 
     return NextResponse.json({sessions},{status: 201})
     

@@ -17,8 +17,13 @@ export async function addProductOptions(data){
   return optionrepo.create(data)
 }
 
-export async function fetchAllProductWithCategory(){
-  return repo.findAllWithFK()
+export async function fetchAllProductWithCategory({
+  searchTerm= "",
+  range= [0,9],
+  categoryId = null,
+  branchId= null 
+}){
+  return repo.findAllWithFK({searchTerm,range,categoryId,branchId})
 }
 
 export async function fetchAllProductComponents(){

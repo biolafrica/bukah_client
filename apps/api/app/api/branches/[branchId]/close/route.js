@@ -7,10 +7,10 @@ import * as error from "../../../../../src/lib/errorHandler";
 
 // Close branch
 export async function POST(__,{params}){
-  const {branchId} = params;
-  error.handleParamIdError(branchId, "branch id")
- 
   try {
+    const {branchId} = await params;
+    if(!branchId)return NextResponse.json({error : 'branch ID is required'}, {status : 400})
+    
     const data = await service.deactivateBranch(branchId)
     return NextResponse.json({data},{status : 201})
     

@@ -8,10 +8,10 @@ import { NextResponse } from "next/server";
 export async function GET(__, {params}){
   try {
     const {orderId} = await params;
-    error.handleParamIdError(orderId, "order ID")
+    if(!orderId)return NextResponse.json({error : 'order ID is required'}, {status : 400})
 
     const feedback = await getOrderFeedback(orderId)
-    error.handleFetchByIdError(feedback, "order feedback not found")
+    if(!feedback)return NextResponse.json({error : "order feedback not found"}, {status : 404})
 
     return NextResponse.json({feedback},{status : 201})
 

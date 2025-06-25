@@ -15,7 +15,7 @@ export const updateProductCategoriesSchema = createProductCategoriesSchema
 })
 
 export const productCategoryField = {
-  name : z.string().optional().default('')
+  name : z.string().optional()
 }
 
 export const getProductCategoryQuerySchema = makeQuerySchema(productCategoryField)

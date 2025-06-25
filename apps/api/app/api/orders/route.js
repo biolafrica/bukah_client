@@ -1,5 +1,5 @@
 //import { requireRole } from "@/apps/api/middleware/requireRole";
-import { schemaUrlParser } from "@/apps/api/src/lib/schemaParser";
+import { schemaUrlParser } from "../../../src/lib/schemaParser";
 import { handleServerError } from "../../../src/lib/errorHandler";
 import { getOrdersQuerySchema } from "../../../src/orders/schema";
 import { getAllOrders } from "../../../src/orders/service";

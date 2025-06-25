@@ -1,4 +1,4 @@
-import { schemaBodyParser } from "@/apps/api/src/lib/schemaParser";
+import { schemaBodyParser } from "../../../../src/lib/schemaParser";
 import * as error from "../../../../src/lib/errorHandler";
 import { updateUserSchema } from "../../../../src/users/schema";
 import * as service from "../../../../src/users/service"
@@ -9,10 +9,10 @@ import { NextResponse } from "next/server";
 export async function GET(__, {params}){
   try {
     const {userId} = await params;
-    error.handleParamIdError(userId, "user ID")
+    if(!userId)return NextResponse.json({error : 'user ID is required'}, {status : 400})
 
     const user = await service.getStaffById(userId)
-    error.handleFetchByIdError(user, "user not found")
+    if(!user)return NextResponse.json({error : "user not found"}, {status : 404})
 
     return NextResponse.json({user},{status : 201})
     
@@ -23,14 +23,14 @@ export async function GET(__, {params}){
 
 
 export async function PUT(request, {params}){
-  const {userId} = params;
-  error.handleParamIdError(userId, "user ID")
-
   try {
+    const {userId} = await params;
+    if(!userId)return NextResponse.json({error : 'user ID is required'}, {status : 400})
+  
     const dto = await schemaBodyParser(request, updateUserSchema)
 
     const data = await service.updateStaffDetails(userId, dto)
-    return NextResponse.json({data}, {status: 201})
+    return NextResponse.json({message : "user updated successfully"}, {status: 201})
     
   } catch (err) {
     return error.handleServerErrorWithZod(err, "updating user")
@@ -41,10 +41,11 @@ export async function PUT(request, {params}){
 
 
 export async function DELETE(__, {params}){
-  const {userId} = params;
-  error.handleParamIdError(userId, "user ID")
-
   try {
+    const {userId} = await params;
+    if(!userId)return NextResponse.json({error : 'user ID is required'}, {status : 400})
+  
+
     await service.deleteStaff(userId)
     return NextResponse.json({message : "user deleted"}, {status: 201})
     

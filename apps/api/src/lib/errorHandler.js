@@ -31,4 +31,5 @@ export function handleFetchByIdError(user, context){
   if(!user){
     return NextResponse.json({error : `${context}`}, {status : 404})
   }
+
 }

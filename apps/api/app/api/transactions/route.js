@@ -3,7 +3,7 @@ import { handleServerErrorWithZod } from "../../../src/lib/errorHandler"
 import { getAllTransaction } from "../../../src/transactions/service"
 import { NextResponse } from "next/server"
 import { getTransactionQuerySchema } from "../../../src/transactions/schema"
-import { schemaUrlParser } from "@/apps/api/src/lib/schemaParser"
+import { schemaUrlParser } from "../../../src/lib/schemaParser"
 
 
 //export const middleware = requireRole(["admin", "supervisor"])

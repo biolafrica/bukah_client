@@ -3,7 +3,7 @@ import { NextResponse } from "next/server";
 import { updateBranchSchema } from "../../../../src/branches/schema";
 import * as service from "../../../../src/branches/service"
 import * as error from "../../../../src/lib/errorHandler";
-import { schemaBodyParser } from "@/apps/api/src/lib/schemaParser";
+import { schemaBodyParser } from "../../../../src/lib/schemaParser";
 
 
 //export const middleware = requireRole(["admin", "supervisor"])
@@ -11,10 +11,10 @@ import { schemaBodyParser } from "@/apps/api/src/lib/schemaParser";
 export async function GET(___,{params}){
   try {
     const {branchId} = await params;
-    error.handleParamIdError(branchId, "branch ID")
+    if(!branchId)return NextResponse.json({error : 'branch ID is required'}, {status : 400})
 
     const branch = await service.getBranchById(branchId)
-    error.handleFetchByIdError(branch, "branch not found")
+    if(!branch)return NextResponse.json({error : "brand not found"}, {status : 404})
 
     return NextResponse.json({branch},{status : 201})
     
@@ -25,10 +25,10 @@ export async function GET(___,{params}){
 }
 
 export async function PUT(request, {params}){
-  const {branchId} = params;
-  error.handleParamIdError(branchId, "branch ID")
- 
   try {
+    const {branchId} = await params;
+    if(!branchId)return NextResponse.json({error : 'branch ID is required'}, {status : 400})
+
     const dto = await schemaBodyParser(request, updateBranchSchema)
 
     const data = await service.updateBranch(branchId, dto);
@@ -41,10 +41,10 @@ export async function PUT(request, {params}){
 }
 
 export async function DELETE(__, {params}){
-  const {branchId} = await params;
-  error.handleParamIdError(branchId, "branch ID")
- 
   try {
+    const {branchId} = await params;
+    if(!branchId)return NextResponse.json({error : 'branch ID is required'}, {status : 400})
+
     await service.deleteBranch(branchId)
     return NextResponse.json({message : "Branch deleted"}, {status: 201})
     
