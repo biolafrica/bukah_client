@@ -44,7 +44,8 @@ export class CustomerRepository extends BaseRepository{
     })
 
     // Aggregated counts
-    const registeredCounts = await this.countByGroup('is_registered', true, filters)
+    const searchKey = 'name'
+    const registeredCounts = await this.countByGroup('is_registered', true, {filters,searchKey, searchTerm})
 
     const stats = {
       total_customers: count,

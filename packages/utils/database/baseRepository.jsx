@@ -85,6 +85,7 @@ export class BaseRepository{
 
     const {data, error, count: total} = await query
     if(error) throw new Error(`[${this.table}] findAllWithFKJoin failed: ${error.message}`)
+    
     return {data, count: total}
     
   }
@@ -151,9 +152,9 @@ export class BaseRepository{
   }
 
 
-  async countByGroup(groupKey, groupValue, extraFilters = {}) {
+  async countByGroup(groupKey, groupValue, {filters = {}, searchKey, searchTerm}={}) {
     if (this.restaurantId) {
-      extraFilters.restaurant_id = this.restaurantId;
+      filters.restaurant_id = this.restaurantId;
     }
 
     let query = supabase
@@ -161,8 +162,11 @@ export class BaseRepository{
     .select('*', { count: 'exact', head: true })
     .eq(groupKey, groupValue);
 
+    if(searchTerm){
+      query = query.ilike(searchKey, `%${searchTerm}%`)
+    }
   
-    for (const [key, value] of Object.entries(extraFilters)) {
+    for (const [key, value] of Object.entries(filters)) {
       query = query.eq(key, value);
     }
 

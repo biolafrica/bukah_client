@@ -10,7 +10,7 @@ export const createProductSchema = z.object({
   preparation_time : z.number().positive("Preparation time must be > 0"),
   category_id : z.string().uuid("Invalid Restaurant ID"),
   available: z.boolean(),
-  isActive : z.boolean(),
+  is_active : z.boolean(),
   image_url : z.string().min(1, "Product image is required"),
 
 })

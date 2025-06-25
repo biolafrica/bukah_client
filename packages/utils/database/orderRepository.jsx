@@ -23,7 +23,7 @@ export class OrderRepository extends BaseRepository{
       filters.placed_at = { start: dateRange.start, end: dateRange.end }
     }
 
-    return await this.findAllWithFKJoin({
+    const { data, count } = await this.findAllWithFKJoin({
       joins: {
         branch: 'branches(name)',
         customer: 'customers(name)',
@@ -34,7 +34,19 @@ export class OrderRepository extends BaseRepository{
       search: searchTerm ? ['order_code', searchTerm] : [],
       range
     })
+    
+    const searchKey = 'order_code'
+    const processingCounts = await this.countByGroup('status', "preparing", {filters,searchKey, searchTerm});
+    const completedCounts = await this.countByGroup('status', "ready", {filters,searchKey,searchTerm})
 
+    const stats = {
+      total_order: count,
+      processing_order: processingCounts,
+      completed_order: completedCounts,
+      cancelled_order: count - (processingCounts + completedCounts),
+    }
+
+    return {data, count, stats }
   }
 
   async findWithFKById(id){
