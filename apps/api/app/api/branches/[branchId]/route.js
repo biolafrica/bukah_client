@@ -12,7 +12,7 @@ export async function GET(___,{params}){
   try {
     const {branchId} = await params;
     if(!branchId)return NextResponse.json({error : 'branch ID is required'}, {status : 400})
-
+ 
     const branch = await service.getBranchById(branchId)
     if(!branch)return NextResponse.json({error : "brand not found"}, {status : 404})
 
