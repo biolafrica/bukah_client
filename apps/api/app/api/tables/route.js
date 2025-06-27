@@ -1,5 +1,5 @@
+import { makePostPayloadHandler } from "../../../src/lib/routeHandlers";
 import * as error from "../../../src/lib/errorHandler";
-import { schemaBodyParser } from "../../../src/lib/schemaParser";
 import { createTableSchema } from "../../../src/tables/schema";
 import { addTable, getAllTables } from "../../../src/tables/service";
 import { NextResponse } from "next/server";
@@ -17,17 +17,8 @@ export async function GET(){
   }
 }
 
-
-export async function POST(request){
-  try {
-    const dto = await schemaBodyParser(request, createTableSchema)
-
-    const data = await addTable(dto)
-    return NextResponse.json({data}, {status: 201})
-    
-  } catch (err) {
-    return error.handleServerErrorWithZod(err, "adding table")
-    
-  }
- 
-}
+export const POST = makePostPayloadHandler(
+  addTable,
+  createTableSchema,
+  "adding table"
+)

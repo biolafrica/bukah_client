@@ -1,40 +1,19 @@
-import { schemaBodyParser, schemaUrlParser } from "../../../src/lib/schemaParser"
-import { handleServerErrorWithZod } from "../../../src/lib/errorHandler"
 import { createProductSchema, getProductQuerySchema } from "../../../src/products/schema"
-import * as service from "../../../src/products/service"
+import {fetchAllProductWithCategory} from "../../../src/products/service"
 //import { requireRole } from "@/apps/api/middleware/requireRole"
-import { NextResponse } from "next/server"
+import { makeGetListHandler, makePostPayloadHandler } from "../../../src/lib/routeHandlers"
+
 
 //export const middleware = requireRole(["admin", "supervisor"])
 
-export async function POST(request){
-  try {
-    const dto = await schemaBodyParser(request, createProductSchema)
+export const POST = makePostPayloadHandler(
+  service.addProduct,
+  createProductSchema,
+  "adding product"
+)
 
-    const data = await service.addProduct(dto)
-    return NextResponse.json({data}, {status: 201})
-    
-  } catch (err) {
-    return handleServerErrorWithZod(err, "adding product")
-  }
-}
-
-
-export async function GET(request){
-  try {
-    const raw = schemaUrlParser(request)
-    const {
-      searchTerm, 
-      categoryId, 
-      branchId, 
-      range 
-    } = getProductQuerySchema.parse(raw)
-
-    const data = await service.fetchAllProductWithCategory({ searchTerm,categoryId,branchId,range })
-
-    return NextResponse.json({data}, {status: 201})
-    
-  } catch (err) {
-    return handleServerErrorWithZod(err, "fetching products")
-  }
-}
+export const GET = makeGetListHandler(
+  fetchAllProductWithCategory,
+  getProductQuerySchema,
+  "fetching products"
+)

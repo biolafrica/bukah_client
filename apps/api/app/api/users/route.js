@@ -1,33 +1,18 @@
 //import { requireRole } from "@/apps/api/middleware/requireRole";
-import { NextResponse } from "next/server";
 import { createUserSchema, getUsersQuerySchema } from "../../../src/users/schema";
 import * as service from "../../../src/users/service"
-import { handleServerErrorWithZod } from "../../../src/lib/errorHandler";
-import { schemaBodyParser, schemaUrlParser } from "../../../src/lib/schemaParser";
+import { makeGetListHandler, makePostPayloadHandler } from "../../../src/lib/routeHandlers";
 
 //export const middleware = requireRole(["admin", "supervisor"])
 
-export async function GET(request){
-  try {
-    const raw = schemaUrlParser(request)
-    const {searchTerm, role, range, isActive} = getUsersQuerySchema.parse(raw)
+export const GET = makeGetListHandler(
+  service.getAllStaffWithBranches,
+  getUsersQuerySchema,
+  "fetching staff lists"
+)
 
-    const data = await service.getAllStaffWithBranches({searchTerm, role, range, isActive})
-    return NextResponse.json({data}, {status: 201})
-
-  } catch (err) {
-    return handleServerErrorWithZod(err, "fetching staff lists")
-  }
-}
-
-export async function POST(request){
-  try {
-    const dto = await schemaBodyParser(request, createUserSchema)
-
-    const data = await service.addStaff(dto)
-    return NextResponse.json({data}, {status: 201})
-    
-  } catch (err) {
-    return handleServerErrorWithZod(err, "adding user")
-  }
-}
+export const POST = makePostPayloadHandler(
+  service.addStaff,
+  createUserSchema,
+  "adding user"
+)

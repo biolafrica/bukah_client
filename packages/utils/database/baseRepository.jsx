@@ -122,10 +122,11 @@ export class BaseRepository{
     const {data, error} = await supabase
     .from(this.table)
     .insert([payload])
+    .select('id')  
     .single()
 
     if(error) throw new Error((`[${this.table}] item creation failed: ${error.message}`))
-    return data
+    return data.id
   }
 
 
@@ -133,11 +134,12 @@ export class BaseRepository{
     const {data, error} = await supabase
     .from(this.table)
     .update(payload)
+    .select('id')  
     .eq("id", id)
     .single()
 
     if(error) throw new Error((`[${this.table}] item update failed: ${error.message}`))
-    return data
+    return data.id
   }
 
 
@@ -171,9 +173,8 @@ export class BaseRepository{
     }
 
     const { count, error } = await query;
-    if (error) {
-      throw new Error(`[${this.table}] countByGroup failed: ${error.message}`);
-    }
+    if (error) {throw new Error(`${this.table} countByGroup failed: ${error.message}`)}
+
     return count;
   }
 
@@ -185,7 +186,7 @@ export class BaseRepository{
     .eq("id", id)
     .single()
 
-    if(error) throw new Error(`[users] deactivateUser failed: ${error.message}`)
+    if(error) throw new Error(`${this.table} deactivation failed: ${error.message}`)
     return data
   }
 
@@ -197,7 +198,7 @@ export class BaseRepository{
     .eq("id", id)
     .single()
 
-    if(error) throw new Error(`[users] reactivateUser failed: ${error.message}`)
+    if(error) throw new Error(`${this.table} reactivation failed: ${error.message}`)
     return data
   }
 

@@ -3,7 +3,8 @@ import * as service from "../../../src/product-categories/service"
 import { NextResponse } from "next/server"
 import { createProductCategoriesSchema, getProductCategoryQuerySchema } from "../../../src/product-categories/schema"
 import { handleServerErrorWithZod } from "../../../src/lib/errorHandler"
-import { schemaBodyParser, schemaUrlParser } from "../../../src/lib/schemaParser"
+import { schemaUrlParser } from "../../../src/lib/schemaParser"
+import { makePostPayloadHandler } from "../../../src/lib/routeHandlers"
 
 //export const middleware = requireRole(["admin", "supervisor"])
 
@@ -24,16 +25,8 @@ export async function GET(request){
 
 }
 
-export async function POST(request){
-  try {
-    const dto = await schemaBodyParser(request, createProductCategoriesSchema)
-  
-    const data = await service.addProductCategory(dto)
-    return NextResponse.json({data}, {status: 201})
-    
-  } catch (err) {
-    return handleServerErrorWithZod(err, "adding category")
-    
-  }
-
-}
+export const POST = makePostPayloadHandler(
+  service.addProductCategory,
+  createProductCategoriesSchema,
+  "adding category"
+)
