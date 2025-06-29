@@ -1,8 +1,6 @@
-import { NextResponse } from "next/server";
 //import { requireRole } from "@/apps/api/middleware/requireRole";
 import { updateBranchSchema } from "../../../../src/branches/schema";
 import * as service from "../../../../src/branches/service"
-import * as error from "../../../../src/lib/errorHandler";
 import * as helper from "../../../../src/lib/routeHandlers";
 
 

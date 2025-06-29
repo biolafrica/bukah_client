@@ -36,7 +36,8 @@ export function makePostPayloadHandler(creater, schema, context){
 
 export function makeGetByIdHandler(paramName, fetcher, context){
   return async function GET(_, { params }) {
-    const id = await params[paramName]
+    const ids = await params;
+    const id = ids[paramName];
     if (!id) {
       return NextResponse.json(
         { error: `${paramName} is required` },
@@ -66,7 +67,8 @@ export function makeGetByIdHandler(paramName, fetcher, context){
 export function makePutByIdHandler(paramName, creater, schema, context){
   return async function PUT(request, {params}){
     try {
-      const id = await params[paramName]
+      const ids = await params;
+      const id = ids[paramName];
       if (!id) {
         return NextResponse.json(
           { error: `${paramName} is required` },
@@ -90,7 +92,8 @@ export function makePutByIdHandler(paramName, creater, schema, context){
 export function makeDeleteByIdHandler(paramName, deleter, context){
   return async function DELETE(_, { params }) {
     try {
-      const id = await params[paramName]
+      const ids = await params;
+      const id = ids[paramName];
       if (!id) {
         return NextResponse.json(
           { error: `${paramName} is required` },

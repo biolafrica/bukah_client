@@ -10,10 +10,7 @@ export async function GET(__, {params}){
     const {customerId} = await params;
     if(!customerId)return NextResponse.json({error : 'customer ID is required'}, {status : 400})
 
-    const filters = {customer_id : customerId};
-    const count = true;
-
-    const feedbacks = await getCustomerFeedbacks({filters, count})
+    const feedbacks = await getCustomerFeedbacks(customerId)
     if(!feedbacks)return NextResponse.json({error : "customer feedbacks not found"}, {status : 404})
    
     return NextResponse.json({feedbacks}, {status: 201})

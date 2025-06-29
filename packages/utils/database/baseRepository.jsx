@@ -1,56 +1,34 @@
 import { supabase } from "./supabaseClient"
 
-export class BaseRepository{
+export class BaseRepo{
 
   constructor(table, restaurantId=null){
     this.table = table
     this.restaurantId = restaurantId
   }
 
-  async findAll({filters = {}, range=[0,9], select="*", count = false, search = null, orderBy = null}={}){
-    let query = supabase
-    .from(this.table)
-    .select(select, count?{count:"exact"}: undefined)
-
-    const fullFilter = {...filters}
-    if(this.restaurantId)fullFilter.restaurant_id = this.restaurantId
-    console.log("full filter", fullFilter)
-
-    for(const [key,value]of Object.entries(fullFilter)){
-      query = query.eq(key, value)
-    }
-
-    if(search && search.key && search.value){
-      query = query.ilike(search.key, `%${search.value}%`)
-    }
-
-    if(orderBy && orderBy.key){
-      query = query.order(orderBy.key, {ascending: orderBy.ascending ?? true})
-    }
-
-    if(range){
-      query= query.range(range[0], range[1])
-    }
-
-    const {data, error, count:total} = await query
-    if(error) throw new Error(`[${this.table}] findAll failed: ${error.message}`)
-    return {data, count:total}
-
-  }
-
-  async findAllWithFKJoin({
+  async findAll ({
     joins = {},
     filters = {},
     search = [],
     range = [0,9],
     count = true,
+    select = "*",
+    orderBy = null
   }={}){
 
-    const selectFields = ["*", ...Object.entries(joins).map(([alias,join])=>`${alias}:${join}`)].join(",")
+    let selectFields = select
+    const joinKeys = Object.keys(joins)
+    if (joinKeys.length > 0) {
+      const joinClauses = joinKeys.map((alias) => `${alias}:${joins[alias]}`)
+      selectFields = [select, ...joinClauses].join(',')
+    }
 
+    
+    const selectOpts = count ? { count: 'exact' } : undefined
     let query = supabase
     .from(this.table)
-    .select(selectFields, count? {count: "exact"}: undefined)
+    .select(selectFields, selectOpts)
 
     if(this.restaurantId)filters.restaurant_id = this.restaurantId
 
@@ -58,53 +36,61 @@ export class BaseRepository{
       if (Array.isArray(value)) {
         query = query.in(key, value)
 
-      } else if (value && typeof value === 'object' && ('start' in value || 'end' in value)) {
-        if (value.start) query = query.gte(key, value.start.toISOString())
-        if (value.end) query = query.lte(key, value.end.toISOString())
-          
+      } else if (
+        value &&
+        typeof value === 'object' &&
+        (value.start !== undefined || value.end !== undefined)
+
+      ) {
+        if (value.start) {
+          query = query.gte(key, value.start.toISOString())
+        }if (value.end) {
+          query = query.lte(key, value.end.toISOString())
+        }
+
       } else {
         query = query.eq(key, value)
       }
     }
 
-    if(search.length === 2){
-      query = query.ilike(
-        `${search[0]}`, `%${search[1]}%`
-      )
+
+    if (search.length === 2) {
+      const [field, term] = search
+      query = query.ilike(field, `%${term}%`)
+
+    }else if (search.length === 3) {
+      const [a, b, term] = search
+      query = query.or(`${a}.ilike.%${term}%,${b}.ilike.%${term}%`)
+    }
+    
+
+    if (orderBy && orderBy.key) {
+      query = query.order(orderBy.key, {ascending: orderBy.ascending ?? true,})
     }
 
-    if(search.length === 3){
-      query= query.or(
-        `${search[0]}.ilike.%${search[2]}%,`+ 
-        `${search[1]}.ilike.%${search[2]}%`
-      )
-    }
 
     query = query.range(range[0], range[1])
 
 
-    const {data, error, count: total} = await query
-    if(error) throw new Error(`[${this.table}] findAllWithFKJoin failed: ${error.message}`)
-    
-    return {data, count: total}
-    
+    const { data, error, count: total } = await query
+    if (error) {
+      throw new Error(`${this.table} findAll failed: ${error.message}`)
+    }
+
+
+    return { data, count: total }
   }
 
 
-  async findById(id){
-    const {data, error} = await supabase
-    .from(this.table)
-    .select("*")
-    .eq("id", id)
-    .maybeSingle()
+  async findById(id, joins = {}, select = "*"){
+    if (!id) {throw new Error(`${this.table} findById requires an ID`)}
 
-    if(error) throw new Error((`[${this.table}] findby ${id} failed: ${error.message}`))
-    return data
-  }
-
-  
-  async findWithFKByIdJoin(id, joins){
-    const selectFields = ["*", ...Object.entries(joins).map(([alias,join])=>`${alias}:${join}`)].join(",")
+    let selectFields = select
+    const joinKeys = Object.keys(joins)
+    if (joinKeys.length > 0) {
+      const joinClauses = joinKeys.map((alias) => `${alias}:${joins[alias]}`)
+      selectFields = [select, ...joinClauses].join(',')
+    }
 
     const {data, error} = await supabase
     .from(this.table)
@@ -112,7 +98,7 @@ export class BaseRepository{
     .eq("id", id)
     .maybeSingle()
 
-    if(error) throw new Error (`[${this.table}] findWithFKById failed: ${error.message}`)
+    if(error) throw new Error (`${this.table} findById failed: ${error.message}`)
     return data
  
   }
@@ -125,7 +111,7 @@ export class BaseRepository{
     .select('id')  
     .single()
 
-    if(error) throw new Error((`[${this.table}] item creation failed: ${error.message}`))
+    if(error) throw new Error((`${this.table} item creation failed: ${error.message}`))
     return data.id
   }
 
@@ -138,7 +124,7 @@ export class BaseRepository{
     .eq("id", id)
     .single()
 
-    if(error) throw new Error((`[${this.table}] item update failed: ${error.message}`))
+    if(error) throw new Error((`${this.table} item update failed: ${error.message}`))
     return data.id
   }
 
@@ -149,16 +135,12 @@ export class BaseRepository{
     .delete()
     .eq("id", id)
 
-    if(error) throw new Error((`[${this.table}] item ${id} delete failed: ${error.message}`))
+    if(error) throw new Error((`${this.table} item ${id} delete failed: ${error.message}`))
     return data
   }
 
-
+  
   async countByGroup(groupKey, groupValue, {filters = {}, searchKey, searchTerm}={}) {
-    if (this.restaurantId) {
-      filters.restaurant_id = this.restaurantId;
-    }
-
     let query = supabase
     .from(this.table)
     .select('*', { count: 'exact', head: true })
@@ -173,8 +155,9 @@ export class BaseRepository{
     }
 
     const { count, error } = await query;
-    if (error) {throw new Error(`${this.table} countByGroup failed: ${error.message}`)}
-
+    if (error) {
+      throw new Error(`${this.table} countByGroup failed: ${error.message}`);
+    }
     return count;
   }
 

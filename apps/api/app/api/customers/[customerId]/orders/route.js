@@ -9,11 +9,8 @@ export async function GET(__, {params}){
   try {
     const {customerId} = await params;
     if(!customerId)return NextResponse.json({error : 'customer ID is required'}, {status : 400})
-    
-    const filters = {customer_id : customerId};
-    const count = true;
 
-    const orders = await getCustomerOrders({filters, count})
+    const orders = await getCustomerOrders(customerId)
     if(!orders)return NextResponse.json({error : "customer orders not found"}, {status : 404})
 
     return NextResponse.json({orders}, {status: 201})
