@@ -1,20 +1,16 @@
-import {ProductRepository } from "../../../../packages/utils/database/productRepository"
-import {BaseRepository } from "../../../../packages/utils/database/baseRepository"
+import { repos } from "../lib/repos"
 
-const repo = new ProductRepository(process.env.NEXT_PUBLIC_RESTAURANT_ID)
-const componentRepo = new BaseRepository("product_components",process.env.NEXT_PUBLIC_RESTAURANT_ID)
-const optionrepo = new BaseRepository("product_component_option",process.env.NEXT_PUBLIC_RESTAURANT_ID)
 
 export async function addProduct(data){
-  return repo.create(data)
+  return repos.product.create(data)
 }
 
 export async function addProductComponents(data){
-  return componentRepo.create(data)
+  return repos.component.create(data)
 }
 
 export async function addProductOptions(data){
-  return optionrepo.create(data)
+  return repos.option.create(data)
 }
 
 export async function fetchAllProductWithCategory({
@@ -22,24 +18,41 @@ export async function fetchAllProductWithCategory({
   range= [0,9],
   categoryId = null,
   branchId= null 
-}){
-  return repo.findAllWithFK({searchTerm,range,categoryId,branchId})
+}={}){
+  const filters = {}
+  if(branchId)filters.branch_id = branchId
+  if(categoryId)filters.category_id = categoryId
+
+  const search = searchTerm ? ['name', searchTerm] : []
+
+  const joins = {
+    branch: "branches(name)", 
+    category: "product_categories(name)"
+  }
+
+  return repos.product.findAll({search,filters,range,joins})
 }
 
+
 export async function fetchAllProductComponents(){
-  return componentRepo.findAll()
+  return repos.component.findAll()
 }
 
 export async function fetchProductById(productId){
-  return repo.findWithFKById(productId)
+  const joins = {
+    branch: "branches(name)", 
+    category: "product_categories(name)"
+  }
+
+  return repos.product.findById(productId, joins)
 }
 
 export async function editProduct(productId, data){
-  return repo.update(productId, data)
+  return repos.product.update(productId, data)
 }
 
 export async function deleteProduct(productId){
-  return repo.delete(productId)
+  return repos.product.delete(productId)
 }
 
 export async function deleteProductComponents(){}

@@ -1,9 +1,4 @@
-import {UserRepository} from "../../../../packages/utils/database/userRepository";
-import {BaseRepository} from "../../../../packages/utils/database/baseRepository"
-
-const repo = new UserRepository(process.env.NEXT_PUBLIC_RESTAURANT_ID)
-const sessionRepo = new BaseRepository("user_sessions", process.env.NEXT_PUBLIC_RESTAURANT_ID)
-
+import { repos } from "../lib/repos";
 
 export async function getAllStaffWithBranches({
   searchTerm =null, 
@@ -11,40 +6,52 @@ export async function getAllStaffWithBranches({
   role =null, 
   isActive = null,  
   range = [0,9]
-}){
-  return repo.findAllWithFK({searchTerm, branchId, role, range, isActive})
+}={}){
+  const filters = {}
+
+  if (branchId) filters.branch_id = branchId
+  if (isActive !== null) filters.is_active = isActive
+  if (role) filters.role = role
+
+  const joins = { branch: 'branches(name, id)' }
+
+  const search = searchTerm ? ['first_name', "last_name", searchTerm] : []
+  
+  return repos.user.findAll({filters,joins,search,range})
 }
 
 
 export async function getStaffById(userId){
-  return repo.findWithFKById(userId)
+  const joins = { branch: 'branches(name, id)' }
+
+  return repos.user.findById(userId, joins)
 }
 
-
 export async function addStaff(data){
-  return repo.create(data)
+  return repos.user.create(data)
 }
 
 
 export async function updateStaffDetails(userId, data){
-  return repo.update(userId, data)
+  return repos.user.update(userId, data)
 }
 
 
 export async function deleteStaff(userId){
-  return repo.delete(userId)
+  return repos.user.delete(userId)
 }
 
 export async function suspendStaff(userId){
-  return repo.deactivate(userId)
+  return repos.user.deactivate(userId)
 }
 
 
 export async function reinstateStaff(userId){
-  return repo.reactivate(userId)
+  return repos.user.reactivate(userId)
 
 }
 
-export async function getStaffSessions({filters = {user_id: userId}, count= true}){
-  return sessionRepo.findAll({filters, count})
+export async function getStaffSessions(userId,{range=[0,9]}={}){
+  const filters = {user_id : userId}
+  return repos.session.findAll({filters, range})
 }

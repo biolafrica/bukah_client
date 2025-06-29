@@ -1,8 +1,4 @@
-import {BaseRepo} from "../../../../packages/utils/database/baseRepository";
-
-
-const feedbackRepo = new BaseRepo("feedbacks",process.env.NEXT_PUBLIC_RESTAURANT_ID )
-const orderRepo = new BaseRepo("orders",process.env.NEXT_PUBLIC_RESTAURANT_ID )
+import { repos } from "../lib/repos";
 
 export async function getAllOrders({
   searchTerm = "",
@@ -36,9 +32,9 @@ export async function getAllOrders({
       processingCounts,
       completedCounts 
     ] = await Promise.all([
-      orderRepo.findAll({filters, joins, search, range}),
-      orderRepo.countByGroup('status', "preparing", {filters,searchKey, searchTerm}),
-      orderRepo.countByGroup('status', "ready", {filters,searchKey,searchTerm})
+      repos.order.findAll({filters, joins, search, range}),
+      repos.order.countByGroup('status', "preparing", {filters,searchKey, searchTerm}),
+      repos.order.countByGroup('status', "ready", {filters,searchKey,searchTerm})
     ])
 
 
@@ -63,11 +59,11 @@ export async function getOrderbyId(orderId){
     customer: 'customers(name)',
     accepted_by: 'users(first_name)', 
   }
-  return orderRepo.findById(orderId, joins)
+  return repos.order.findById(orderId, joins)
 }
 
 export async function getOrderFeedback(orderId){
   const filters = {order_id : orderId}
   const count = true;
-  return feedbackRepo.findAll({filters, count})
+  return repos.feedback.findAll({filters, count})
 }

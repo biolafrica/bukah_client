@@ -81,7 +81,6 @@ export class BaseRepo{
     return { data, count: total }
   }
 
-
   async findById(id, joins = {}, select = "*"){
     if (!id) {throw new Error(`${this.table} findById requires an ID`)}
 

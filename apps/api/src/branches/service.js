@@ -1,9 +1,4 @@
-import {BaseRepo} from "../../../../packages/utils/database/baseRepository";
-
-const repo = new BaseRepo(
-  "branches",
-  process.env.NEXT_PUBLIC_RESTAURANT_ID
-)
+import { repos } from "../lib/repos";
 
 export async function getAllBranches({
   searchTerm = '', 
@@ -11,9 +6,8 @@ export async function getAllBranches({
 }={}){
   const search = searchTerm ? ['name', searchTerm] : []
 
-  return repo.findAll({range, search})
+  return repos.branch.findAll({range, search})
 }
-
 
 export async function getAllBranchesWithSupervisor({ 
   searchTerm = '', 
@@ -22,37 +16,31 @@ export async function getAllBranchesWithSupervisor({
   const  joins = { branch: 'users(first_name,last_name, id)'}
   const search = searchTerm ? ['name', searchTerm] : []
 
-  return repo.findAll({search, joins, range})
+  return repos.branch.findAll({search, joins, range})
 }
-
 
 export async function getBranchById(branchId){
   const  joins = { branch: 'users(first_name,last_name, id)'}
 
-  return repo.findById(branchId, joins)
+  return repos.branch.findById(branchId, joins)
 }
-
 
 export async function createBranch(data){
-  return repo.create(data)
+  return repos.branch.create(data)
 }
-
 
 export async function updateBranch(branchId, data){
-  return repo.update(branchId, data)
+  return repos.branch.update(branchId, data)
 }
-
 
 export async function deleteBranch(branchId){
-  return repo.delete(branchId)
+  return repos.branch.delete(branchId)
 }
-
 
 export async function deactivateBranch(branchId){
-  return repo.deactivate(branchId)
+  return repos.branch.deactivate(branchId)
 }
 
-
 export async function activateBranch(branchId){
-  return repo.reactivate(branchId)
+  return repos.branch.reactivate(branchId)
 }

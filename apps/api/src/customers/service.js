@@ -1,9 +1,4 @@
-import {BaseRepo} from "../../../../packages/utils/database/baseRepository"
-
-const repo = new BaseRepo("customers", process.env.NEXT_PUBLIC_RESTAURANT_ID)
-const orderRepo = new BaseRepo("orders", process.env.NEXT_PUBLIC_RESTAURANT_ID )
-const feedbackRepo = new BaseRepo("feedbacks", process.env.NEXT_PUBLIC_RESTAURANT_ID )
-
+import { repos } from "../lib/repos"
 
 export async function getAllCustomersWithCounts({
   searchTerm = "", 
@@ -22,9 +17,9 @@ export async function getAllCustomersWithCounts({
   const searchKey = 'name'
 
   try {
-    const { data, count } = await repo.findAll({search, filters, range})
+    const { data, count } = await repos.customer.findAll({search, filters, range})
 
-    const registeredCounts = await repo.countByGroup('is_registered', true, {filters, searchKey, searchTerm})
+    const registeredCounts = await repos.customer.countByGroup('is_registered', true, {filters, searchKey, searchTerm})
 
     const stats = {
       total_customers: count,
@@ -45,12 +40,12 @@ export async function getAllTopCustomers(){
   const ordersOrderBy = {"total_orders": false}
   const spendersOrderBy = {"total_spent": false}
   try {
-    const topOrders = await repo.findAll({
+    const topOrders = await repos.customer.findAll({
       range, 
       orderBy:ordersOrderBy
     })
 
-    const topSpenders = await repo.findAll({
+    const topSpenders = await repos.customer.findAll({
       range, 
       orderBy:spendersOrderBy
     })
@@ -66,7 +61,7 @@ export async function getAllTopCustomers(){
 }
 
 export async function getCustomerById(customerId){
-  return repo.findById(customerId)
+  return repos.customer.findById(customerId)
 }
 
 export async function getCustomerFeedbacks(customerId, { 
@@ -74,18 +69,13 @@ export async function getCustomerFeedbacks(customerId, {
 }={}){
 
   const filters = {customer_id : customerId}
-  return feedbackRepo.findAll({filters, range})
+  return repos.feedback.findAll({filters, range})
 }
 
-export async function getCustomerOrders(customerId, { 
+export async function getCustomerOrders(customerId,{ 
   range =[0,9]
 }={}){
 
   const filters = {customer_id : customerId}
-  return orderRepo.findAll({filters, range})
-}
-
-//web
-export async function editCustomerDetails({}){
-  return repo.update()
+  return repos.order.findAll({filters, range})
 }

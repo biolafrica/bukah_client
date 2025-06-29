@@ -1,6 +1,5 @@
-import {TransactionRepository} from "../../../../packages/utils/database/transactionRepository"
+import { repos } from "../lib/repos"
 
-const repo = new TransactionRepository(process.env.NEXT_PUBLIC_RESTAURANT_ID)
 
 export async function getAllTransaction({
   searchId = "", 
@@ -9,10 +8,30 @@ export async function getAllTransaction({
   method = null, 
   dateRange = null, 
   range =[0,9]
-}){
-  return repo.findAllTransactionWithFK({searchId,branchId,type,method,dateRange,range})
+}={}){
+  const filters = {}
+
+  if (branchId) filters.branch_id = branchId
+  if (type) filters.transaction_type = type
+  if (method) filters.payment_method = method
+  if (dateRange) {
+    filters.created_at = { start: dateRange.start, end: dateRange.end }
+  }
+
+  const search = searchId ? ['reference_id', searchId] : []
+
+  const joins = {
+    branch: 'branches(name)',
+    order: 'orders(id)',
+  }
+
+  return repos.transaction.findAll({search,filters,joins, range})
 }
 
 export async function getTransactionById(transactionId){
-  return repo.findTransactionById(transactionId)
+  const joins = {
+    branch: 'branches(name)',
+    order: 'orders(id)',
+  }
+  return repos.transaction.findById(transactionId, joins)
 }
