@@ -38,6 +38,7 @@
     "turbo": "^2.5.4"
   },
   "dependencies": {
+    "@heroicons/react": "^2.2.0",
     "@supabase/ssr": "^0.6.1",
     "@supabase/supabase-js": "^2.50.0",
     "zod": "^3.25.67"
