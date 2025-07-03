@@ -1,7 +1,5 @@
-
-
 export default function Home() {
   return (
-    <div>Home</div>
+    <div className=" pt-30 lg:pl-75">Home</div>
   )
 }

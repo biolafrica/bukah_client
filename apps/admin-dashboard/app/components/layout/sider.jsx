@@ -1,131 +1,72 @@
 "use client"
 
 import * as outline from "@heroicons/react/24/outline"
-import * as solid from "@heroicons/react/24/solid"
-import Link from "next/link";
-import { useState } from "react";
+import * as solid  from "@heroicons/react/24/solid"
+import Link       from "next/link"
+import { useState, useEffect } from "react"
+import { usePathname } from "next/navigation"
 
-export default function Sider(){
+const SECTIONS = [{
+  title: "MAIN",
+  items: [
+    { key: "dashboard", label:"Dashboard", href: "/", icon: outline.Squares2X2Icon, activeIcon: solid.Squares2X2Icon},
+    { key: "menu", label: "Menu", href: "/menu", icon: outline.ArchiveBoxIcon, activeIcon:  solid.ArchiveBoxIcon},
+    { key: "orders", label: "Orders", href: "/orders", icon: outline.ClipboardIcon, activeIcon: solid.ClipboardIcon},
+    { key: "customers", label: "Customer", href: "/customers", icon: outline.UsersIcon, activeIcon: solid.UsersIcon},
+    { key: "employee", label: "Employee", href: "/employees", icon: outline.UserGroupIcon, activeIcon: solid.UserGroupIcon},
+    { key: "branches", label: "Branches", href: "/branches", icon: outline.BuildingStorefrontIcon,activeIcon: solid.BuildingStorefrontIcon},
+    { key: "finance", label: "Finance", href: "/finance", icon: outline.WalletIcon, activeIcon: solid.WalletIcon},
+  ]
+},{
+    title: "OTHERS",
+    items: [
+      { key: "helpCenter", label:"Help Center", href:"/help-center",icon: outline.QuestionMarkCircleIcon,activeIcon:solid.QuestionMarkCircleIcon,},
+      {key: "settings",label: "Settings",href: "/settings", icon: outline.Cog6ToothIcon, activeIcon: solid.Cog6ToothIcon },
+      { key: "logout", label: "Logout", href: "/", icon: outline.ArrowLeftEndOnRectangleIcon,activeIcon: solid.ArrowLeftEndOnRectangleIcon},
+    ]
+  },
+]
 
+export default function Sider() {
+  const pathname = usePathname()
+  const defaultKey = SECTIONS.flatMap(s => s.items).find(i => i.href === pathname)?.key
+  const [active, setActive] = useState(defaultKey || "dashboard")
 
-  const [active, setActive] = useState("dashboard")
+  useEffect(() => {
+    if (defaultKey && defaultKey !== active) {
+      setActive(defaultKey)
+    }
+  }, [defaultKey])
 
-  const handleClick =(value = "dasboard")=>{
-    setActive(value)
-
-  }
-
-  return(
-    <div className="p-5 border-r-gray-200 border-r w-[276px] h-screen" >
-
-      <div className="flex flex-col gap-1">
-
-        <h4 className="pl-2 text-xs text-gray-400 mb-1">MAIN</h4>
-
-        <Link 
-          href="/" 
-          className={`sider-item ${active === "dashboard" ? "sider-item--active"  : "" }`} 
-          onClick={ ()=>{handleClick("dashboard")}}
-        >
-
-          {active === "dashboard" ?<solid.Squares2X2Icon className="w-6 h-6"/>:<outline.Squares2X2Icon className="w-6 h-6"/>}
-          <h2 className=" text-gray-900">Dashboard</h2>
-        </Link>
-
-        <Link 
-          href="/menu"
-          className={`sider-item ${active === "menu" ? "sider-item--active"  : "" }`} 
-          onClick={ ()=>{handleClick("menu")}}
-          
-        >
-          {active === "menu" ? <solid.ArchiveBoxIcon className="w-5 h-5"/> : <outline.ArchiveBoxIcon className="w-5 h-5"/>}
-          <h2>Menu</h2>
-        </Link>
-
-        <Link 
-          href="/orders" 
-          className={`sider-item ${active === "orders" ? "sider-item--active"  : "" }`} 
-          onClick={ ()=>{handleClick("orders")}}
-         
-        >
-          {active === "orders" ? <solid.ClipboardIcon className="w-5 h-5"/> : <outline.ClipboardIcon className="w-5 h-5"/>}
-          <h2>Orders</h2>
-        </Link>
-
-        <Link 
-          href="/customers" 
-          className={`sider-item ${active === "customers" ? "sider-item--active"  : "" }`} 
-          onClick={ ()=>{handleClick("customers")}}
-        >
-          {active === "customers" ?<solid.UsersIcon className="w-5 h-5"/>:<outline.UsersIcon className="w-5 h-5"/>}
-          <h2>Customer</h2>
-        </Link>
-
-        <Link 
-          href="/employees" 
-          className={`sider-item ${active === "employee" ? "sider-item--active"  : "" }`} 
-          onClick={ ()=>{handleClick("employee")}}
-          
-          >
-          {active === "employee" ?<solid.UserGroupIcon className="w-5 h-5"/>:<outline.UserGroupIcon className="w-5 h-5"/>}
-          <h2>Employee</h2>
-        </Link>
-
-        <Link 
-          href="/branches" 
-          className={`sider-item ${active === "branches" ? "sider-item--active"  : "" }`} 
-          onClick={ ()=>{handleClick("branches")}}
-        >
-          {active === "branches" ?<solid.BuildingStorefrontIcon className="w-5 h-5"/>:<outline.BuildingStorefrontIcon className="w-5 h-5"/>}
-          <h2>Branches</h2>
-        </Link>
-
-        <Link 
-          href="/finance" 
-          className={`sider-item ${active === "finance" ? "sider-item--active"  : "" }`} 
-          onClick={ ()=>{handleClick("finance")}}
-        >
-          {active === "finance" ? <solid.WalletIcon className="w-5 h-5"/>:<outline.WalletIcon className="w-5 h-5"/>}
-          <h2>Finance</h2>
-        </Link>
-
+  return (
+    <aside className="fixed left-0 h-screen w-[276px] bg-white z-20 py-6 pt-30">
+      {SECTIONS.map(({ title, items }) => (
+        <div key={title} className="px-5 mb-6 last:mb-0">
+          <h4 className="pl-2 mb-1 text-xs text-gray-400">{title}</h4>
+          <nav className="flex flex-col gap-1">
+            {items.map(({ key, label, href, icon: OutlineIcon, activeIcon: SolidIcon }) => {
+              const isActive = active === key
+              return (
+                <Link
+                  key={key}
+                  href={href}
+                  className={`sider-item ${isActive ? "sider-item--active" : ""}`}
+                  onClick={() => setActive(key)}
+                >
+                  {isActive
+                    ? <SolidIcon className="w-5 h-5" />
+                    : <OutlineIcon className="w-5 h-5" />
+                  }
+                  <h2 className="text-gray-900">{label}</h2>
+                </Link>
+              )
+            })}
+          </nav>
+        </div>
+      ))}
+      <div className="px-5 mt-auto">
+        <h4 className="text-xs text-gray-400 my-10 text-center">Powered by Bukah Africa</h4>
       </div>
-
-      <div>
-
-        <h4 className="pl-2 text-xs text-gray-400 mb-1 mt-5" >OTHERS</h4>
-
-        <Link 
-          href="/help-center" 
-          className={`sider-item ${active === "helpCenter" ? "sider-item--active"  : "" }`} 
-          onClick={ ()=>{handleClick("helpCenter")}}
-        >
-          {active === "helpCenter" ?<solid.QuestionMarkCircleIcon className="w-5 h-5"/> :<outline.QuestionMarkCircleIcon className="w-5 h-5"/>}
-          <h2>Help Center</h2>
-        </Link>
-
-        <Link 
-          href="/settings" 
-          className={`sider-item ${active === "settings" ? "sider-item--active"  : "" }`} 
-          onClick={ ()=>{handleClick("settings")}}
-        >
-          {active === "settings" ?<solid.Cog6ToothIcon className="w-5 h-5"/>:<outline.Cog6ToothIcon className="w-5 h-5"/>}
-          <h2>Settings</h2>
-        </Link>
-
-        <Link 
-          href="/" 
-          className={`sider-item ${active === "logout" ? "sider-item--active"  : "" }`} 
-          onClick={ ()=>{handleClick("logout")}}
-        >
-          {active === "logout" ?<solid.ArrowLeftEndOnRectangleIcon className="w-5 h-5"/>:<outline.ArrowLeftEndOnRectangleIcon className="w-5 h-5"/>}
-          <h2>Logout</h2>
-        </Link>
-
-      </div>
-
-      <h4 className="text-xs text-gray-400 my-10 text-center">Powered by Bukah Africa</h4>
-      
-    </div>
+    </aside>
   )
 }
