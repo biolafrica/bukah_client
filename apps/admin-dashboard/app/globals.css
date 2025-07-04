@@ -107,7 +107,7 @@
     display: flex;
     align-items: center;
     gap: 10px;
-    height: 40px;
+    height: fit-content;
     padding: 13px 12px;
     border: 1px solid #E2E6E9;
     border-radius: 6px;
@@ -231,6 +231,43 @@
     font-size: 12px;
     font-weight: 500;
     color: #1C274C;
+  }
+
+  /* ─── SEGMENTED BUTTON ───────────────────────────────────────────────── */
+  .segmented {
+    display: inline-flex;
+    background-color: #E8E8E8;
+    padding: 3px;
+    border: 1px solid #DEE0E2;
+    border-radius: 6px;
+    width: fit-content;
+    height: fit-content;
+    
+  }
+
+  .segmented__option {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    width: 96px;
+    height: fit-content;
+    padding-top: 5px;
+    padding-bottom: 4px;
+    border-radius: 6px;
+    font-size: 14px;
+    font-weight: 400;
+    cursor: pointer;
+  }
+
+  .segmented__option--selected {
+    background-color: #243837;
+    color: #FFFFFF;
+  }
+
+  .segmented__option--unselected {
+    background-color: #E8E8E8;
+    color: #75758A;
   }
   
 }
