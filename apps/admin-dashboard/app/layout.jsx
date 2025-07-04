@@ -1,5 +1,12 @@
-import {} from "next/font/google";
+import {Urbanist} from "next/font/google";
 import "./globals.css";
+
+const urbanist = Urbanist({
+  subsets: ['latin'],
+  weight: ['400','500','600','700'],
+  variable: '--font-sans',
+  display: 'swap',
+})
 
 export const metadata = {
   title: "Create Next App",
@@ -9,7 +16,7 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
-      <body className="text-gray-900 font-sans bg-gray-50">
+      <body className={`text-gray-900 bg-gray-50 ${urbanist.variable}`}>
         {children}
       </body>
     </html>

@@ -28,5 +28,209 @@
     padding: var(--spacing-6);
     box-shadow: var(--shadow-xl);
   }
- 
+
+  @keyframes spin {
+    to {
+      transform: rotate(360deg);
+    }
+  }
+
+  /* ─── BUTTONS ─────────────────────────────────────────────────────────── */
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 8px 24px;
+    gap: 8px;
+    height: fit-content;
+    border-radius: 6px;
+    width: auto;
+    transition: transform .2s ease, filter .2s ease;
+    transform: translateY(0);
+    font-weight: 600;
+    cursor: pointer;
+  }
+
+  .btn:hover {
+    filter: brightness(0.9);
+  }
+
+  .btn:active{
+    transform: translateY(2px);
+  }
+
+  .btn[disabled] {
+    cursor: not-allowed;
+    filter: none;
+    transform: none;
+  }
+
+  .btn-filled {
+    background-color: #A8DF46;
+    color: #1C274C;
+    font-size: 14px;
+  }
+
+  .btn-outlined {
+    background-color: #FFFFFF;
+    color: #1C274C;
+    border: 1px solid #E2E6E9;
+    font-size: 14px;
+  }
+
+  .btn-tonal {
+    background-color: #CDE0DF;
+    color: #243837;
+    font-size: 14px;
+  }
+
+  .btn-inactive {
+    background-color: #E2E6E9;
+    color: #7984A9;
+    font-size: 14px;
+  }
+
+  .btn-spinner {
+    display: inline-block;
+    width: 1em;
+    height: 1em;
+    border-width: 2px;
+    border-style: solid;
+    border-radius: 9999px;
+    border-color: currentColor;
+    border-top-color: transparent;
+    animation: spin 1s linear infinite;
+  }
+
+  /* ─── INPUTS ──────────────────────────────────────────────────────────── */
+  .input {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    height: 40px;
+    padding: 13px 12px;
+    border: 1px solid #E2E6E9;
+    border-radius: 6px;
+    font-size: 14px;
+    font-weight: 400;
+    color: #63637A;
+    background-color: #FFFFFF;
+    transition: border-color .2s ease, filter .2s ease;
+  }
+
+  .input::placeholder {
+    color: #7984A9;
+    font-weight: 400;
+    font-size: 14px;
+  }
+
+  .input:focus {
+    outline: none;
+    border-color: #1C274C;
+  }
+
+  .input-search {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    height: 40px;
+    padding: 8px 12px;
+    border: 1px solid #E2E6E9;
+    border-radius: 6px;
+    font-size: 14px;
+    font-weight: 400;
+    color: #63637A;
+    background-color: #FFFFFF;
+    transition: border-color .2s ease;
+  }
+
+  .input-search::placeholder {
+    color: #7984A9;
+    font-weight: 400;
+    font-size: 14px;
+  }
+
+  .input-search:focus {
+    outline: none;
+    border-color: #1C274C;
+  }
+
+  .input-search-icon {
+    width: 16px;
+    height: 16px;
+    color: #1C274C;
+  }
+
+  /* ─── SELECTS ─────────────────────────────────────────────────────────── */
+  .select {
+    position: relative;
+    display: inline-block;
+    width: 469px;
+    border-radius: 6px;
+    background-color: #FFFFFF;
+  }
+
+  .select>select {
+    appearance: none;
+    width: 100%;
+    height: 40px;
+    padding: 13px 36px 13px 12px;
+    border: 1px solid #E2E6E9;
+    border-radius: 6px;
+    font-size: 14px;
+    font-weight: 400;
+    color: #63637A;
+    background-color: transparent;
+    transition: border-color .2s ease;
+  }
+
+  .select>select:focus {
+    outline: none;
+    border-color: #1C274C;
+  }
+
+  .select-icon {
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 16px;
+    height: 16px;
+    pointer-events: none;
+    color: #1C274C;
+  }
+
+  .select-option {
+    padding: 13px 12px;
+    font-size: 14px;
+    font-weight: 400;
+    color: #63637A;
+    background-color: #FFFFFF;
+    cursor: pointer;
+  }
+
+  .select-option:hover {
+    background-color: #F5F5F6;
+    color: #1C274C;
+  }
+
+  /* ─── FORM & LABEL ────────────────────────────────────────────────────── */
+  .form {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+  }
+
+  .form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .form-label {
+    font-size: 12px;
+    font-weight: 500;
+    color: #1C274C;
+  }
+  
 }

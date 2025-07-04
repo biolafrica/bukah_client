@@ -6,7 +6,7 @@ export default function Header({onMenuClick}){
   return(
     <header className="border-b border-gray-100 fixed top-0 inset-x-0 z-40 bg-white">
 
-      <div className="flex items-center py-6">
+      <div className="flex items-center py-6 ">
 
         <Link 
           href="/" 
@@ -21,12 +21,12 @@ export default function Header({onMenuClick}){
           <outline.Bars3Icon className="w-6 h-6"/>
         </button>
 
-        <div className="flex flex-1 px-4 items-center gap-2" > 
+        <div className="flex flex-1 px-4 items-center gap-1" > 
           <outline.MagnifyingGlassIcon className="w-6 h-6"/>
           <input 
             type="text" 
             placeholder="Search for items, orders..."
-            className="input-search flex-1" 
+            className="input-search flex-1 border-none bg-gra" 
             aria-label="Search"
           />
 
