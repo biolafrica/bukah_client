@@ -7,7 +7,7 @@ import SegmentedToolbar from "../../components/pages/segmentedToolbar";
 export default function  Finance() {
   const handleFinanceExport=()=>{}
   return (
-    <div className="finance-container p-24 pt-30 lg:pl-75">
+    <div className="finance-container p-5 pt-30 lg:pl-75">
 
       {/* Module Intro component */}
       <HeadingIntro 

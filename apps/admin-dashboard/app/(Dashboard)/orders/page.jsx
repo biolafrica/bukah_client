@@ -8,7 +8,7 @@ export default function Orders(){
   const handleOrderExport=()=>{}
 
   return (
-    <div className="order-container p-24 pt-30 lg:pl-75">
+    <div className="order-container p-5 pt-30 lg:pl-75">
 
        {/* Module Intro component */}
       <HeadingIntro 

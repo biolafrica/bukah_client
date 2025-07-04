@@ -8,7 +8,7 @@ export default function Customers() {
   const handleCustomerExport=()=>{}
 
   return (
-    <div className="customer-container p-24 pt-30 lg:pl-75">
+    <div className="customer-container p-5 pt-30 lg:pl-75">
 
       {/* Module Intro component */}
       <HeadingIntro 
