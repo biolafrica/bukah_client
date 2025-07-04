@@ -3,6 +3,8 @@
 import HeadingIntro from "../../components/pages/headingIntro";
 import * as outline  from "@heroicons/react/24/outline"
 import SegmentedToolbar from "../../components/pages/segmentedToolbar";
+import MetricsContainer from "../../components/pages/metricsCont";
+import { formatNumber } from "../../utils/format";
 
 export default function Orders(){
   const handleOrderExport=()=>{}
@@ -21,6 +23,14 @@ export default function Orders(){
       />
 
       {/* Transaction Metrics components */}
+      <MetricsContainer
+        metrics={[
+          { label: 'Total Orders', value: formatNumber(2500), percentage: '+11.02%', comparison: 'vs last month', trend: 'up' },
+          { label: 'Completed', value: formatNumber(2400), percentage: '+5.00%', comparison: 'vs last month', trend: 'up' },
+          { label: 'In Progress', value: formatNumber(90), percentage: '-3.50%', comparison: 'vs last month', trend: 'down' },
+          { label: 'Cancelled', value: formatNumber(19), percentage: '-3.50%', comparison: 'vs last month', trend: 'down' },
+        ]}
+      />
 
 
       {/* Segmented Buttons and filter Component */}

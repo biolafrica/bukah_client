@@ -54,7 +54,7 @@ export default function SegmentedToolbar({
 
       {/* Actions: desktop */}
       <div className="flex items-center gap-2">
-        <div className="hidden lg:flex items-center border border-gray-300 rounded bg-white">
+        <div className="hidden lg:flex items-center border border-gray-300 rounded-md bg-white">
           <outline.MagnifyingGlassIcon className="w-7 h-9 px-1" aria-hidden="true" />
           <input
             type="text"

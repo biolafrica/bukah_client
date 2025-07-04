@@ -3,6 +3,8 @@
 import HeadingIntro from "../../components/pages/headingIntro";
 import * as outline  from "@heroicons/react/24/outline"
 import SegmentedToolbar from "../../components/pages/segmentedToolbar";
+import MetricsContainer from "../../components/pages/metricsCont";
+import { formatNumber } from "../../utils/format";
 
 export default function Customers() {
   const handleCustomerExport=()=>{}
@@ -21,6 +23,13 @@ export default function Customers() {
       />
 
       {/* Transaction Metrics components */}
+      <MetricsContainer
+        metrics={[
+          { label: 'Total Customers', value: formatNumber(312), percentage: '+11.02%', comparison: 'vs last month', trend: 'up' },
+          { label: 'Registered', value: formatNumber(300), percentage: '+5.00%', comparison: 'vs last month', trend: 'up' },
+          { label: 'Guest', value: formatNumber(12), percentage: '-3.50%', comparison: 'vs last month', trend: 'down' },
+        ]}
+      />
 
 
 

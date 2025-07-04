@@ -3,8 +3,12 @@
 import HeadingIntro from "../../components/pages/headingIntro";
 import * as outline  from "@heroicons/react/24/outline"
 import SegmentedToolbar from "../../components/pages/segmentedToolbar";
+import MetricsContainer from "../../components/pages/metricsCont";
+import { formatNaira } from "../../utils/format";
 
 export default function  Finance() {
+
+
   const handleFinanceExport=()=>{}
   return (
     <div className="finance-container p-5 pt-30 lg:pl-75">
@@ -19,7 +23,15 @@ export default function  Finance() {
         onButtonClick={handleFinanceExport} 
       />
 
+
       {/* Transaction Metrics components */}
+      <MetricsContainer
+        metrics={[
+          { label: 'Total Sales', value: formatNaira(125500000), percentage: '+11.02%', comparison: 'vs last month', trend: 'up' },
+          { label: 'Registered', value: formatNaira(1300000), percentage: '+5.00%', comparison: 'vs last month', trend: 'up' },
+          { label: 'Net Revenue', value: formatNaira(124200000), percentage: '-3.50%', comparison: 'vs last month', trend: 'up' },
+        ]}
+      />
 
 
       {/* Segmented Buttons and filter Component */}
@@ -37,6 +49,9 @@ export default function  Finance() {
         onSort={() => console.log('Sort clicked')}
         searchPlaceholder = 'search order Id'
       />
+
+      
+
 
     </div>
   )
