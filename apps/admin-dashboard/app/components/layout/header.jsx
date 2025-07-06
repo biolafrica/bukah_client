@@ -4,7 +4,7 @@ import Link from "next/link";
 
 export default function Header({onMenuClick}){
   return(
-    <header className="border-b border-gray-100 fixed top-0 inset-x-0 z-40 bg-white">
+    <header className="border-b border-gray-100 fixed top-0 inset-x-0 z-60 bg-white">
 
       <div className="flex items-center py-6 ">
 

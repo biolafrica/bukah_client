@@ -13,7 +13,7 @@ export default function DataTable({ columns, data, onEdit, onDelete }) {
               <th
                 key={col.key}
                 className={`px-4 py-3 text-left font-light text-sec-text truncate ${
-                  idx === 0 ? 'sticky left-0 z-50 bg-white' : ''
+                  idx === 0 ? 'sticky left-0 z-20 bg-white' : ''
                 } ${col.minWidth ? `min-w-[${col.minWidth}]` : 'min-w-[150px]'}`}
               >
                 {col.header}

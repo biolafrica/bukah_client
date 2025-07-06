@@ -19,7 +19,7 @@ export default function DashboardLayout({children}){
         </aside>
 
         {sidebarOpen && (
-          <div className="fixed inset-0 z-30 flex lg:hidden">
+          <div className="fixed inset-0 z-50 flex lg:hidden">
             <div
               className="absolute inset-0 bg-black opacity-50"
               onClick={()=> setSidebarOpen(false)}

@@ -39,7 +39,7 @@ export default function Sider() {
   }, [defaultKey])
 
   return (
-    <aside className="fixed left-0 h-screen w-[276px] bg-white z-20 py-6 pt-30">
+    <aside className="fixed left-0 h-screen w-[276px] bg-white z-auto py-6 pt-30 ">
       {SECTIONS.map(({ title, items }) => (
         <div key={title} className="px-5 mb-6 last:mb-0">
           <h4 className="pl-2 mb-1 text-xs text-gray-400">{title}</h4>

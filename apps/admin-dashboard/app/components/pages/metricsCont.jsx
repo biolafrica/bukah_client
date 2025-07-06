@@ -7,7 +7,7 @@ function MetricItem({ label, value, percentage, comparison, trend }) {
   const colorClass = trend === 'down' ? 'text-red-600' : 'text-green-600'
 
   return (
-    <div className="flex flex-col gap-3">
+    <div className="flex flex-col gap-3 min-w-[200px]">
       <span className="text-gray-600 text-sm">{label}</span>
       <span className="text-2xl font-semibold text-gray-900">{value}</span>
       <div className={`flex items-center gap-2 ${colorClass}`}>
@@ -21,11 +21,11 @@ function MetricItem({ label, value, percentage, comparison, trend }) {
 
 export default function MetricsContainer({ metrics }) {
   return (
-    <div className="border border-border-text rounded-md flex items-center flex-1 p-3 my-5 gap-4 bg-white">
+    <div className="border border-border-text rounded-md flex items-center flex-1 p-3 my-5 gap-4 bg-white overflow-x-auto">
       {metrics.map((metric, idx) => (
         <div
           key={metric.label}
-          className={idx < metrics.length - 1 ? 'border-r border-gray-300 pr-5 w-1/3' : 'w-1/3'}
+          className={idx < metrics.length - 1 ? 'border-r border-gray-300 pr-5 flex-1' : 'flex-1'}
         >
           <MetricItem {...metric} />
         </div>

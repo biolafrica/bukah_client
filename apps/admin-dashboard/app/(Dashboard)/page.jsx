@@ -78,7 +78,7 @@ export default function Home() {
   ];
 
   return (
-    <div className="home-container p-24 pt-30 lg:pl-75">
+    <div className="home-container p-5 pt-30 lg:pl-75">
       {/* Module Intro component */}
       <HeadingIntro 
         module="Overview" 

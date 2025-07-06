@@ -24,31 +24,33 @@ export default function SegmentedToolbar({
 
   return(
 
-    <div className="flex items-center justify-between my-6">
+    <div className="flex items-center justify-between my-6 gap-4">
       {/* Segmented control */}
 
-      <div className="segmented">
-        {segments && segments.map(({ key, label }) => (
-          <div
-            key={key}
-            role="button"
-            tabIndex={0}
-            className={`segmented__option ${
-              active === key
-                ? 'segmented__option--selected'
-                : 'segmented__option--unselected'
-            }`}
-            onClick={() => handleSegmentClick(key)}
-            onKeyDown={(e) => {
-              if (e.key === 'Enter' || e.key === ' ') {
-                e.preventDefault()
-                handleSegmentClick(key)
-              }
-            }}
-          >
-            <h4 className="text-sm">{label}</h4>
-          </div>
-        ))}
+      <div className="overflow-x-auto rounded-[6px]">
+        <div className="segmented min-w-[150px]">
+          {segments && segments.map(({ key, label }) => (
+            <div
+              key={key}
+              role="button"
+              tabIndex={0}
+              className={`segmented__option ${
+                active === key
+                  ? 'segmented__option--selected'
+                  : 'segmented__option--unselected'
+              }`}
+              onClick={() => handleSegmentClick(key)}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                  e.preventDefault()
+                  handleSegmentClick(key)
+                }
+              }}
+            >
+              <h4 className="text-sm">{label}</h4>
+            </div>
+          ))}
+        </div>
       </div>
 
 

@@ -258,7 +258,7 @@
     padding: 3px;
     border: 1px solid #DEE0E2;
     border-radius: 6px;
-    width: fit-content;
+    min-width: 150px;
     height: fit-content;
     
   }
@@ -276,6 +276,7 @@
     font-size: 14px;
     font-weight: 400;
     cursor: pointer;
+    
   }
 
   .segmented__option--selected {
