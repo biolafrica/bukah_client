@@ -33,7 +33,7 @@ export default function DashboardLayout({children}){
         )}
      
         
-        <main className="flex-1">
+        <main className="flex-1 w-full">
           {children}
         </main>
       </div>

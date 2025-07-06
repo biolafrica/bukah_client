@@ -2,6 +2,24 @@
 @import url('https://fonts.googleapis.com/css2?family=Urbanist:wght@400;500;600;700&display=swap');
 
 
+@theme {
+  --color-pri: oklch(83.72% 0.187 127.25);
+  --color-pri-cont: oklch(89.22% 0.020 192.97);
+  --color-on-pri-cont: oklch(32.34% 0.026 192.02);
+  --color-on-pri: oklch(28.40% 0.070 269.17);
+  --color-success-600: oklch(63.93% 0.202 139.96);
+  --color-success-900: oklch(55.18% 0.120 160.67);
+  --color-error-600: oklch(51.25% 0.173 28.61);
+  --color-error-900: oklch(47.26% 0.187 29.74);
+  --color-pri-text: oklch(28.40% 0.070 269.17);
+  --color-sec-text: oklch(61.81% 0.058 271.76);
+  --color-dis-text: oklch(67.35% 0.031 285.54);
+  --color-border-text: oklch(92.27% 0.006 239.82);
+  --color-sep-text: oklch(94.27% 0.008 236.56);
+  --color-laybg-text: oklch(97.04% 0.001 286.38);
+  --font-urbanist: Urbanist, sans-serif;
+}
+
 @layer components {
   .sider-item {
     display: flex;

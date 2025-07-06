@@ -8,12 +8,12 @@ function MetricItem({ label, value, percentage, comparison, trend }) {
 
   return (
     <div className="flex flex-col gap-3">
-      <span className="text-gray-600 text-xs">{label}</span>
-      <span className="text-2xl font-bold text-gray-900">{value}</span>
+      <span className="text-gray-600 text-sm">{label}</span>
+      <span className="text-2xl font-semibold text-gray-900">{value}</span>
       <div className={`flex items-center gap-2 ${colorClass}`}>
         <Icon className="w-5 h-5" aria-hidden="true" />
         <span className="font-semibold">{percentage}</span>
-        <span className="text-xs text-gray-500">{comparison}</span>
+        <span className="text-sm text-sec-text">{comparison}</span>
       </div>
     </div>
   )
@@ -21,7 +21,7 @@ function MetricItem({ label, value, percentage, comparison, trend }) {
 
 export default function MetricsContainer({ metrics }) {
   return (
-    <div className="ring-1 ring-inset ring-gray-300 rounded-sm flex items-center flex-1 p-5 my-5 gap-5">
+    <div className="border border-border-text rounded-md flex items-center flex-1 p-3 my-5 gap-4 bg-white">
       {metrics.map((metric, idx) => (
         <div
           key={metric.label}
