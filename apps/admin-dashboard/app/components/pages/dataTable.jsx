@@ -1,4 +1,5 @@
 import * as solid from '@heroicons/react/24/solid'
+import TableFooter from './tableFooter'
 
 export default function DataTable({ columns, data, onEdit, onDelete }) {
   return (
@@ -51,8 +52,9 @@ export default function DataTable({ columns, data, onEdit, onDelete }) {
             </tr>
           ))}
         </tbody>
-
       </table>
+
+      <TableFooter/>
     </div>
   )
 }
