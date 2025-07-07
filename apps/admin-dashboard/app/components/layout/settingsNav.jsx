@@ -48,7 +48,7 @@ export default function SettingsNav(props = items, defaultActiveKey = "general")
   const isAnyMatched = items.some(item => item.href === pathname)
 
   return (
-    <nav className="flex flex-col gap-3 lg:border lg:border-border-text px-5 py-10 lg:rounded-md text-sm font-medium bg-white rounded-t-2xl h-fit">
+    <nav className="flex flex-col gap-3 lg:border lg:border-border-text px-5 py-7 lg:rounded-md text-sm font-medium bg-white rounded-t-2xl h-fit">
       {items.map(({ key, label, href, outlineIcon: OutlineIcon, solidIcon: SolidIcon }) => {
       
         const isActive = isAnyMatched

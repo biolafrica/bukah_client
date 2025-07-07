@@ -3,6 +3,7 @@
 import { SettingsSectionNav } from "../../../components/layout/settingsMainNav";
 import SettingsNav from "../../../components/layout/settingsNav"
 import SettingsHeadingIntro from "../../../components/pages/settingsHeadingIntro"
+import Switch from "../../../components/uiComponents/switch";
 
 export default function General() {
   const generalItems = [
@@ -30,6 +31,9 @@ export default function General() {
         </div>
 
       </div>
+      <Switch initial={true} onChange={state => console.log("now", state)} />
+
+
     </div>
   )
 }
