@@ -6,6 +6,7 @@ import SegmentedToolbar from "../../components/pages/segmentedToolbar";
 import MetricsContainer from "../../components/pages/metricsCont";
 import { formatNaira, formatNumber } from "../../utils/format";
 import DataTable from "../../components/pages/dataTable";
+import ListingCard from "../../components/pages/listCard";
 
 export default function Customers() {
 
@@ -46,6 +47,24 @@ export default function Customers() {
       dateRegistered: "26-04-2023",
     },
   
+  ];
+
+  const topCustomers = [
+    { id: 1, name: 'Chinedu Daniel', role: 'Waiter', countText: '100 orders' },
+    { id: 2, name: 'Ada Lovelace', role: 'Chef', countText: '95 orders' },
+    { id: 3, name: 'Ada Lovelace', role: 'Chef', countText: '95 orders' },
+    { id: 4, name: 'Ada Lovelace', role: 'Chef', countText: '95 orders' },
+    { id: 5, name: 'Ada Lovelace', role: 'Chef', countText: '95 orders' },
+ 
+  ]
+  
+  const spenderCustomers = [
+    { id: 1, name: 'Chinedu Daniel', role: 'Registered', countText: formatNaira(120000) },
+    { id: 2, name: 'Ada Lovelace', role: 'Guest', countText: formatNaira(100000) },
+    { id: 3, name: 'Ada Lovelace', role: 'Guest', countText: formatNaira(80000) },
+    { id: 4, name: 'Ada Lovelace', role: 'Registered', countText: formatNaira(70000) },
+    { id: 5, name: 'Ada Lovelace', role: 'Registered', countText: formatNaira(20000) },
+ 
   ]
 
   const handleCustomerExport=()=>{}
@@ -65,36 +84,43 @@ export default function Customers() {
         onButtonClick={handleCustomerExport}
       />
 
-      {/* Transaction Metrics components */}
-      <MetricsContainer
-        metrics={[
-          { label: 'Total Customers', value: formatNumber(312), percentage: '+11.02%', comparison: 'vs last month', trend: 'up' },
-          { label: 'Registered', value: formatNumber(300), percentage: '+5.00%', comparison: 'vs last month', trend: 'up' },
-          { label: 'Guest', value: formatNumber(12), percentage: '-3.50%', comparison: 'vs last month', trend: 'down' },
-        ]}
-      />
+      <div className="flex gap-5">
 
+        <div className="flex-1 lg:w-4/7">
+          {/* Transaction Metrics components */}
+          <MetricsContainer
+            metrics={[
+              { label: 'Total Customers', value: formatNumber(312), percentage: '+11.02%', comparison: 'vs last month', trend: 'up' },
+              { label: 'Registered', value: formatNumber(300), percentage: '+5.00%', comparison: 'vs last month', trend: 'up' },
+              { label: 'Guest', value: formatNumber(12), percentage: '-3.50%', comparison: 'vs last month', trend: 'down' },
+            ]}
+          />
 
+          {/* Segmented Buttons and filter Component */}
+          <SegmentedToolbar
+            segments={[
+              { key: 'all', label: 'All' },
+              { key: 'registered', label: 'Registered' },
+              { key: 'guest', label: 'Guest' },
+            ]}
+            defaultActive="all"
+            onSegmentChange={(key) => console.log('Segment:', key)}
+            onSearch={(q) => console.log('Search query:', q)}
+            onFilter={() => console.log('Filter clicked')}
+            onSort={() => console.log('Sort clicked')}
+            searchPlaceholder = 'search order Id'
+          />
 
-      {/* Segmented Buttons and filter Component */}
-      <SegmentedToolbar
-        segments={[
-          { key: 'all', label: 'All' },
-          { key: 'registered', label: 'Registered' },
-          { key: 'guest', label: 'Guest' },
-        ]}
-        defaultActive="all"
-        onSegmentChange={(key) => console.log('Segment:', key)}
-        onSearch={(q) => console.log('Search query:', q)}
-        onFilter={() => console.log('Filter clicked')}
-        onSort={() => console.log('Sort clicked')}
-        searchPlaceholder = 'search order Id'
-      />
+          {/* Table Component */}
+          <DataTable columns={columns} data={data} onEdit={handleEdit} onDelete={handleDelete}/>
+        </div>
 
+        <div className=" hidden lg:block lg:w-2/7 pt-5 ">
+          <ListingCard title="Top Customers - Most Orders" items={topCustomers}/>
+          <ListingCard title="Top Customers - Highest Spenders" items={spenderCustomers}/>
+        </div>
 
-      {/* Table Component */}
-      <DataTable columns={columns} data={data} onEdit={handleEdit} onDelete={handleDelete}/>
-      
+      </div>
 
     </div>
   )

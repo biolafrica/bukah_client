@@ -5,6 +5,7 @@ import * as outline  from "@heroicons/react/24/outline"
 import { formatNaira, formatNumber } from "../utils/format";
 import MetricsContainer from "../components/pages/metricsCont";
 import DataTable from "../components/pages/dataTable";
+import ListingCard from "../components/pages/listCard";
 
 export default function Home() {
   const handleEdit =(row)=>{}
@@ -77,8 +78,26 @@ export default function Home() {
 
   ];
 
+  const topSelling = [
+    { id: 1, name: 'Jollof Rice', role: 'Main', countText: '100 orders', avatarUrl: '/images/food.png'},
+    { id: 2, name: 'Jollof Rice', role: 'Main', countText: '100 orders', avatarUrl: '/images/food.png'},
+    { id: 3, name: 'Jollof Rice', role: 'Main', countText: '100 orders', avatarUrl: '/images/food.png'},
+    { id: 4, name: 'Jollof Rice', role: 'Main', countText: '100 orders', avatarUrl: '/images/food.png'},
+    { id: 5, name: 'Jollof Rice', role: 'Main', countText: '100 orders', avatarUrl: '/images/food.png'},
+  ]
+
+  const topStaff = [
+    { id: 1, name: 'Chinedu Daniel', role: 'Waiter', countText: formatNaira(120000) },
+    { id: 2, name: 'Ada Lovelace', role: 'Waiter', countText: formatNaira(100000) },
+    { id: 3, name: 'Ada Lovelace', role: 'Bartender', countText: formatNaira(80000) },
+    { id: 4, name: 'Ada Lovelace', role: 'Waiter', countText: formatNaira(70000) },
+    { id: 5, name: 'Ada Lovelace', role: 'Bartender', countText: formatNaira(20000) },
+ 
+  ]
+
   return (
     <div className="home-container p-5 pt-30 lg:pl-75">
+
       {/* Module Intro component */}
       <HeadingIntro 
         module="Overview" 
@@ -88,18 +107,31 @@ export default function Home() {
         branches={true}
       />
 
-      {/* Transaction Metrics components */}
-      <MetricsContainer
-        metrics={[
-          { label: 'Total Sales', value: formatNaira(125500000), percentage: '+11.02%', comparison: 'vs last month', trend: 'up' },
-          { label: 'Total Orders', value: formatNumber(2500), percentage: '+5.00%', comparison: 'vs last month', trend: 'up' },
-          { label: 'Total Customers', value: formatNumber(312), percentage: '-3.50%', comparison: 'vs last month', trend: 'down' },
-          { label: 'Customer Satisfaction', value: "89%", percentage: '-3.50%', comparison: 'vs last month', trend: 'down' },
-        ]}
-      />
+      <div className="flex gap-5">
 
-      {/* Table Component */}
-      <DataTable columns={columns} data={data} onEdit={handleEdit} onDelete={handleDelete}/>
+        <div className="flex-1 lg:w-4/7">
+          {/* Transaction Metrics components */}
+          <MetricsContainer
+            metrics={[
+              { label: 'Total Sales', value: formatNaira(125500000), percentage: '+11.02%', comparison: 'vs last month', trend: 'up' },
+              { label: 'Total Orders', value: formatNumber(2500), percentage: '+5.00%', comparison: 'vs last month', trend: 'up' },
+              { label: 'Total Customers', value: formatNumber(312), percentage: '-3.50%', comparison: 'vs last month', trend: 'down' },
+              { label: 'Customer Satisfaction', value: "89%", percentage: '-3.50%', comparison: 'vs last month', trend: 'down' },
+            ]}
+          />
+
+          {/* Table Component */}
+          <DataTable columns={columns} data={data} onEdit={handleEdit} onDelete={handleDelete}/>
+        </div>
+
+        <div className=" hidden lg:block lg:w-2/7 pt-5 ">
+          <ListingCard title="Best Selling Food" items={topSelling}/>
+          <ListingCard title="Sales By Staff" items={topStaff}/>
+        </div>
+
+      </div>
+
+    
 
     </div>
    
