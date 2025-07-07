@@ -1,6 +1,6 @@
 'use client'
 
-import NotificationSettings from "../../../components/layout/settingsMainNav";
+import {NotificationSettings} from "../../../components/layout/settingsMainNav";
 import SettingsNav from "../../../components/layout/settingsNav"
 import SettingsHeadingIntro from "../../../components/pages/settingsHeadingIntro"
 import { sections } from "../../../data/notification";

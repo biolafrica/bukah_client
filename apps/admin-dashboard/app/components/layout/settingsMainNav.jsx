@@ -1,6 +1,7 @@
 import * as outline  from "@heroicons/react/24/outline"
 import Link from "next/link"
 import Switch from "../uiComponents/switch"
+import Policies from "../../data/policies"
 
 
 export function SettingsSectionNav({ title, items }) {
@@ -81,7 +82,7 @@ export function NotificationSection({ title, items }) {
 }
 
 
-export default function NotificationSettings({ sections }) {
+export function NotificationSettings({ sections }) {
   return (
     <div className="border border-border-text rounded-md p-5 bg-white">
       <h3 className="font-semibold text-base border-b border-border-text pb-3 mb-5">
@@ -97,6 +98,15 @@ export default function NotificationSettings({ sections }) {
           items={section.items}
         />
       ))}
+    </div>
+  )
+}
+
+export function PolicyBody(){
+  return(
+    <div className="border border-border-text rounded-md p-5 bg-white">
+      <h3 className="font-semibold text-base border-b border-border-text pb-3 mb-5">Policies</h3>
+      <Policies/>
     </div>
   )
 }
