@@ -6,17 +6,17 @@ import SettingsHeadingIntro from "../../../../components/pages/settingsHeadingIn
 import { AddSection } from "../../../../components/pages/addSettingsItemCard";
 import { formatNaira } from "../../../../utils/format";
 
-export default function Tables(){
+export default function Terminals(){
   const data= {
-    head: "Add New Tables",
-    subHead: "Add tables to your restaurant here",
-    button:"Add Table",
-    link : '/settings/general/tables/add'
+    head: "Add New Terminals",
+    subHead: "Add and manage your pos terminals",
+    button:"Add Terminal",
+    link : '/settings/payment/terminals/add'
   }
   const listCard =[
-    {id : 1, name : "Table 1", head : "4 seater - Main Lounge", subHead: `service charge ${formatNaira(500)}`},
-    {id : 2, name : "Table 2", head : "2 seater - Main Lounge", subHead: `service charge ${formatNaira(10000)}`},
-    {id : 3, name : "Table 3", head : "3 seater - Main Lounge", subHead: `service charge ${formatNaira(2000)}`}
+    {id : 1, name : "Terminal1234", head : "Branch B", subHead: 'POS1234'},
+    {id : 2, name : "Terminal4321", head : "Branch C", subHead: "POS4321"},
+    {id : 3, name : "Terminal54678", head : "Branch A", subHead: "POS5432"}
   ]
 
   const handleDelete = ()=>{}
@@ -35,7 +35,7 @@ export default function Tables(){
           </div>
 
           <div className=" w-full xl:w-3/4 border p-5 rounded-md border-border-text">
-            <BackButton info="Table Management"/>
+            <BackButton info="Terminals"/>
             <AddSection data={data}/>
 
             <div>

@@ -1,21 +1,19 @@
 'use client'
+import BackButton from "../../../../components/common/backButton";
+import Form from "../../../../components/common/form";
+import SettingsNav from "../../../../components/layout/settingsNav";
+import SettingsHeadingIntro from "../../../../components/pages/settingsHeadingIntro";
+import { bankFields } from "../../../../data/formFields";
 
-import BackButton from "../../../../../components/common/backButton";
-import Form from "../../../../../components/common/form";
-import SettingsNav from "../../../../../components/layout/settingsNav";
-import SettingsHeadingIntro from "../../../../../components/pages/settingsHeadingIntro";
-import { addTableFields } from "../../../../../data/formFields";
-
-export default function AddTables(){
-  const initialData = { tableName: '', capacity: '' , section: '', serviceCharge:''}
+export default function Bank(){
+  const initialData = { bankName: '', accountName: '', accountNumber:''}
 
   async function handleSubmit(values) {
     // call API
   }
-  
-  return(
-    <div className="tables_cont p-5 pt-30 lg:pl-75">
 
+  return(
+    <div className="tax_cont p-5 pt-30 lg:pl-75">
       <SettingsHeadingIntro/>
 
       <div className="border border-border-text rounded-md p-5 bg-white">
@@ -27,15 +25,15 @@ export default function AddTables(){
           </div>
 
           <div className=" w-full lg:w-3/4 border p-5 rounded-md border-border-text">
-            <BackButton info="Add Table"/>
+            <BackButton info="Bank Details"/>
 
             <div className="xl:w-2/3">
               <Form   
-                fields={addTableFields}
+                fields={bankFields}
                 initialValues={initialData}
                 validate={()=>[]} 
                 onSubmit={handleSubmit}
-                submitLabel="Add Table"
+                submitLabel="Save"
               />
             </div>
           </div>

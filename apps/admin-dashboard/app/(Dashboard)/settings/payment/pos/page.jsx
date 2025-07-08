@@ -4,19 +4,19 @@ import BackButton from "../../../../components/common/backButton";
 import SettingsNav from "../../../../components/layout/settingsNav";
 import SettingsHeadingIntro from "../../../../components/pages/settingsHeadingIntro";
 import { AddSection } from "../../../../components/pages/addSettingsItemCard";
-import { formatNaira } from "../../../../utils/format";
 
-export default function Tables(){
+
+export default function POS(){
   const data= {
-    head: "Add New Tables",
-    subHead: "Add tables to your restaurant here",
-    button:"Add Table",
-    link : '/settings/general/tables/add'
+    head: "Add New POS",
+    subHead: "Add and manage your POS machines",
+    button:"Add POS",
+    link : '/settings/payment/pos/add'
   }
   const listCard =[
-    {id : 1, name : "Table 1", head : "4 seater - Main Lounge", subHead: `service charge ${formatNaira(500)}`},
-    {id : 2, name : "Table 2", head : "2 seater - Main Lounge", subHead: `service charge ${formatNaira(10000)}`},
-    {id : 3, name : "Table 3", head : "3 seater - Main Lounge", subHead: `service charge ${formatNaira(2000)}`}
+    {id : 1, name : "POS 1234", head : "MoniePoint", subHead: "Bukah Africa"},
+    {id : 2, name : "POS234", head : "MoniePoint", subHead: "Bukah Africa"},
+    {id : 3, name : "POS456", head : "MoniePoint", subHead: "Bukah Africa"}
   ]
 
   const handleDelete = ()=>{}
@@ -35,7 +35,7 @@ export default function Tables(){
           </div>
 
           <div className=" w-full xl:w-3/4 border p-5 rounded-md border-border-text">
-            <BackButton info="Table Management"/>
+            <BackButton info="POS"/>
             <AddSection data={data}/>
 
             <div>

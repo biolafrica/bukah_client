@@ -4,10 +4,10 @@ import BackButton from "../../../../../components/common/backButton";
 import Form from "../../../../../components/common/form";
 import SettingsNav from "../../../../../components/layout/settingsNav";
 import SettingsHeadingIntro from "../../../../../components/pages/settingsHeadingIntro";
-import { addTableFields } from "../../../../../data/formFields";
+import { addPOSFields} from "../../../../../data/formFields";
 
 export default function AddTables(){
-  const initialData = { tableName: '', capacity: '' , section: '', serviceCharge:''}
+  const initialData = { referenceID: '', posProvider: '' , bankName: '', accountName:'', accountNumber: ''}
 
   async function handleSubmit(values) {
     // call API
@@ -31,7 +31,7 @@ export default function AddTables(){
 
             <div className="xl:w-2/3">
               <Form   
-                fields={addTableFields}
+                fields={addPOSFields}
                 initialValues={initialData}
                 validate={()=>[]} 
                 onSubmit={handleSubmit}

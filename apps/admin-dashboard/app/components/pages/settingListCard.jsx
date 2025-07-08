@@ -1,6 +1,7 @@
 import * as outline from '@heroicons/react/24/outline'
 
 export default function SettingListCard({data, icon = outline.PresentationChartBarIcon, onDelete, onEdit}){
+  let Icons = icon;
   return(
     <div className='grid grid-cols-1 gap-2 md:grid-cols-2 '>
 
