@@ -10,13 +10,17 @@ export default function Tables(){
   const data= {
     head: "Add New Tables",
     subHead: "Add tables to your restaurant here",
-    button:"Add Table"
+    button:"Add Table",
+    link : '/settings/general/tables/add'
   }
   const listCard =[
     {id : 1, name : "Table 1", head : "4 seater - Main Lounge", subHead: `service charge ${formatNaira(500)}`},
     {id : 2, name : "Table 2", head : "2 seater - Main Lounge", subHead: `service charge ${formatNaira(10000)}`},
     {id : 3, name : "Table 3", head : "3 seater - Main Lounge", subHead: `service charge ${formatNaira(2000)}`}
   ]
+
+  const handleDelete = ()=>{}
+  const handleEdit = ()=>{}
 
   return(
     <div className="tables_cont p-5 pt-30 lg:pl-75">
@@ -35,7 +39,7 @@ export default function Tables(){
             <AddSection data={data}/>
 
             <div>
-              <SettingListCard data={listCard}/>
+              <SettingListCard data={listCard} onDelete={handleDelete} onEdit={handleEdit} />
             </div>
             
           </div>

@@ -20,3 +20,11 @@ export const initial = [
   { day: 'Sunday',   enabled: false,  from: '09:00', to: '17:00' },
  
 ]
+
+export const addTableFields = [
+  { name: 'tableName', label: 'Table Name/Number', type: 'text', required: true },
+  { name: 'capacity', label: 'Capacity', type: 'text', required: true },
+  { name: 'section', label: 'Section', type: 'text', required: true },
+  { name: 'serviceCharge', label: 'Service Charge', type: 'number', required: true },
+ 
+]

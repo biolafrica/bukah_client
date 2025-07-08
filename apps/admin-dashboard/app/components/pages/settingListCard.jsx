@@ -1,6 +1,6 @@
 import * as outline from '@heroicons/react/24/outline'
 
-export default function SettingListCard({data, icon = outline.PresentationChartBarIcon}){
+export default function SettingListCard({data, icon = outline.PresentationChartBarIcon, onDelete, onEdit}){
   return(
     <div className='grid grid-cols-1 gap-2 md:grid-cols-2 '>
 
@@ -20,11 +20,11 @@ export default function SettingListCard({data, icon = outline.PresentationChartB
           </div>
 
           <div className='flex flex-1 items-center gap-2'>
-            <button className='btn btn-outlined'>
+            <button onClick={() => onEdit(row)} className='btn btn-outlined'>
               <outline.PencilIcon className='w-5 h-5'/>
               Edit
             </button>
-            <button className='btn btn-outlined text-red-600'>
+            <button onClick={() => onDelete(row)} className='btn btn-outlined text-red-600'>
               <outline.TrashIcon className='w-5 h-5'/>
               Delete
             </button>
