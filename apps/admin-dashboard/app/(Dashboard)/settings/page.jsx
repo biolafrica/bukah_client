@@ -6,11 +6,11 @@ import SettingsHeadingIntro from "../../components/pages/settingsHeadingIntro";
 
 export default function Settings() {
   const generalItems = [
-    { key: 'store',   href: '/settings/payment/bank',   label: 'Store Info',     description: 'Edit your business name, email, etc.' },
-    { key: 'hours',  href: '/settings/payment/hours',  label: 'Business Hours',   description: 'Manage your opening hours' },
-    { key: 'brand',  href: '/settings/payment/brand',  label: 'Brand Customization', description: 'Edit your brand logo and colors' },
-    { key: 'tables', href: '/settings/payment/tables', label: 'Table Management',  description: 'Manage tables & service charges' },
-    { key: 'tax',    href: '/settings/payment/tax',    label: 'Tax',              description: 'Set your tax percentage' },
+    { key: 'store',   href: '/settings/general/bank',   label: 'Store Info',     description: 'Edit your business name, email, etc.' },
+    { key: 'hours',  href: '/settings/general/hours',  label: 'Business Hours',   description: 'Manage your opening hours' },
+    { key: 'brand',  href: '/settings/genral/brand',  label: 'Brand Customization', description: 'Edit your brand logo and colors' },
+    { key: 'tables', href: '/settings/general/tables', label: 'Table Management',  description: 'Manage tables & service charges' },
+    { key: 'tax',    href: '/settings/general/tax',    label: 'Tax',              description: 'Set your tax percentage' },
   ];
 
   return (

@@ -3,15 +3,14 @@
 import { SettingsSectionNav } from "../../../components/layout/settingsMainNav";
 import SettingsNav from "../../../components/layout/settingsNav"
 import SettingsHeadingIntro from "../../../components/pages/settingsHeadingIntro"
-import Switch from "../../../components/uiComponents/switch";
 
 export default function General() {
   const generalItems = [
-    { key: 'store',   href: '/settings/payment/bank',   label: 'Store Info',     description: 'Edit your business name, email, etc.' },
-    { key: 'hours',  href: '/settings/payment/hours',  label: 'Business Hours',   description: 'Manage your opening hours' },
-    { key: 'brand',  href: '/settings/payment/brand',  label: 'Brand Customization', description: 'Edit your brand logo and colors' },
-    { key: 'tables', href: '/settings/payment/tables', label: 'Table Management',  description: 'Manage tables & service charges' },
-    { key: 'tax',    href: '/settings/payment/tax',    label: 'Tax',              description: 'Set your tax percentage' },
+    { key: 'store',   href: '/settings/general/store',   label: 'Store Info',     description: 'Edit your business name, email, etc.' },
+    { key: 'hours',  href: '/settings/general/hours',  label: 'Business Hours',   description: 'Manage your opening hours' },
+    { key: 'brand',  href: '/settings/general/brand',  label: 'Brand Customization', description: 'Edit your brand logo and colors' },
+    { key: 'tables', href: '/settings/general/tables', label: 'Table Management',  description: 'Manage tables & service charges' },
+    { key: 'tax',    href: '/settings/general/tax',    label: 'Tax',              description: 'Set your tax percentage' },
   ];
   return (
     <div className="general_cont p-5 pt-30 lg:pl-75">
@@ -31,8 +30,6 @@ export default function General() {
         </div>
 
       </div>
-      <Switch initial={true} onChange={state => console.log("now", state)} />
-
 
     </div>
   )
