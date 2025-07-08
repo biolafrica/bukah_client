@@ -25,12 +25,8 @@ export default function Hours(){
           </div>
 
           <div className=" w-full lg:w-3/4 border p-5 rounded-md border-border-text">
-
-            <div className="border-b border-border-text flex items-center gap-2 mb-5 pb-2 font-semibold">
-              <BackButton/>
-              <h4>Business Hours</h4>
-            </div>
-
+            <BackButton info="Business Hours"/>
+         
             <WeeklySchedule
               initialSchedules={initial}
               onSave={handleSave}

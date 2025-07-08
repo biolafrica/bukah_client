@@ -6,7 +6,7 @@ import SettingsHeadingIntro from "../../components/pages/settingsHeadingIntro";
 
 export default function Settings() {
   const generalItems = [
-    { key: 'store',   href: '/settings/general/bank',   label: 'Store Info',     description: 'Edit your business name, email, etc.' },
+    { key: 'store',   href: '/settings/general/store',   label: 'Store Info',     description: 'Edit your business name, email, etc.' },
     { key: 'hours',  href: '/settings/general/hours',  label: 'Business Hours',   description: 'Manage your opening hours' },
     { key: 'brand',  href: '/settings/genral/brand',  label: 'Brand Customization', description: 'Edit your brand logo and colors' },
     { key: 'tables', href: '/settings/general/tables', label: 'Table Management',  description: 'Manage tables & service charges' },

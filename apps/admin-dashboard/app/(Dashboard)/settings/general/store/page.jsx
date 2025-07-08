@@ -36,13 +36,9 @@ export default function Store(){
           </div>
 
           <div className=" w-full lg:w-3/4 border p-5 rounded-md border-border-text">
+            <BackButton info="Store Info"/>
 
-            <div className="border-b border-border-text flex items-center gap-2 mb-5 pb-2 font-semibold">
-              <BackButton/>
-              <h4>Store Info</h4>
-            </div>
-
-            <div>
+            <div className="xl:w-2/3">
               <Form   
                 fields={storeFields}
                 initialValues={initialData}
