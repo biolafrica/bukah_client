@@ -7,8 +7,8 @@ import SettingsHeadingIntro from "../../../components/pages/settingsHeadingIntro
 export default function Payment() {
    
   const paymentItems = [
-    { key: 'bank',   href: '/settings/payment/bank', label: 'Bank Details',description: 'Add and manage your bank details' },
-    { key: 'gateway',  href: '/settings/payment/hours', label: 'Payment Gateway',description: 'Add and manage your payment gateway details' },
+    { key: 'bank', href: '/settings/payment/bank', label: 'Bank Details',description: 'Add and manage your bank details' },
+    { key: 'gateway', href: '/settings/payment/hours', label: 'Payment Gateway',description: 'Add and manage your payment gateway details' },
     { key: 'pos',  href: '/settings/payment/brand', label: 'POS',description: 'Add and manage the POS machine in your store'},
     { key: 'terminal', href: '/settings/payment/tables', label: 'Terminals',description: 'Add and manage the terminals in your store'},
   ];
