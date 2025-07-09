@@ -25,7 +25,7 @@ export default function PlanList({year}){
 
           <div className="flex flex-col gap-3">
             {plan.features.map((item)=>(
-              <div className="flex items-center gap-2">
+              <div key={item.id} className="flex items-center gap-2">
                 <outline.CheckCircleIcon className="w-5 h-5 text-green-600"/>
                 {item.feature}
               </div>
