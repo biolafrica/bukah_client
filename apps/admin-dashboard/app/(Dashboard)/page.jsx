@@ -6,10 +6,29 @@ import { formatNaira, formatNumber } from "../utils/format";
 import MetricsContainer from "../components/pages/metricsCont";
 import DataTable from "../components/pages/dataTable";
 import ListingCard from "../components/pages/listCard";
+import Carousel from "../components/uiComponents/carousel";
 
 export default function Home() {
   const handleEdit =(row)=>{}
   const handleDelete =(row)=>{}
+
+  const suggestions = [
+    {
+      id: 1,
+      title: 'AI Suggestion',
+      message: 'Revenue dipped by 12% this week. Do you want a quick breakdown?',
+    },
+    {
+      id: 2,
+      title: 'AI Insight',
+      message: 'New customer signups are up 8% this month!',
+    },
+    {
+      id: 3,
+      title: 'AI Insight',
+      message: 'New customer signups are up 8% this month!',
+    },
+  ]
 
   const columns = [
     { key: 'orderID', header: 'Order ID', minWidth: '150px' },
@@ -120,11 +139,15 @@ export default function Home() {
             ]}
           />
 
+          <div className="h-[419px] border border-border-text rounded-md mb-5 bg-white"></div>
+
           {/* Table Component */}
           <DataTable columns={columns} data={data} onEdit={handleEdit} onDelete={handleDelete}/>
         </div>
 
         <div className=" hidden lg:block lg:w-2/7 pt-5 ">
+
+          <Carousel items={suggestions} interval={7000}/>
           <ListingCard title="Best Selling Food" items={topSelling}/>
           <ListingCard title="Sales By Staff" items={topStaff}/>
         </div>
