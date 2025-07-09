@@ -32,19 +32,16 @@ export const gatewayFields = [
   { name: 'secretKey', label: 'Secret Key', type: 'text', required: true },
   { name: 'callbackURL', label: 'Callback URL', type: 'text', required: true },
   { name: 'gatewayName', label: 'Gateway Name', type: 'number', required: true },
- 
 ]
 
 export const bankFields = [
   { name: 'bankName', label: 'Bank Name', type: 'text', required: true },
   { name: 'accountName', label: 'Account Name', type: 'text', required: true },
   { name: 'accountNumber', label: 'Account Number', type: 'text', required: true },
- 
 ]
 
 export const taxFields = [
   { name: 'tax', label: 'Tax(Add tax % if applicable)', type: 'nuber', required: false },
- 
 ]
 
 export const addTerminalFields = [
@@ -59,4 +56,12 @@ export const addPOSFields = [
   { name: 'bankName', label: 'Bank Name', type: 'text', required: true },
   { name: 'accountName', label: 'Account Name', type: 'text', required: true },
   { name: 'accountNumber', label: 'Account Number', type: 'text', required: true },
+]
+
+export const cardUpdateFields = [
+  { name: 'cardHolderName', label: "Card Holder's Name", type: 'text', required: true },
+  { name: 'cardNumber', label: 'Card Number', type: 'text', required: true },
+  { name: 'expiryDate', label: 'Expiry Date', type: 'date', required: true },
+  { name: 'cvv', label: 'CVV', type: 'number', required: true },
+
 ]

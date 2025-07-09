@@ -5,6 +5,7 @@ import SettingsHeadingIntro from "../../../components/pages/settingsHeadingIntro
 import * as solid  from "@heroicons/react/24/solid"
 import { formatNaira } from "../../../utils/format";
 import DataTable from "../../../components/pages/dataTable";
+import Link from "next/link";
 
 export default function Billing() {
 
@@ -95,7 +96,7 @@ export default function Billing() {
                   <h4 className="text-sec-text hidden md:block">For restaurants with multi branches and over 20 staff</h4>
                 </div>
 
-                <button className="btn btn-filled">Change Plan</button>
+                <Link href='/plans'><button className="btn btn-filled">Change Plan</button></Link>
 
               </div>
 
@@ -108,7 +109,7 @@ export default function Billing() {
                   </div>
                 </div>
 
-                <button className="btn btn-outlined">Update Card</button>
+                <Link href="/settings/billing/card-update"><button className="btn btn-outlined">Update Card</button></Link>
               </div>
             </div>
 
