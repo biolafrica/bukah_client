@@ -1,4 +1,3 @@
-
 'use client'
 
 import { useRouter, useSearchParams } from 'next/navigation'
@@ -7,6 +6,7 @@ import DataTable       from '../../components/pages/dataTable'
 import * as outline    from '@heroicons/react/24/outline'
 import { menu }        from '../../data/menu'
 import SegmentedToolbars from '../../components/pages/segment'
+import EmptyState from '../../components/pages/emptyState'
 
 
 export default function ClientMenuInner({
@@ -30,6 +30,11 @@ export default function ClientMenuInner({
     })
     router.replace(`?${next.toString()}`)
   }
+
+  const hasSearch  = params.has('search')  && params.get('search').trim() !== ''
+  const hasBranch  = params.has('branch')  && params.get('branch') !== ''
+  const hasCategory= params.has('category')&& params.get('category') !== ''
+  const isQuerying = hasSearch || hasBranch || hasCategory
 
   return (
     <div className="p-5 pt-30 lg:pl-75">
@@ -77,12 +82,23 @@ export default function ClientMenuInner({
         }}
       />
 
-      <DataTable
-        columns={ segment==='items' 
-          ? menu.itemsColumn
-          : menu.categoriesColumns}
-        data={tableData}
-      />
+      {tableData.length === 0 && 
+        <EmptyState
+          icon={outline.InboxIcon}
+          title={isQuerying ? 'No results found' : 'No items yet'}
+          description={isQuerying ? 'Try clearing your filters or search terms.' : "No items created yet."}
+        />
+      }
+
+      {tableData.length !== 0 && 
+        <DataTable
+          columns={ segment==='items' 
+            ? menu.itemsColumn
+            : menu.categoriesColumns}
+          data={tableData}
+        />
+      }
+
     </div>
   )
 }
