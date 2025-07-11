@@ -60,6 +60,11 @@ export const repos = {
   session : new BaseRepo(
     "user_sessions", 
     process.env.NEXT_PUBLIC_RESTAURANT_ID
+  ),
+
+  productCategory : new BaseRepo(
+    "product_categories",
+    process.env.NEXT_PUBLIC_RESTAURANT_ID
   )
 
 

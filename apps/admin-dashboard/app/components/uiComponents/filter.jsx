@@ -26,18 +26,18 @@ export default function FilterDropdown({
   const activeCount = Object.values(filters).filter(v => v !== '' && v != null).length
 
   return (
-    <div className="relative inline-block" ref={ref}>
+    <div className="relative inline-block z-45" ref={ref}>
       <button
         type="button"
         onClick={() => setOpen(o => !o)}
-        className={`flex items-center gap-2 px-4 py-2 rounded-lg border transition-colors ${
+        className={`flex items-center gap-2 px-4 py-2 rounded-md border transition-colors ${
           activeCount > 0
             ? 'bg-pri-cont border-pri-cont text-on-pri'
             : 'bg-[#E8E8E8] border-border-text text-pri-text hover:bg-gray-50'
         }`}
       >
         <outline.FunnelIcon className="w-4 h-4" aria-hidden="true" />
-        <span>Filter</span>
+        <span className='text-sm'>Filter</span>
         {activeCount > 0 && (
           <span className="bg-on-pri-cont text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
             {activeCount}

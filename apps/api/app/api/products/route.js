@@ -4,7 +4,7 @@ import {addProduct, fetchAllProductWithCategory} from "../../../src/products/ser
 import { makeGetListHandler, makePostPayloadHandler } from "../../../src/lib/routeHandlers"
 
 
-//export const middleware = requireRole(["admin", "supervisor"])
+//export const middleware = requireRole(["admin", "supervisor"]
 
 export const POST = makePostPayloadHandler(
   addProduct,

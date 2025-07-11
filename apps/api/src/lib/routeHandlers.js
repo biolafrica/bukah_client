@@ -2,6 +2,7 @@ import { NextResponse } from "next/server"
 import { handleServerError, handleServerErrorWithZod } from "./errorHandler"
 import { schemaBodyParser, schemaUrlParser } from "./schemaParser"
 
+
 export function makeGetListHandler (fetcher, schema, context){
   return async function GET(request){
     try {
@@ -17,7 +18,6 @@ export function makeGetListHandler (fetcher, schema, context){
     }
   }
 }
-
 
 export function makePostPayloadHandler(creater, schema, context){
   return async function POST(request){

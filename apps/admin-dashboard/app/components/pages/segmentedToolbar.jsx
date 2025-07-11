@@ -54,7 +54,7 @@ export default function SegmentedToolbar({
       </div>
 
 
-      {/* Actions: desktop */}
+      {/* search */}
       <div className="flex items-center gap-2">
         <div className="hidden lg:flex items-center border border-gray-300 rounded-md bg-white">
           <outline.MagnifyingGlassIcon className="w-7 h-9 px-1" aria-hidden="true" />
@@ -69,6 +69,7 @@ export default function SegmentedToolbar({
           />
         </div>
 
+        {/* FILTER*/ }
         <button
           type="button"
           onClick={() => onFilter?.()}
@@ -81,6 +82,7 @@ export default function SegmentedToolbar({
           <span className="hidden lg:block text-sm">Filter</span>
         </button>
 
+        {/* sort*/ }
         <button
           type="button"
           onClick={() => onSort?.()}
@@ -90,35 +92,10 @@ export default function SegmentedToolbar({
           <span className="hidden lg:block text-sm">Sort</span>
         </button>
 
-        {/* Mobile actions */}
-        <div className="flex lg:hidden items-center gap-2">
-          <button
-            type="button"
-            onClick={() => onSearch?.()}
-            className="btn btn-outlined p-2"
-            aria-label="Search"
-          >
-            <outline.MagnifyingGlassIcon className="w-5 h-5" />
-          </button>
-          <button
-            type="button"
-            onClick={() => onFilter?.()}
-            className="btn btn-outlined p-2"
-            aria-label="Filter"
-          >
-            <outline.AdjustmentsVerticalIcon className="w-5 h-5" />
-          </button>
-          <button
-            type="button"
-            onClick={() => onSort?.()}
-            className="btn btn-outlined p-2"
-            aria-label="Sort"
-          >
-            <outline.ArrowsUpDownIcon className="w-5 h-5" />
-          </button>
-        </div>
       </div>
+
     </div>
     
   )
 }
+

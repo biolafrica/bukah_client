@@ -27,7 +27,7 @@ export async function fetchAllProductWithCategory({
 
   const joins = {
     branch: "branches(name)", 
-    category: "product_categories(name)"
+    category: "product_categories(name)",
   }
 
   return repos.product.findAll({search,filters,range,joins})
