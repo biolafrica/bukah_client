@@ -1,4 +1,4 @@
-import ClientMenuInner from "../../context/menu/innerConsumer"
+import ClientMenuInner from "../../components/pages/menu/innerConsumer"
 
 export const dynamic = 'force-dynamic'
 
@@ -11,7 +11,13 @@ export default async function MenuPage({ searchParams }) {
     category = '',
     sortBy   = '',
     direction= '',
+    page = '',
   } = await searchParams
+
+  const pageIdx  = parseInt(page, 10) || 0
+  const pageSize = 10
+  const start   = pageIdx * pageSize
+  const end     = start + pageSize - 1
 
 
   const [branchesRes, catsRes] = await Promise.all([
@@ -41,6 +47,7 @@ export default async function MenuPage({ searchParams }) {
   if (sortBy)params.set('sortBy',    sortBy)
 
   if (direction) params.set('direction', direction)
+  params.set('range', `${start},${end}`)
 
   const endpoint = segment === 'items' 
     ? 'api/products' 
@@ -50,6 +57,8 @@ export default async function MenuPage({ searchParams }) {
   const rowsRes = await fetch(`${process.env.NEXT_PUBLIC_API_URL}${endpoint}?${params}`)
   const rowsJson = await rowsRes.json()
   const tableData = rowsJson.data.data || []
+  const totalCount = rowsJson.data.count
+
   console.log(tableData)
 
   // 4️⃣ render the client UI, passing all of it down
@@ -62,6 +71,9 @@ export default async function MenuPage({ searchParams }) {
       filters={{ branch, category }}
       sortConfig={ sortBy ? { key: sortBy, direction } : null }
       tableData={tableData}
+      totalCount={totalCount}
+      currentPage={pageIdx}
+      pageSize={pageSize}
     />
   )
 }

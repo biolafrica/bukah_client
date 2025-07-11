@@ -1,12 +1,12 @@
 'use client'
 
 import { useRouter, useSearchParams } from 'next/navigation'
-import HeadingIntro    from '../../components/pages/headingIntro'
-import DataTable       from '../../components/pages/dataTable'
+import HeadingIntro    from '../headingIntro'
+import DataTable       from '../dataTable'
 import * as outline    from '@heroicons/react/24/outline'
-import { menu }        from '../../data/menu'
-import SegmentedToolbars from '../../components/pages/segment'
-import EmptyState from '../../components/pages/emptyState'
+import { menu }        from '../../../data/menu'
+import SegmentedToolbars from '../segment'
+import EmptyState from '../../common/emptyState'
 
 
 export default function ClientMenuInner({
@@ -17,6 +17,9 @@ export default function ClientMenuInner({
   filters,
   sortConfig,
   tableData,
+  totalCount,
+  currentPage,
+  pageSize,
 }) {
   const router = useRouter()
   const params = useSearchParams()  // read-only
@@ -94,8 +97,15 @@ export default function ClientMenuInner({
         <DataTable
           columns={ segment==='items' 
             ? menu.itemsColumn
-            : menu.categoriesColumns}
+            : menu.categoriesColumns
+          }
           data={tableData}
+          onEdit={()=>console.log("delete")}
+          onDelete={()=>console.log("delete")}
+          currentPage={currentPage}
+          pageSize={pageSize}
+          totalCount={totalCount}
+          onPageChange={(newPage) => updateParams({ page: newPage })}
         />
       }
 

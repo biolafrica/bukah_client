@@ -1,7 +1,16 @@
 import * as solid from '@heroicons/react/24/solid'
 import TableFooter from './tableFooter'
 
-export default function DataTable({ columns, data, onEdit, onDelete }) {
+export default function DataTable({ 
+  columns, 
+  data, 
+  onEdit, 
+  onDelete,
+  currentPage,
+  pageSize,
+  totalCount,
+  onPageChange,
+}) {
   return (
     <div className="w-full h-fit overflow-auto bg-white rounded-lg border border-border-text">
 
@@ -54,7 +63,16 @@ export default function DataTable({ columns, data, onEdit, onDelete }) {
         </tbody>
       </table>
 
-      <TableFooter/>
+      {totalCount => 10 && 
+        ( <TableFooter
+            currentPage={currentPage}
+            pageSize={pageSize}
+            totalCount={totalCount}
+            onPageChange={onPageChange}
+          />
+        )
+      }
+
     </div>
   )
 }
