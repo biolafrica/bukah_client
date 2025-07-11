@@ -17,3 +17,8 @@ export async function fetchAllProductCategory({
 range=[0,9]}={}){
   return repos.productCategory.findAll({range})
 }
+
+export async function fetchCategoryNameAndID({range=[0,9]}={}){
+  const select = ("name, id")
+  return repos.productCategory.findAll({range, select})
+}

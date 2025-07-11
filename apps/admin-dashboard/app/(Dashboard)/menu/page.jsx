@@ -21,8 +21,8 @@ export default async function MenuPage({ searchParams }) {
 
 
   const [branchesRes, catsRes] = await Promise.all([
-    fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/branches`),
-    fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/product-categories`),
+    fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/common/branches`),
+    fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/common/product-categories`),
   ])
 
   const [branchesJson, catsJson] = await Promise.all([

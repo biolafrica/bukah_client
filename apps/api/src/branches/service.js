@@ -1,12 +1,11 @@
 import { repos } from "../lib/repos";
 
 export async function getAllBranches({
-  searchTerm = '', 
   range = [0, 9] 
 }={}){
-  const search = searchTerm ? ['name', searchTerm] : []
+  const select = ("name, id")
 
-  return repos.branch.findAll({range, search})
+  return repos.branch.findAll({range, select})
 }
 
 export async function getAllBranchesWithSupervisor({ 

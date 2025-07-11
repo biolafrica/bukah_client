@@ -32,7 +32,7 @@ export default function Orders(){
         }
         const cls = colors[row.status] || 'bg-gray-100 text-gray-800'
         return (
-          <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${cls}`}>
+          <span className={`inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium ${cls}`}>
             {row.status}
           </span>
         )
