@@ -41,11 +41,13 @@ export default function ClientMenuInner({
 
   return (
     <div className="p-5 pt-30 lg:pl-75">
+
       <HeadingIntro
         module="Items"
         moduleIntro="Create, update, organize menu items"
         Icon={outline.PlusIcon}
         buttonText="Add Item"
+        onButtonClick={()=>console.log("add items")}
       />
 
       <SegmentedToolbars
@@ -72,7 +74,7 @@ export default function ClientMenuInner({
         }}
 
         sortProps={{
-          options: segment==='items'?menu.sortOptions:[{key:'name', label:'Name'}],
+          options: segment ==='items' ? menu.sortOptions:[{key:'name', label:'Name'}],
           sortConfig,
           onSort: key => {
             const dir = sortConfig?.key===key && sortConfig.direction ==='asc'

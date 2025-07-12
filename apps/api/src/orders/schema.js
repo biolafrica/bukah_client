@@ -3,6 +3,8 @@ import { makeQuerySchema } from "../lib/queryBuilder"
 
 const orderFields ={
   searchTerm : z.string().optional().default(""),
+  orderNumber : z.string().optional(),
+  price : z.string().optional(),
   branchId : z.string().uuid().optional(),
   status : z.enum([
     "pending",
@@ -10,13 +12,12 @@ const orderFields ={
     "preparing", 
     "ready", 
     "served", 
-    "cancelled", 
-    "refunded"
+    "cancelled",
+    "completed"
   ]).optional(),
   channel : z.enum([
-    "web", 
-    "waiter", 
-    "qr"
+    "online", 
+    "instore", 
   ]).optional(),
 }
 

@@ -6,9 +6,12 @@ export async function getAllOrders({
   status = null,
   channel = null,
   dateRange = null,
-  range = [0,9]
+  range = [0,9],
+  orderNumber = null,
+  price = null
 }={}){
   const filters = {}
+  const orderBy = {}
 
   if (branchId) filters.branch_id = branchId
   if (status) filters.status = status
@@ -16,6 +19,8 @@ export async function getAllOrders({
   if (dateRange) {
     filters.placed_at = { start: dateRange.start, end: dateRange.end }
   }
+  if(orderNumber)orderBy.order_code = orderNumber
+  if(price)orderBy.total_amount = price
 
   const joins = {
     branch: 'branches(name)',
@@ -24,32 +29,9 @@ export async function getAllOrders({
   }
 
   const  search = searchTerm ? ['order_code', searchTerm] : []
-  const searchKey = 'order_code'
-
-  try {
-    const [
-      { data, count },
-      processingCounts,
-      completedCounts 
-    ] = await Promise.all([
-      repos.order.findAll({filters, joins, search, range}),
-      repos.order.countByGroup('status', "preparing", {filters,searchKey, searchTerm}),
-      repos.order.countByGroup('status', "ready", {filters,searchKey,searchTerm})
-    ])
 
 
-    const stats = {
-      total_order: count,
-      processing_order: processingCounts,
-      completed_order: completedCounts,
-      cancelled_order: count - (processingCounts + completedCounts),
-    }
-
-    return {data, count, stats }
-    
-  } catch (error) {
-    throw new Error(`Error fetching customer and counts: ${err.message}`)
-  }
+  return repos.order.findAll({filters, joins, search, range, orderBy})
  
 }
 

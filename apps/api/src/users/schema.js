@@ -32,6 +32,7 @@ const userFields={
   searchTerm: z.string().optional().default(''),
   branchId: z.string().optional(),
   isActive: z.string().optional(),
+  name: z.string().optional(),
   role: z.enum([
     'admin',
     'supervisor',

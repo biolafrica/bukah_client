@@ -7,9 +7,11 @@ export async function getAllTransaction({
   type = null, 
   method = null, 
   dateRange = null, 
-  range =[0,9]
+  range =[0,9],
+  totalAmount = null
 }={}){
   const filters = {}
+  const orderBy = {}
 
   if (branchId) filters.branch_id = branchId
   if (type) filters.transaction_type = type
@@ -18,6 +20,8 @@ export async function getAllTransaction({
     filters.created_at = { start: dateRange.start, end: dateRange.end }
   }
 
+  if(totalAmount) orderBy.total_amount = totalAmount
+
   const search = searchId ? ['reference_id', searchId] : []
 
   const joins = {
@@ -25,7 +29,7 @@ export async function getAllTransaction({
     order: 'orders(id)',
   }
 
-  return repos.transaction.findAll({search,filters,joins, range})
+  return repos.transaction.findAll({search,filters,joins, range, orderBy})
 }
 
 export async function getTransactionById(transactionId){

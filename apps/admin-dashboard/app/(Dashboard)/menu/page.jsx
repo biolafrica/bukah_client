@@ -14,12 +14,15 @@ export default async function MenuPage({ searchParams }) {
     page = '',
   } = await searchParams
 
+  
+  //pagination
   const pageIdx  = parseInt(page, 10) || 0
   const pageSize = 10
   const start   = pageIdx * pageSize
   const end     = start + pageSize - 1
 
 
+  //fetch options for filter
   const [branchesRes, catsRes] = await Promise.all([
     fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/common/branches`),
     fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/common/product-categories`),
@@ -34,6 +37,7 @@ export default async function MenuPage({ searchParams }) {
 
   const branchOptions = branches.map(b => ({ value: b.id, label: b.name }))
   const categoryOptions = categories.map(c => ({ value: c.id, label: c.name }))
+
 
   // 2️⃣ build the query URL for products or categories
   const params = new URLSearchParams()

@@ -1,37 +1,28 @@
 import { repos } from "../lib/repos"
 
-export async function getAllCustomersWithCounts({
+export function getAllCustomersWithCounts({
   searchTerm = "", 
   type = null, 
   dateRange = null, 
-  range=[0,9]
+  range=[0,9],
+  totalOrders = null,
+  totalSpent = null,
 }={}){
-  const filters = {}
+  const filters = {};
+  const orderBy = {};
+
   if (type === 'registered') filters.is_registered = true
   if (type === 'guest') filters.is_registered = false
   if (dateRange) {
     filters.created_at = { start: dateRange.start, end: dateRange.end }
   }
 
+  if(totalOrders) orderBy.total_orders = totalOrders;
+  if(totalSpent) orderBy.total_spent = totalSpent;
+
   const search = searchTerm ? ['name', searchTerm] : [];
-  const searchKey = 'name'
 
-  try {
-    const { data, count } = await repos.customer.findAll({search, filters, range})
-
-    const registeredCounts = await repos.customer.countByGroup('is_registered', true, {filters, searchKey, searchTerm})
-
-    const stats = {
-      total_customers: count,
-      registered_customers: registeredCounts,
-      guest_customers: count - registeredCounts
-    }
-
-    return { data, count, stats }
-    
-  } catch (err) {
-    throw new Error(`Error fetching customer with counts: ${err.message}`)
-  }
+  return repos.customer.findAll({search, filters, range, orderBy})
 }
 
 

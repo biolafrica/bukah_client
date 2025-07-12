@@ -14,7 +14,7 @@ export class BaseRepo{
     range = [0,9],
     count = true,
     select = "*",
-    orderBy = null
+    orderBy = {}
   }={}){
 
     let selectFields = select
@@ -63,9 +63,10 @@ export class BaseRepo{
       query = query.or(`${a}.ilike.%${term}%,${b}.ilike.%${term}%`)
     }
     
-
-    if (orderBy && orderBy.key) {
-      query = query.order(orderBy.key, {ascending: orderBy.ascending ?? true,})
+  
+    if (orderBy && typeof orderBy === 'object' && Object.keys(orderBy).length > 0) {
+      const [key, direction] = Object.entries(orderBy)[0];
+      query = query.order(key, { ascending: direction === 'ascending' ?? true });
     }
 
 

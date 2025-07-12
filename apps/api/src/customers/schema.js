@@ -24,7 +24,9 @@ export const updateCustomerSchema = createCustomerSchema
 
 const customerFields = {
   searchTerm: z.string().optional().default(''),
-  type:       z.string().optional(),
+  type: z.string().optional(),
+  totalOrders: z.string().optional(),
+  totalSpent: z.string().optional(),
 }
 
 

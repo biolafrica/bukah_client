@@ -63,7 +63,7 @@ export default function DataTable({
         </tbody>
       </table>
 
-      {totalCount => 10 && 
+      {totalCount > pageSize && 
         ( <TableFooter
             currentPage={currentPage}
             pageSize={pageSize}

@@ -5,19 +5,22 @@ export async function getAllStaffWithBranches({
   branchId = null, 
   role =null, 
   isActive = null,  
-  range = [0,9]
+  range = [0,9],
+  name = null
 }={}){
   const filters = {}
+  const orderBy = {}
 
   if (branchId) filters.branch_id = branchId
   if (isActive !== null) filters.is_active = isActive
   if (role) filters.role = role
+  if(name)orderBy.first_name = name
 
   const joins = { branch: 'branches(name, id)' }
 
   const search = searchTerm ? ['first_name', "last_name", searchTerm] : []
   
-  return repos.user.findAll({filters,joins,search,range})
+  return repos.user.findAll({filters,joins,search,range,orderBy})
 }
 
 
