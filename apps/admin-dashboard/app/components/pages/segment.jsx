@@ -15,6 +15,7 @@ export default function SegmentedToolbars({
   filterProps = null,
   // sortProps: { options, sortConfig, onSort, onClear, label }
   sortProps = null,
+  search = true
 }) {
   const [active, setActive] = useState(
     defaultActive || (segments.length > 0 ? segments[0].key : "")
@@ -59,21 +60,22 @@ export default function SegmentedToolbars({
       <div className="flex items-center gap-2 mb-2">
 
         {/* Search */}
-        <div className="flex items-center border border-gray-300 rounded-md bg-white">
-          <outline.MagnifyingGlassIcon
-            className="w-7 h-9 px-1"
-            aria-hidden="true"
-          />
-          <input
-            type="text"
-            className="input-search border-none h-9"
-            placeholder={searchPlaceholder}
-            onKeyDown={(e) => {
-              if (e.key === "Enter") onSearch?.(e.target.value)
-            }}
-            aria-label="Search"
-          />
-        </div>
+        {search && (<div className="flex items-center border border-gray-300 rounded-md bg-white">
+            <outline.MagnifyingGlassIcon
+              className="w-7 h-9 px-1"
+              aria-hidden="true"
+            />
+            <input
+              type="text"
+              className="input-search border-none h-9"
+              placeholder={searchPlaceholder}
+              onKeyDown={(e) => {
+                if (e.key === "Enter") onSearch?.(e.target.value)
+              }}
+              aria-label="Search"
+            />
+          </div>)
+        }
 
         {/* Filter */}
         {filterProps && (

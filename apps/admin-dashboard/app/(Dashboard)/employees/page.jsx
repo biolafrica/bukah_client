@@ -1,105 +1,70 @@
-"use client"
+// app/employees/page.jsx (Server Component)
 
-import HeadingIntro from "../../components/pages/headingIntro";
-import * as outline  from "@heroicons/react/24/outline"
-import SegmentedToolbar from "../../components/pages/segmentedToolbar";
-import DataTable from "../../components/pages/dataTable";
+import ClientEmployeeInner from "../../components/pages/employee/clientEmployeeInner"
 
-export default function Employee() {
-  const handleAddEmployee=()=>{}
-  const handleEdit =(row)=>{}
-  const handleDelete =(row)=>{}
 
-  const columns = [
-    { key: 'name', header: 'Name', minWidth: '150px' },
-    { key: 'role', header: 'Role', minWidth: '150px' },
-    { key: 'email', header: 'Email', minWidth: '200px' },
-    { key: 'branch', header: 'Branch', minWidth: '150px' },
-    { key: 'dateRegistered', header: 'Date Registered', minWidth: '150px' },
-    {
-      key: 'status',
-      header: 'Status',
-      minWidth: '100px',
-      render: row => {
-        const colors = {
-          active:  'bg-green-100 text-green-800',
-          inactive:   'bg-red-100 text-red-800',
-        }
-        const cls = colors[row.status] || 'bg-gray-100 text-gray-800'
-        return (
-          <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${cls}`}>
-            {row.status}
-          </span>
-        )
-      }
-    },
-  ];
+export const dynamic = 'force-dynamic'
 
-  const data =[
-    {
-      id: 1,
-      name: 'Adekunle Johnson',
-      role: 'Chef',
-      email: 'ajohnson@gmail.com',
-      branch: 'branch B',
-      dateRegistered: '26-05-2025',
-      status: "active"
-    },
-    {
-      id: 2,
-      name: 'Folake Abimbola',
-      role: 'Supervisor',
-      email: 'folakeabimbola@hotmail.com',
-      branch: 'branch A',
-      dateRegistered: '26-04-2025',
-      status: "inactive"
-    },
-    {
-      id: 3,
-      name: 'Kunle Afolabi',
-      role: 'Manager',
-      email: 'kafolabi@bukah.co',
-      branch: 'Branch D',
-      dateRegistered: '26-03-2024',
-      status: "active"
-    },
-  
-  ]
+export default async function EmployeesPage({ searchParams }) {
+  const {
+    segment     = 'employees',  // 'employees' or 'permissions'
+    searchTerm  = '',
+    branch      = '',           // branchId
+    isActive    = '',           // 'true' or 'false'
+    role        = '',
+    name        = '',           // sort by name: 'ascending'|'descending'
+    page        = '0',
+  } = await searchParams
 
+  const pageIdx  = parseInt(page, 10) || 0
+  const pageSize = 10
+  const start    = pageIdx * pageSize
+  const end      = start + pageSize - 1
+
+  // Fetch branch options
+  const branchesRes = await fetch(
+    `${process.env.NEXT_PUBLIC_API_URL}/api/common/branches`
+  )
+  const branchesJson = await branchesRes.json()
+  const branches = branchesJson.data.data; 
+  const branchOptions = branches.map(b => ({
+    value: b.id,
+    label: b.name,
+  }))
+
+  // Build params if segment is employees
+  let tableData = []
+  let totalCount = 0
+
+  if (segment === 'employees') {
+    const params = new URLSearchParams()
+    if (searchTerm) params.set('searchTerm', searchTerm)
+    if (branch)     params.set('branch',     branch)
+    if (isActive)   params.set('isActive',   isActive)
+    if (role)       params.set('role',       role)
+    if (name)       params.set('name',       name)
+    params.set('range', `${start},${end}`)
+
+    const usersRes = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}/api/users?${params}`
+    )
+    const usersJson   = await usersRes.json()
+    const wrapper     = usersJson.data
+    tableData    = wrapper.data
+    totalCount   = wrapper.count
+  }
 
   return (
-    <div className="employee-container p-5 pt-30 lg:pl-75">
-
-      {/* Module Intro component */}
-      <HeadingIntro 
-        module="Employee" 
-        moduleIntro="Manage who works in restaurants and their role" 
-        Icon={outline.PlusIcon} 
-        buttonText="Add Employee"
-        branches={false} 
-        onButtonClick={handleAddEmployee}
-      />
-
-      {/* Segmented Buttons and filter Component */}
-      <SegmentedToolbar
-        segments={[
-          { key: 'employee', label: 'Employee' },
-          { key: 'permissions', label: 'Permissions' },
-        ]}
-        defaultActive="employee"
-        onSegmentChange={(key) => console.log('Segment:', key)}
-        onSearch={(q) => console.log('Search query:', q)}
-        onFilter={() => console.log('Filter clicked')}
-        onSort={() => console.log('Sort clicked')}
-        searchPlaceholder = 'search names'
-
-      />
-
-
-      {/* Table Component */}
-      <DataTable columns={columns} data={data} onEdit={handleEdit} onDelete={handleDelete}/>
-
-
-    </div>
+    <ClientEmployeeInner
+      segment={segment}
+      searchTerm={searchTerm}
+      branchOptions={branchOptions}
+      filters={{ branch, isActive, role }}
+      sortConfig={ name ? { key: 'name', direction: name } : null }
+      tableData={tableData}
+      totalCount={totalCount}
+      currentPage={pageIdx}
+      pageSize={pageSize}
+    />
   )
 }
