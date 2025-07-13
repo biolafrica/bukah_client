@@ -3,7 +3,7 @@ import { repos } from "../lib/repos"
 
 export async function getAllTransaction({
   searchId = "", 
-  branchId = null, 
+  branch = null, 
   type = null, 
   method = null, 
   dateRange = null, 
@@ -13,7 +13,7 @@ export async function getAllTransaction({
   const filters = {}
   const orderBy = {}
 
-  if (branchId) filters.branch_id = branchId
+  if (branch) filters.branch_id = branch
   if (type) filters.transaction_type = type
   if (method) filters.payment_method = method
   if (dateRange) {
@@ -26,7 +26,7 @@ export async function getAllTransaction({
 
   const joins = {
     branch: 'branches(name)',
-    order: 'orders(id)',
+    order: 'orders(order_code)',
   }
 
   return repos.transaction.findAll({search,filters,joins, range, orderBy})

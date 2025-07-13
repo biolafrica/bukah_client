@@ -90,11 +90,7 @@ export default function ClientEmployeeInner({
       key: 'branch',
       header: 'Branch',
       minWidth: '150px',
-      render: row => (
-        row.branch.length > 0
-          ? row.branch.map(b => b.name).join(', ')
-          : '-'  
-      )
+      render: row => row.branch?.name ?? '-' 
     },
     {
       key: 'created_at',

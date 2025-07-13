@@ -12,10 +12,9 @@ export async function getAllBranchesWithSupervisor({
   searchTerm = '', 
   range = [0, 9] 
 }={}){
-  const  joins = { branch: 'users(first_name,last_name, id)'}
   const search = searchTerm ? ['name', searchTerm] : []
 
-  return repos.branch.findAll({search, joins, range})
+  return repos.branch.findAll({search, range})
 }
 
 export async function getBranchById(branchId){

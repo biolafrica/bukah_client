@@ -1,124 +1,76 @@
-"use client"
-
-import HeadingIntro from "../../components/pages/headingIntro";
-import * as outline  from "@heroicons/react/24/outline"
-import SegmentedToolbar from "../../components/pages/segmentedToolbar";
-import MetricsContainer from "../../components/pages/metricsCont";
+import ClientFinanceInner from "../../components/pages/finance/clientFinaceInner"
 import { formatNaira } from "../../utils/format";
-import DataTable from "../../components/pages/dataTable";
 
-export default function  Finance() {
 
-  const columns = [
-    { key: 'transactionID', header: 'Transaction ID', minWidth: '150px' },
-    { key: 'orderID', header: 'Order ID', minWidth: '150px' },
-    { key: 'paymentMethod', header: 'Payment Method', minWidth: '150px' },
-    { key: 'branch', header: 'Branch', minWidth: '150px' },
-    { key: 'amount', header: 'Amount', minWidth: '150px' },
-    { key: 'dateAndTime', header: 'Date and Time', minWidth: '150px' },
-    {
-      key: 'status',
-      header: 'Status',
-      minWidth: '100px',
-      render: row => {
-        const colors = {
-          successful: 'bg-green-100 text-green-800',
-          pending: 'bg-yellow-100 text-yellow-800',
-          refunded: 'bg-blue-100 text-blue-800',
-        }
-        const cls = colors[row.status] || 'bg-gray-100 text-gray-800'
-        return (
-          <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${cls}`}>
-            {row.status}
-          </span>
-        )
-      }
-    },
-  ];
+export const dynamic = 'force-dynamic'
 
-  const data =[
-    {
-      id: 1,
-      orderID: '#001',
-      transactionID: '1234RT-4567UY-9807',
-      branch: 'Branch A',
-      paymentMethod: 'Cash',
-      amount: formatNaira(60000),
-      dateAndTime: '26-05-2025 - 03:00pm',
-      status: "refunded"
-    },
-    {
-      id: 2,
-      orderID: '#001',
-      transactionID: '1234RT-4567UY-9807',
-      branch: 'Branch A',
-      paymentMethod: 'Transfer',
-      amount: formatNaira(90000),
-      dateAndTime: '26-06-2025 - 05:00pm',
-      status: "pending"
-    },
-    {
-      id: 3,
-      orderID: '#001',
-      transactionID: '1234RT-4567UY-9807',
-      branch: 'Branch A',
-      paymentMethod: 'Card',
-      amount: formatNaira(20000),
-      dateAndTime: '12-05-2025 - 04:00pm',
-      status: "successful"
-    },
+export default async function FinancePage({ searchParams }) {
+  const {
+    segment     = 'all',      // 'all' | 'successful' | 'pending' | 'refund'
+    searchId    = '',
+    dateRange   = '',         // 'YYYY-MM-DD,YYYY-MM-DD'
+    branch      = '',         // branchId
+    method      = '',         // 'cash' | 'transfer' | 'card'
+    totalAmount = '',         // 'ascending' | 'descending'
+    page        = '0',
+  } = await searchParams;
 
+  const pageIdx  = parseInt(page, 10) || 0
+  const pageSize = 10
+  const start    = pageIdx * pageSize
+  const end      = start + pageSize - 1
+
+  // Fetch branch options
+  const branchesRes = await fetch(
+    `${process.env.NEXT_PUBLIC_API_URL}/api/common/branches`
+  )
+  const branchesJson   = await branchesRes.json()
+  const branches = branchesJson.data.data;
+  const branchOptions  = branches.map(b => ({ value: b.id, label: b.name }))
+
+  // Prepare query params for transactions
+  const params = new URLSearchParams()
+  if (segment !== 'all')   params.set('type', segment)
+  if (searchId)            params.set('searchId', searchId)
+  if (dateRange)           params.set('dateRange', dateRange)
+  if (branch)              params.set('branch', branch)
+  if (method)              params.set('method', method)
+  if (totalAmount)         params.set('totalAmount', totalAmount)
+  params.set('range', `${start},${end}`)
+
+  // Fetch paginated transactions
+  const txRes    = await fetch(
+    `${process.env.NEXT_PUBLIC_API_URL}/api/transactions?${params}`
+  )
+  const txJson   = await txRes.json()
+  const tableData  = txJson.data.data
+  const totalCount = txJson.data.count
+
+  // Fetch metrics for transactions
+  {/*const metricsRes = await fetch(
+    `${process.env.NEXT_PUBLIC_API_URL}/api/transactions/metrics`
+  )
+  const metricsJson  = await metricsRes.json()
+  const metrics      = metricsJson.data */}
+  const metrics = [
+    { label: 'Total Sales', value: formatNaira(125500000), percentage: '+11.02%', comparison: 'vs last month', trend: 'up' },
+    { label: 'Registered', value: formatNaira(1300000), percentage: '+5.00%', comparison: 'vs last month', trend: 'up' },
+    { label: 'Net Revenue', value: formatNaira(124200000), percentage: '-3.50%', comparison: 'vs last month', trend: 'up' },
   ]
 
-  const handleFinanceExport=()=>{}
-  const handleDelete =(row)=>{}
-  const handleEdit =(row)=>{}
   return (
-    <div className="finance-container p-5 pt-30 lg:pl-75">
-
-      {/* Module Intro component */}
-      <HeadingIntro 
-        module="Finances" 
-        moduleIntro="View and manage all your money in one place" 
-        Icon={outline.ArrowUpOnSquareIcon} 
-        buttonText="Export"
-        branches={false}
-        onButtonClick={handleFinanceExport} 
-      />
-
-
-      {/* Transaction Metrics components */}
-      <MetricsContainer
-        metrics={[
-          { label: 'Total Sales', value: formatNaira(125500000), percentage: '+11.02%', comparison: 'vs last month', trend: 'up' },
-          { label: 'Registered', value: formatNaira(1300000), percentage: '+5.00%', comparison: 'vs last month', trend: 'up' },
-          { label: 'Net Revenue', value: formatNaira(124200000), percentage: '-3.50%', comparison: 'vs last month', trend: 'up' },
-        ]}
-      />
-
-
-      {/* Segmented Buttons and filter Component */}
-      <SegmentedToolbar
-        segments={[
-          { key: 'all', label: 'All' },
-          { key: 'successful', label: 'Successful' },
-          { key: 'pending', label: 'Pending' },
-          { key: 'refunds', label: 'Refunds' },
-        ]}
-        defaultActive="all"
-        onSegmentChange={(key) => console.log('Segment:', key)}
-        onSearch={(q) => console.log('Search query:', q)}
-        onFilter={() => console.log('Filter clicked')}
-        onSort={() => console.log('Sort clicked')}
-        searchPlaceholder = 'search order Id'
-      />
-
-
-      {/* table Component */}
-      <DataTable columns={columns} data={data} onEdit={handleEdit} onDelete={handleDelete}/>
-      
-  
-
-    </div>
+    <ClientFinanceInner
+      segment={segment}
+      searchId={searchId}
+      dateRange={dateRange}
+      filters={{ branch, method }}
+      sortConfig={ totalAmount ? { key: 'totalAmount', direction: totalAmount } : null }
+      tableData={tableData}
+      totalCount={totalCount}
+      currentPage={pageIdx}
+      pageSize={pageSize}
+      branchOptions={branchOptions}
+      metrics={metrics}
+    />
   )
 }
