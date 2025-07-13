@@ -1,6 +1,77 @@
-"use client"
+// app/customers/page.jsx (Server Component)
 
-import HeadingIntro from "../../components/pages/headingIntro";
+import ClientCustomerInner from "../../components/pages/customers/clientCustomer"
+import { formatNumber } from "../../utils/format"
+
+
+export const dynamic = 'force-dynamic'
+
+export default async function CustomersPage({ searchParams }) {
+  const {
+    segment     = 'all',        // 'all' | 'registered' | 'guest'
+    search      = '',
+    dateRange   = '',
+    sortBy      = '',           // 'totalOrders' | 'totalSpent'
+    direction   = '',           // 'asc' | 'desc'
+    page        = '0',
+  } = await searchParams
+
+  const pageIdx  = parseInt(page, 10) || 0
+  const pageSize = 10
+  const start    = pageIdx * pageSize
+  const end      = start + pageSize - 1
+
+  // Build shared params
+  const params = new URLSearchParams()
+  if (segment !== 'all') params.set('type', segment)
+  if (search)      params.set('searchTerm', search)
+  if (dateRange)   params.set('dateRange', dateRange)
+  if (sortBy)      params.set(sortBy, direction || 'asc')
+  params.set('range', `${start},${end}`)
+
+  // Fetch main customer list
+  const listRes = await fetch(
+    `${process.env.NEXT_PUBLIC_API_URL}/api/customers?${params}`
+  )
+  const listJson      = await listRes.json()
+  const tableData     = listJson.data.data
+  const totalCount    = listJson.data.count
+
+  // Fetch top customers by orders/spending
+  const topsRes       = await fetch(
+    `${process.env.NEXT_PUBLIC_API_URL}/api/customers/tops`
+  )
+  const topsJson      = await topsRes.json()
+  const topOrders     = topsJson.data.most_orders.data
+  const topSpenders   = topsJson.data.top_spenders.data
+
+  // Fetch customer metrics
+  const metrics=[
+    { label: 'Total Customers', value: formatNumber(312), percentage: '+11.02%', comparison: 'vs last month', trend: 'up' },
+    { label: 'Registered', value: formatNumber(300), percentage: '+5.00%', comparison: 'vs last month', trend: 'up' },
+    { label: 'Guest', value: formatNumber(12), percentage: '-3.50%', comparison: 'vs last month', trend: 'down' },
+  ]
+
+  return (
+    <ClientCustomerInner
+      segment={segment}
+      search={search}
+      dateRange={dateRange}
+      sortBy={sortBy}
+      direction={direction}
+      tableData={tableData}
+      totalCount={totalCount}
+      currentPage={pageIdx}
+      pageSize={pageSize}
+      topOrders={topOrders}
+      topSpenders={topSpenders}
+      metrics={metrics}
+    />
+  )
+}
+
+
+{/*import HeadingIntro from "../../components/pages/headingIntro";
 import * as outline  from "@heroicons/react/24/outline"
 import SegmentedToolbar from "../../components/pages/segmentedToolbar";
 import MetricsContainer from "../../components/pages/metricsCont";
@@ -74,7 +145,7 @@ export default function Customers() {
   return (
     <div className="customer-container p-5 pt-30 lg:pl-75">
 
-      {/* Module Intro component */}
+      {/* Module Intro component 
       <HeadingIntro 
         module="Customers" 
         moduleIntro="Understand your customers to improve service" 
@@ -87,7 +158,7 @@ export default function Customers() {
       <div className="flex gap-5">
 
         <div className="flex-1 lg:w-4/7">
-          {/* Transaction Metrics components */}
+          {/* Transaction Metrics components 
           <MetricsContainer
             metrics={[
               { label: 'Total Customers', value: formatNumber(312), percentage: '+11.02%', comparison: 'vs last month', trend: 'up' },
@@ -96,7 +167,7 @@ export default function Customers() {
             ]}
           />
 
-          {/* Segmented Buttons and filter Component */}
+          {/* Segmented Buttons and filter Component 
           <SegmentedToolbar
             segments={[
               { key: 'all', label: 'All' },
@@ -111,7 +182,7 @@ export default function Customers() {
             searchPlaceholder = 'search order Id'
           />
 
-          {/* Table Component */}
+          {/* Table Component *
           <DataTable columns={columns} data={data} onEdit={handleEdit} onDelete={handleDelete}/>
         </div>
 
@@ -124,4 +195,4 @@ export default function Customers() {
 
     </div>
   )
-}
+}*/}
