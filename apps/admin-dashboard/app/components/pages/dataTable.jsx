@@ -14,7 +14,7 @@ export default function DataTable({
   return (
     <div className="w-full h-fit overflow-auto bg-white rounded-lg border border-border-text">
 
-      <table className="min-w-full text-sm">
+      <table className="min-w-full text-sm ">
 
         <thead className="border-b border-border-text bg-white">
           <tr>
