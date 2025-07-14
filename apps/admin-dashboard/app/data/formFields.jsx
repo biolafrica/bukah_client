@@ -10,6 +10,8 @@ export const storeFields = [
   { name: 'prefix', label: 'Prefix(Two letters before your OrderID)', type: 'text', required: true },
 ]
 
+
+
 export const initial = [
   { day: 'Monday',    enabled: true,  from: '09:00', to: '17:00' },
   { day: 'Tuesday',   enabled: true,  from: '09:00', to: '17:00' },
@@ -41,7 +43,7 @@ export const bankFields = [
 ]
 
 export const taxFields = [
-  { name: 'tax', label: 'Tax(Add tax % if applicable)', type: 'nuber', required: false },
+  { name: 'tax', label: 'Tax(Add tax % if applicable)', type: 'number', required: false },
 ]
 
 export const addTerminalFields = [

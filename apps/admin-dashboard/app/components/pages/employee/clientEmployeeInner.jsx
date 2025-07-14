@@ -7,6 +7,8 @@ import DataTable        from '../dataTable'
 import EmptyState       from '../../common/emptyState'
 import Permission from './permission'
 import * as outline     from '@heroicons/react/24/outline'
+import { useState } from 'react'
+import AddEmployee from './addEmployee'
 
 export default function ClientEmployeeInner({
   segment,
@@ -21,6 +23,8 @@ export default function ClientEmployeeInner({
 }) {
   const router = useRouter()
   const params = useSearchParams()
+
+  const [sideScreenOpen,setSideScreenOpen] = useState(false)
 
   // Filter config for employees
   const filterConfig = [
@@ -117,13 +121,27 @@ export default function ClientEmployeeInner({
 
   return (
     <div className="p-5 pt-30 lg:pl-75">
+
+      {sideScreenOpen && (
+        <div className='fixed inset-0 z-60 flex'>
+          <div className='absolute inset-0 bg-black opacity-50' onClick={()=> setSideScreenOpen(false)}/>
+
+          <div className='relative z-65'>
+            <AddEmployee branchOptions={branchOptions} OnCancelClick={()=>setSideScreenOpen(false)}/>
+          </div>
+
+        </div>
+
+      )}
+
+
       <HeadingIntro
         module="Employee"
         moduleIntro="Manage who works in restaurants and their role"
         Icon={outline.PlusIcon}
         buttonText="Add Employee"
         branches={false}
-        onButtonClick={() => updateParams({})}
+        onButtonClick={() => setSideScreenOpen(true)}
       />
 
       <SegmentedToolbar
@@ -187,6 +205,7 @@ export default function ClientEmployeeInner({
           />
         )
       )}
+
     </div>
   )
 }
