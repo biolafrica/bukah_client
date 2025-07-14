@@ -149,9 +149,9 @@ export default function ClientEmployeeInner({
           options:    sortOptions,
           sortConfig,
           onSort:     (key) => {
-            const dir = sortConfig?.key === key && sortConfig.direction === 'asc'
-              ? 'desc'
-              : 'asc'
+            const dir = sortConfig?.key === key && sortConfig.direction === 'ascending'
+              ? 'descending'
+              : 'ascending'
             updateParams({ name: dir })
           },
           onClear:    () => updateParams({ name: null }),

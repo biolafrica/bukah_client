@@ -2,7 +2,7 @@ import { repos } from "../lib/repos";
 
 export async function getAllStaffWithBranches({
   searchTerm =null, 
-  branchId = null, 
+  branch = null, 
   role =null, 
   isActive = null,  
   range = [0,9],
@@ -11,7 +11,7 @@ export async function getAllStaffWithBranches({
   const filters = {}
   const orderBy = {}
 
-  if (branchId) filters.branch_id = branchId
+  if (branch) filters.branch_id = branch
   if (isActive !== null) filters.is_active = isActive
   if (role) filters.role = role
   if(name)orderBy.first_name = name

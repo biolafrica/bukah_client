@@ -22,7 +22,7 @@ export default function ClientMenuInner({
   pageSize,
 }) {
   const router = useRouter()
-  const params = useSearchParams()  // read-only
+  const params = useSearchParams()
 
   // helper to update URL without full reload
   const updateParams = (patch) => {
@@ -34,10 +34,13 @@ export default function ClientMenuInner({
     router.replace(`?${next.toString()}`)
   }
 
-  const hasSearch  = params.has('search')  && params.get('search').trim() !== ''
-  const hasBranch  = params.has('branch')  && params.get('branch') !== ''
-  const hasCategory= params.has('category')&& params.get('category') !== ''
-  const isQuerying = hasSearch || hasBranch || hasCategory
+  const isQuerying = [
+    'search', 'category', 'branch',
+  ].some((k) => {
+    const val = params.get(k)
+    return val != null && val !== ''
+  })
+
 
   return (
     <div className="p-5 pt-30 lg:pl-75">
@@ -68,7 +71,7 @@ export default function ClientMenuInner({
           
           onChange: (k, v) => updateParams({ [k]: v }),
 
-          onApply:  () => {},      // data auto-refresh via server
+          onApply:  () => {},
           onClear:  () => updateParams({ branch: '', category: '' }),
           title:    'Filter Items',
         }}
@@ -77,12 +80,12 @@ export default function ClientMenuInner({
           options: segment ==='items' ? menu.sortOptions:[{key:'name', label:'Name'}],
           sortConfig,
           onSort: key => {
-            const dir = sortConfig?.key===key && sortConfig.direction ==='asc'
-              ? 'desc'
-              : 'asc'
-            updateParams({ sortBy:key, direction:dir })
+            const dir = sortConfig?.key===key && sortConfig.direction ==='ascending'
+              ? 'descending'
+              : 'ascending'
+            updateParams({ name:dir })
           },
-          onClear: () => updateParams({ sortBy:null, direction:null }),
+          onClear: () => updateParams({  name:null}),
           label: 'Sort',
         }}
       />

@@ -37,7 +37,7 @@ export default function SortDropdown({
         <span className='text-sm'>{label}</span>
         {sortConfig && (
           <div className="flex items-center gap-1">
-            {sortConfig.direction === 'asc' ? (
+            {sortConfig.direction === 'ascending' ? (
               <outline.ArrowUpIcon className="w-3 h-3 text-on-pri-cont" aria-hidden="true" />
             ) : (
               <outline.ArrowDownIcon className="w-3 h-3 text-on-pri-cont" aria-hidden="true" />
@@ -60,6 +60,7 @@ export default function SortDropdown({
                 <outline.XMarkIcon className="w-4 h-4" aria-hidden="true" />
               </button>
             </div>
+            
             <div className="space-y-2 text-sm">
               {options.map(opt => {
                 const isActive = sortConfig?.key === opt.key
@@ -77,7 +78,7 @@ export default function SortDropdown({
                   >
                     <span>{opt.label}</span>
                     {isActive && (
-                      sortConfig.direction === 'asc' ? (
+                      sortConfig.direction === 'ascending' ? (
                         <outline.ArrowUpIcon className="w-3 h-3" aria-hidden="true" />
                       ) : (
                         <outline.ArrowDownIcon className="w-3 h-3" aria-hidden="true" />

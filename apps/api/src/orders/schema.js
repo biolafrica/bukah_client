@@ -5,7 +5,7 @@ const orderFields ={
   searchTerm : z.string().optional().default(""),
   orderNumber : z.string().optional(),
   price : z.string().optional(),
-  branchId : z.string().uuid().optional(),
+  branch : z.string().uuid().optional(),
   status : z.enum([
     "pending",
     "accepted", 

@@ -3,7 +3,6 @@ import { formatNaira } from "../utils/format"
 export const menu = {
   sortOptions : [
     { key: "name", label: "Name" },
-    { key: "price", label: "Price" },
   ],
 
   categoriesColumns :[

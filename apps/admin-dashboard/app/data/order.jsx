@@ -13,7 +13,7 @@ export const order = {
 
     { key: 'amount', header: 'Amount', minWidth: '150px',render: (row) => formatNaira(row.total_amount),},
 
-    { key: 'dateAndTime', header: 'Date and Time', minWidth: '150px',render: (row) => new Date(row.placed_at).toLocaleString() },
+    { key: 'dateAndTime', header: 'Date and Time', minWidth: '150px',render: row => new Date(row.placed_at).toLocaleString('en-GB') },
 
     {
       key: 'status',
@@ -36,49 +36,6 @@ export const order = {
     },
   ],
 
-  data :[
-    {
-      id: 1,
-      orderID: '#001',
-      items: 'Rice,Beans,Beef',
-      branch: 'Branch A',
-      staff: 'Adekunle Johnson',
-      amount: formatNaira(60000),
-      dateAndTime: '26-05-2025 - 03:00pm',
-      status: "cancelled"
-    },
-    {
-      id: 2,
-      orderID: '#001',
-      items: 'Rice,Beans,Beef',
-      branch: 'Branch A',
-      staff: 'Adekunle Johnson',
-      amount: formatNaira(60000),
-      dateAndTime: '26-05-2025 - 03:00pm',
-      status: "inprogress"
-    },
-    {
-      id: 3,
-      orderID: '#001',
-      items: 'Rice,Beans,Beef',
-      branch: 'Branch A',
-      staff: 'Adekunle Johnson',
-      amount: formatNaira(60000),
-      dateAndTime: '26-05-2025 - 03:00pm',
-      status: "received"
-    },
-    {
-      id: 4,
-      orderID: '#001',
-      items: 'Rice,Beans,Beef',
-      branch: 'Branch A',
-      staff: 'Adekunle Johnson',
-      amount: formatNaira(60000),
-      dateAndTime: '26-05-2025 - 03:00pm',
-      status: "completed"
-    },
-
-  ],
 
   metrics :[
     { label: 'Total Orders', value: formatNumber(2500), percentage: '+11.02%', comparison: 'vs last month', trend: 'up' },
@@ -107,11 +64,7 @@ export const order = {
   ],
 
   sortOptions : [
-    { key: "orderNumber", label: "Order Number" },
     { key: "price", label: "Price" },
   ],
 
-  dateOptions: [
-    {}
-  ]
 }

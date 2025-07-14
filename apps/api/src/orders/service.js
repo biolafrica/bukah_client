@@ -2,7 +2,7 @@ import { repos } from "../lib/repos";
 
 export async function getAllOrders({
   searchTerm = "",
-  branchId = null,
+  branch = null,
   status = null,
   channel = null,
   dateRange = null,
@@ -13,7 +13,7 @@ export async function getAllOrders({
   const filters = {}
   const orderBy = {}
 
-  if (branchId) filters.branch_id = branchId
+  if (branch) filters.branch_id = branch
   if (status) filters.status = status
   if (channel) filters.order_channel = channel
   if (dateRange) {

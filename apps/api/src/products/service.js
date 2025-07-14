@@ -17,11 +17,16 @@ export async function fetchAllProductWithCategory({
   searchTerm= "",
   range= [0,9],
   categoryId = null,
-  branchId= null 
+  branchId= null,
+  name = null, 
 }={}){
   const filters = {}
+  const orderBy = {}
+
   if(branchId)filters.branch_id = branchId
   if(categoryId)filters.category_id = categoryId
+
+  if(name)orderBy.name = name
 
   const search = searchTerm ? ['name', searchTerm] : []
 
@@ -30,7 +35,7 @@ export async function fetchAllProductWithCategory({
     category: "product_categories(name)",
   }
 
-  return repos.product.findAll({search,filters,range,joins})
+  return repos.product.findAll({search, filters, range, joins,orderBy})
 }
 
 

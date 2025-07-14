@@ -30,7 +30,7 @@ export const updateUserSchema = createUserSchema
 
 const userFields={
   searchTerm: z.string().optional().default(''),
-  branchId: z.string().optional(),
+  branch: z.string().optional(),
   isActive: z.string().optional(),
   name: z.string().optional(),
   role: z.enum([

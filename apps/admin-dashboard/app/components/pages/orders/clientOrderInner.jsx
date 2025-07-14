@@ -13,6 +13,7 @@ export default function ClientOrderInner({
   segment,
   search,
   branchOptions,
+  dateRange,
   filters,
   sortConfig,
   tableData,
@@ -23,17 +24,19 @@ export default function ClientOrderInner({
 
   const router = useRouter()
   const params = useSearchParams()
-  const [drStart, drEnd] = (params.get('dateRange') || '').split(',')
+  const [drStart, drEnd] = (dateRange || '').split(',')
 
   let config = [
     { key:'branch',   label:'Branch',   type:'select', options: branchOptions },
 
     { key:'channel', label:'channel', type:'select', options: order.channelOption },
 
-    { key:'dateRange', label:'dateRange', type:'date-range',fromKey: 'dateStart',
-    toKey:   'dateEnd',
-    value: { from: drStart, to: drEnd }, 
-    }
+    {
+      key:   'dateRange',
+      label: 'Date Created',
+      type:  'date-range',
+      value: { from: drStart, to: drEnd },
+    },
 
   ]
 
@@ -47,13 +50,12 @@ export default function ClientOrderInner({
     router.replace(`?${next.toString()}`)
   }
 
-  const hasSearch  = params.has('search')  && params.get('search').trim() !== '';
-  const hasBranch  = params.has('branch')  && params.get('branch') !== '';
-  const hasStatus= params.has('status')&& params.get('status') !== '';
-  const hasChannel= params.has('channel')&& params.get('channel') !== '';
-  const hasdateRange= params.has('dateRange')&& params.get('dateRange') !== '';
-
-  const isQuerying = hasSearch || hasBranch || hasStatus || hasChannel || hasdateRange
+  const isQuerying = [
+    'segment', 'search', 'dateRange', 'branch', 'channel',
+  ].some((k) => {
+    const val = params.get(k)
+    return val != null && val !== ''
+  })
 
 
   return(
@@ -76,7 +78,7 @@ export default function ClientOrderInner({
         segments={order.segment}
         defaultActive={segment}
 
-        onSegmentChange={key => updateParams({ segment: key })}
+        onSegmentChange={(key) => updateParams({ segment: key })}
 
         onSearch={q => updateParams({ search: q })}
 
@@ -95,12 +97,12 @@ export default function ClientOrderInner({
           options: order.sortOptions,
           sortConfig,
           onSort: key => {
-            const dir = sortConfig?.key===key && sortConfig.direction ==='asc'
-              ? 'desc'
-              : 'asc'
-            updateParams({ sortBy:key, direction:dir })
+            const dir = sortConfig?.key===key && sortConfig.direction ==='ascending'
+              ? 'descending'
+              : 'ascending'
+            updateParams({ price: dir})
           },
-          onClear: () => updateParams({ sortBy:null, direction:null }),
+          onClear: () => updateParams({price: null}),
           label: 'Sort',
         }}
       />

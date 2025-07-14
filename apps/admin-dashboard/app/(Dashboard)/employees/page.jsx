@@ -12,7 +12,7 @@ export default async function EmployeesPage({ searchParams }) {
     branch      = '',           // branchId
     isActive    = '',           // 'true' or 'false'
     role        = '',
-    name        = '',           // sort by name: 'ascending'|'descending'
+    name        = '',    
     page        = '0',
   } = await searchParams
 

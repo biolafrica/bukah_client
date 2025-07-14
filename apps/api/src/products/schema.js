@@ -24,7 +24,8 @@ export const updateProductSchema = createProductSchema
 export const productFields = {
   searchTerm : z.string().optional().default(""), 
   categoryId : z.string().uuid().optional(), 
-  branchId :z.string().uuid().optional()
+  branchId :z.string().uuid().optional(),
+  name :z.string().optional(),
 }
 
 export const getProductQuerySchema = makeQuerySchema(productFields)

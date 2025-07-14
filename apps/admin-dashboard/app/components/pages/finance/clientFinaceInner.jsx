@@ -100,6 +100,7 @@ export default function ClientFinanceInner({
         defaultActive={segment}
         onSegmentChange={(key) => updateParams({ segment: key })}
         onSearch={(q) => updateParams({ searchId: q })}
+
         filterProps={{
           filters,
           config:   filterConfig,
@@ -108,18 +109,20 @@ export default function ClientFinanceInner({
           onClear:  () => updateParams({ dateRange:'', branch:'', method:'' }),
           title:    'Filter Transactions'
         }}
+
         sortProps={{
-          options:    sortOptions,
+          options: sortOptions,
           sortConfig,
           onSort:     (key) => {
-            const dir = sortConfig?.key === key && sortConfig.direction === 'asc'
-              ? 'desc'
-              : 'asc'
-            updateParams({ totalAmount: dir })
+            const dir = sortConfig?.key === key && sortConfig.direction === 'ascending'
+              ? 'descending'
+              : 'ascending'
+            updateParams({ totalAmount: dir})
           },
-          onClear:    () => updateParams({ totalAmount: null }),
+          onClear: () => updateParams({ totalAmount: null}),
           label:      'Sort'
         }}
+
         searchPlaceholder="Search Reference ID"
       />
 

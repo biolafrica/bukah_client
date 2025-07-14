@@ -19,6 +19,7 @@ export function getAllCustomersWithCounts({
 
   if(totalOrders) orderBy.total_orders = totalOrders;
   if(totalSpent) orderBy.total_spent = totalSpent;
+  console.log("taotal",  orderBy)
 
   const search = searchTerm ? ['name', searchTerm] : [];
 

@@ -14,8 +14,13 @@ export async function deleteProductCategory(categoryId){
 }
 
 export async function fetchAllProductCategory({
-range=[0,9]}={}){
-  return repos.productCategory.findAll({range})
+  range=[0,9],
+  name = null,
+}={}){
+  const orderBy = {};
+  if(name) orderBy.name = name;
+
+  return repos.productCategory.findAll({range, orderBy})
 }
 
 export async function fetchCategoryNameAndID({range=[0,9]}={}){

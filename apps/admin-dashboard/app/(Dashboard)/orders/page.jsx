@@ -9,8 +9,7 @@ export default async function Orders({searchParams}){
     branch   = '',
     channel = '',
     dateRange = '',
-    sortBy   = '',
-    direction= '',
+    price = '',
     page = '',
   } = await searchParams
   
@@ -21,41 +20,31 @@ export default async function Orders({searchParams}){
   const end     = start + pageSize - 1
 
   const branchRes = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/common/branches`);
+
   const branchesJson = await branchRes.json();
   const branches = branchesJson.data.data;
 
   const branchOptions = branches.map(b => ({ value: b.id, label: b.name }))
-  //dateOptions
-  //channel option
+
 
   const params = new URLSearchParams()
+  if (segment !== 'all')   params.set('status', segment)
   if (search)    params.set('searchTerm', search)
   if (channel)  params.set('channel',    channel)
   if (dateRange) params.set('dateRange', dateRange)
+  if (branch)  params.set('branch', branch)
+  if (price) params.set('price', price)
 
-  if (sortBy)params.set('sortBy',    sortBy)
-  if (direction) params.set('direction', direction)
   params.set('range', `${start},${end}`)
 
-  let segments;
+  // Fetch paginated orders
+  const orderRes    = await fetch(
+    `${process.env.NEXT_PUBLIC_API_URL}/api/orders?${params}`
+  )
 
-  if(segment === "all"){
-    segments = 'api/orders' 
-  }else if(segment === "preparing"){
-    segments = `api/orders?status=preparing` 
-  }else if(segment === "completed"){
-    segments = `api/orders?status=preparing` 
-  }else if (segment === "cancelled"){
-    segments = `api/orders?status=cancelled`
-  }
-
-  const endpoint = segments;
-
-
-  const rowsRes = await fetch(`${process.env.NEXT_PUBLIC_API_URL}${endpoint}?${params}`)
-  const rowsJson = await rowsRes.json()
-  const tableData = rowsJson.data.data || []
-  const totalCount = rowsJson.data.count
+  const orderJson   = await orderRes.json()
+  const tableData  = orderJson.data.data
+  const totalCount = orderJson.data.count
 
   console.log("data", tableData, "count", totalCount)
 
@@ -63,9 +52,10 @@ export default async function Orders({searchParams}){
     <ClientOrderInner
       segment={segment}
       search={search}
+      dateRange={dateRange}
       branchOptions={branchOptions}
-      filters={{branch,channel,dateRange}}
-      sortConfig={ sortBy ? { key: sortBy, direction } : null }
+      filters={{branch, channel, dateRange}}
+      sortConfig={ price ? { key: 'price', direction:price } : null}
       tableData={tableData}
       totalCount={totalCount}
       currentPage={pageIdx}

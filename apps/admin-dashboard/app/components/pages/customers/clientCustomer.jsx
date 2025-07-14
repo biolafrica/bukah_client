@@ -15,8 +15,7 @@ export default function ClientCustomerInner({
   segment,
   search,
   dateRange,
-  sortBy,
-  direction,
+  sortConfig,
   tableData,
   totalCount,
   currentPage,
@@ -42,8 +41,7 @@ export default function ClientCustomerInner({
 
   // Sort options: totalOrders or totalSpent
   const sortOptions = [
-    { key: 'totalOrders',  label: 'Total Orders' },
-    { key: 'totalSpent',   label: 'Total Spent'  },
+    { key: 'totalSpent', label: 'Total Spent'  }
   ]
 
   const updateParams = (patch) => {
@@ -98,13 +96,14 @@ export default function ClientCustomerInner({
             }}
             sortProps={{
               options:    sortOptions,
-              sortConfig: sortBy ? { key: sortBy, direction } : null,
+              sortConfig,
               onSort:     (key) => {
-                const dir =
-                  sortBy === key && direction === 'asc' ? 'desc' : 'asc'
-                updateParams({ [key]: dir })
+                const dir = sortConfig?.key === key && sortConfig.direction === 'ascending'
+              ? 'descending'
+              : 'ascending'
+                updateParams({ totalSpent: dir })
               },
-              onClear:    () => updateParams({ totalOrders: null, totalSpent: null }),
+              onClear:    () => updateParams({totalSpent: null }),
               label:      'Sort',
             }}
             searchPlaceholder="Search customers"

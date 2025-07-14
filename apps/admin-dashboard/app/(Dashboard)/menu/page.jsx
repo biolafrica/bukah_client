@@ -9,8 +9,7 @@ export default async function MenuPage({ searchParams }) {
     search   = '',
     branch   = '',
     category = '',
-    sortBy   = '',
-    direction= '',
+    name   = '',
     page = '',
   } = await searchParams
 
@@ -41,16 +40,15 @@ export default async function MenuPage({ searchParams }) {
 
   // 2️⃣ build the query URL for products or categories
   const params = new URLSearchParams()
-  if (search)    params.set('searchTerm', search)
+  if (search)params.set('searchTerm', search)
 
   if (segment==='items') {
     if (branch)   params.set('branchId',   branch)
     if (category) params.set('categoryId', category)
   }
 
-  if (sortBy)params.set('sortBy',    sortBy)
+  if (name)params.set('name', name)
 
-  if (direction) params.set('direction', direction)
   params.set('range', `${start},${end}`)
 
   const endpoint = segment === 'items' 
@@ -73,7 +71,7 @@ export default async function MenuPage({ searchParams }) {
       branchOptions={branchOptions}
       categoryOptions={categoryOptions}
       filters={{ branch, category }}
-      sortConfig={ sortBy ? { key: sortBy, direction } : null }
+      sortConfig={name ? { key: 'name', direction: name } : null}
       tableData={tableData}
       totalCount={totalCount}
       currentPage={pageIdx}

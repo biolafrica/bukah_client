@@ -20,7 +20,7 @@ export async function getAllTransaction({
     filters.created_at = { start: dateRange.start, end: dateRange.end }
   }
 
-  if(totalAmount) orderBy.total_amount = totalAmount
+  if(totalAmount)orderBy.total_amount = totalAmount
 
   const search = searchId ? ['reference_id', searchId] : []
 
@@ -28,6 +28,7 @@ export async function getAllTransaction({
     branch: 'branches(name)',
     order: 'orders(order_code)',
   }
+  console.log(orderBy)
 
   return repos.transaction.findAll({search,filters,joins, range, orderBy})
 }
