@@ -127,7 +127,7 @@ export default function ClientEmployeeInner({
           <div className='absolute inset-0 bg-black opacity-50' onClick={()=> setSideScreenOpen(false)}/>
 
           <div className='relative z-65'>
-            <AddEmployee branchOptions={branchOptions} OnCancelClick={()=>setSideScreenOpen(false)}/>
+            <AddEmployee branchOptions={branchOptions} setSideScreenOpen={setSideScreenOpen}/>
           </div>
 
         </div>

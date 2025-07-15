@@ -1,4 +1,4 @@
-import ClientMenuInner from "../../components/pages/menu/innerConsumer"
+import ClientMenuInner from "../../components/pages/menu/clientMenuInner"
 
 export const dynamic = 'force-dynamic'
 
@@ -60,8 +60,6 @@ export default async function MenuPage({ searchParams }) {
   const rowsJson = await rowsRes.json()
   const tableData = rowsJson.data.data || []
   const totalCount = rowsJson.data.count
-
-  console.log(tableData)
 
   // 4️⃣ render the client UI, passing all of it down
   return (

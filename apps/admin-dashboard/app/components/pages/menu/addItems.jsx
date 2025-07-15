@@ -1,14 +1,19 @@
 import React, { useState } from 'react'
 import Form from '../../common/form'
 import { ImageUploadField } from '../../common/imageUploadField'
+import CloseButton from '../../common/closeButton'
 
-export default function AddItems({branchOptions, categoryOptions}){
+export default function AddItems({branchOptions, categoryOptions, setSideScreenOpen}){
+
   const [imageFile, setImageFile] = useState(null)
 
   const addSingleItemFormFields =[
     { name: 'itemName', label: 'Item Name', placeholder:"Enter item name", type: 'text', required: true },
+
     { name: 'description', label: 'Description', placeholder:"Describe the item", type: 'textarea', required: true, rows:3 },
+
     { name: 'price', label: 'Price(&#8358;)', placeholder:"0.00", type: 'number', required: true,},
+
     { name: 'category', label: 'Category', type: 'select',
       options: [
         { value: '', label: 'Choose category' },
@@ -20,6 +25,7 @@ export default function AddItems({branchOptions, categoryOptions}){
       ],
      required: true  
     },
+
     { name: 'branch', label: 'Branch', type: 'select',
       options: [
         { value: '', label: 'Choose branch' },
@@ -31,10 +37,13 @@ export default function AddItems({branchOptions, categoryOptions}){
       ],
      required: true  
     },
+
     { name: 'cookingTime', label: 'Cooking Time(minutes)', placeholder:"How long does it take to prepare?", type: 'text', required: false},
+
     { name: 'ingredient', label: '  Ingredient', placeholder:"What are the ingredient used?", type: 'text', required: false},
+
     { name: 'image', type: 'custom', label: 'Item Image' },
-  ]
+  ];
 
   const initialData = { 
     itemName: "",
@@ -50,34 +59,46 @@ export default function AddItems({branchOptions, categoryOptions}){
     const errors = {}
     if (!imageFile) errors.image = 'Please upload an image'
     return errors
-  }
+  };
 
   async function handleSubmit(values){
     const fd = new FormData()
     fd.append('image', imageFile)
     Object.entries(values).forEach(([k,v]) => fd.append(k, v))
 
-    console.log(fd)
+    console.log("fd",fd)
 
   }
   
   return(
-    <div className='w-screen lg:w-1/2 fixed right-0 h-screen bg-white'>
+    <div className='w-screen lg:w-1/2 fixed right-0 h-screen bg-white overflow-y-auto'>
 
-      <Form
-        fields={addSingleItemFormFields}
-        initialValues={initialData}
-        validate={validate}
-        onSubmit={handleSubmit}
-        submitLabel='Add Item'
+      <CloseButton 
+        title='Add Items'
+        onCancelClick={()=>setSideScreenOpen(false)}
       />
 
-      <ImageUploadField
-        name="image"
-        value={imageFile}
-        onChange={setImageFile}
-        requirementText="JPG or PNG, max 2MB, square"
-      />
+      <div className='p-5 flex flex-col gap-3'>
+        <div>
+          <h4 className='mb-1 text-sm font-medium'>Item image</h4>
+          <ImageUploadField
+            name="image"
+            value={imageFile}
+            onChange={setImageFile}
+            requirementText="JPG or PNG, max 2MB, square"
+          />
+        </div>
+
+        <Form
+          fields={addSingleItemFormFields}
+          initialValues={initialData}
+          validate={validate}
+          onSubmit={handleSubmit}
+          submitLabel='Add Item'
+        />
+
+      </div>
+
 
     </div>
   )

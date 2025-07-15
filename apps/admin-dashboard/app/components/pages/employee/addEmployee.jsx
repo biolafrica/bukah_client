@@ -1,7 +1,7 @@
-import * as outline     from '@heroicons/react/24/outline'
 import Form from '../../common/form'
+import CloseButton from '../../common/closeButton';
 
-export default function AddEmployee({branchOptions, OnCancelClick}){
+export default function AddEmployee({branchOptions, setSideScreenOpen}){
 
   const addEmployeeFormFields = [
     { name: 'firstName', label: 'First Name', placeholder:"Enter first name", type: 'text', required: true },
@@ -66,10 +66,10 @@ export default function AddEmployee({branchOptions, OnCancelClick}){
   return(
     <div className='w-screen lg:w-1/2 fixed right-0 h-screen bg-white'>
 
-      <div className='flex items-center justify-between p-5 border-b border-border-text mb-5'>
-        <h4 className='text-base font-medium'>Add Employee</h4>
-        <outline.XMarkIcon className='w-4 h-4 cursor-pointer' onClick={OnCancelClick}/>
-      </div>
+      <CloseButton 
+        title="Add Employee" 
+        onCancelClick={()=>setSideScreenOpen(false)} 
+      />
 
       <div className='p-5'>
         <Form

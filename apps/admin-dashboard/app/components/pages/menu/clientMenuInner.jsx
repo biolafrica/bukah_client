@@ -60,6 +60,7 @@ export default function ClientMenuInner({
             <AddItems 
               branchOptions={branchOptions} 
               categoryOptions={categoryOptions}
+              setSideScreenOpen={setSideScreenOpen}
             />
           </div>
 
@@ -135,7 +136,6 @@ export default function ClientMenuInner({
           onPageChange={(newPage) => updateParams({ page: newPage })}
         />
       }
-
 
     </div>
   )

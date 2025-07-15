@@ -27,16 +27,18 @@ export default function Form({
       return val !== undefined && val !== null && val.toString().trim() !== ''
     })
 
+  const inputClass = (showError) =>
+    `mt-1 block w-full rounded-md border px-3 py-2 sm:text-sm focus:outline-none focus:ring-2 focus:ring-pri-text focus:border-pri-text ${
+      showError ? 'border-red-500' : 'border-gray-300'
+    }`
+
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
       {globalError && <div className={errorClassName}>{globalError}</div>}
 
       {fields.map(field => {
-        const { name, label, type, placeholder, required, options } = field
+        const { name, label, type, placeholder, required, options, rows } = field
         const showError = touched[name] && errors[name]
-        const inputClass = `mt-1 block w-full rounded-md border px-3 py-2 sm:text-sm focus:outline-none focus:ring-2 focus:ring-pri-text focus:border-pri-text ${
-          showError ? 'border-red-500' : 'border-gray-300'
-        }`
 
         return (
           <div key={name}>
@@ -50,18 +52,16 @@ export default function Form({
                 name={name}
                 value={values[name] ?? ''}
                 onChange={handleChange}
-                className={inputClass}
+                className={inputClass(showError)}
               >
-                <option value="" disabled>
-                  {placeholder || `Select ${label}`}
-                </option>
                 {options.map(opt => (
-                  <option key={opt.value} value={opt.value}>
+                  <option key={opt.value} value={opt.value} disabled={opt.value === ''}>
                     {opt.label}
                   </option>
                 ))}
               </select>
-            ):type === 'textarea' ? (
+
+            ) : type === 'textarea' ? (
               <textarea
                 id={name}
                 name={name}
@@ -74,7 +74,7 @@ export default function Form({
                 }`}
               />
 
-            ):(
+            ) : (
               <input
                 id={name}
                 name={name}
@@ -82,7 +82,7 @@ export default function Form({
                 placeholder={placeholder}
                 value={values[name] ?? ''}
                 onChange={handleChange}
-                className={inputClass}
+                className={inputClass(showError)}
               />
             )}
 
@@ -106,5 +106,6 @@ export default function Form({
     </form>
   )
 }
+
 
 
