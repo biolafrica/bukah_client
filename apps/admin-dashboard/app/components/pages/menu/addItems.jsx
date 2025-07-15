@@ -2,10 +2,14 @@ import React, { useState } from 'react'
 import Form from '../../common/form'
 import { ImageUploadField } from '../../common/imageUploadField'
 import CloseButton from '../../common/closeButton'
+import { useOptions } from '../../context/optionsContext'
 
-export default function AddItems({branchOptions, categoryOptions, onClose}){
+
+export default function AddItems({onClose}){
 
   const [imageFile, setImageFile] = useState(null)
+
+  const { branchOptions, categoryOptions } = useOptions()
 
   const addSingleItemFormFields =[
     { name: 'itemName', label: 'Item Name', placeholder:"Enter item name", type: 'text', required: true },
@@ -79,6 +83,7 @@ export default function AddItems({branchOptions, categoryOptions, onClose}){
       />
 
       <div className='p-5 flex flex-col gap-3'>
+
         <div>
           <h4 className='mb-1 text-sm font-medium'>Item image</h4>
           <ImageUploadField
@@ -98,8 +103,6 @@ export default function AddItems({branchOptions, categoryOptions, onClose}){
         />
 
       </div>
-
-
     </div>
   )
 }

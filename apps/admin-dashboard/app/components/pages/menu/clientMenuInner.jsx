@@ -11,13 +11,12 @@ import { useState } from 'react'
 import AddItems from './addItems'
 import AddComboItems from './addComboItems'
 import ItemDetails from './itemDetails'
+import { useOptions } from '../../context/optionsContext'
 
 
 export default function ClientMenuInner({
   segment,
   search,
-  branchOptions,
-  categoryOptions,
   filters,
   sortConfig,
   tableData,
@@ -27,6 +26,8 @@ export default function ClientMenuInner({
 }) {
   const router = useRouter()
   const params = useSearchParams()
+
+  const { branchOptions, categoryOptions } = useOptions()
 
   const [sideScreenOpen, setSideScreenOpen] = useState(false)
   const [itemSideScreenOpen, setItemSideScreenOpen] = useState(false)
@@ -100,8 +101,6 @@ export default function ClientMenuInner({
 
             {itemSideScreenOpen && (
               <AddItems 
-                branchOptions={branchOptions} 
-                categoryOptions={categoryOptions}
                 onClose= {closeAll}
               />
             )}

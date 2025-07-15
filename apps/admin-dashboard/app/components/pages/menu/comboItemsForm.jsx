@@ -1,13 +1,14 @@
 import React, { useState,} from 'react'
 import { PlusIcon, PencilIcon, TrashIcon as DeleteIcon } from '@heroicons/react/24/outline'
 import { ImageUploadField } from '../../common/imageUploadField'
+import { useOptions } from '../../context/optionsContext'
 
 export default function ComboItemForm({
-  branchOptions = [],
-  categoryOptions = [],
-  singleItemOptions = [],
   onSubmit
 }) {
+
+  const { branchOptions, categoryOptions, singleItemOptions } = useOptions()
+
   // Section 1 state
   const [imageFile,   setImageFile]   = useState(null)
   const [name,        setName]        = useState('')
@@ -32,6 +33,7 @@ export default function ComboItemForm({
       options: []
     })
   }
+
   function saveComponent() {
     if (editing.min > editing.max) {
       alert('Minimum cannot exceed Maximum')
@@ -40,10 +42,12 @@ export default function ComboItemForm({
     setComponents(prev => [...prev, editing])
     setEditing(null)
   }
+
   function editComponent(comp) {
     setEditing(comp)
     setComponents(prev => prev.filter(c => c.id !== comp.id))
   }
+
   function deleteComponent(id) {
     setComponents(prev => prev.filter(c => c.id !== id))
   }
@@ -55,12 +59,14 @@ export default function ComboItemForm({
       options: [...editing.options, { id: Date.now(), item: '', price: '' }]
     }))
   }
+
   function updateOption(idx, key, val) {
     setEditing(editing => ({
       ...editing,
       options: editing.options.map((opt,i) => i===idx ? { ...opt, [key]: val } : opt)
     }))
   }
+
   function deleteOption(idx) {
     setEditing(editing => ({
       ...editing,
@@ -81,38 +87,49 @@ export default function ComboItemForm({
     onSubmit(payload)
   }
 
+
   return (
     <form onSubmit={handleSubmit} className="space-y-6 p-6 bg-white rounded-lg shadow">
+
       {/* Section 1 */}
-      <div className="space-y-4">
+      <div className="space-y-4 ">
+
         <ImageUploadField
           name="comboImage"
           value={imageFile}
           onChange={setImageFile}
           requirementText="JPG or PNG, max 2MB, square"
         />
+
+        <label htmlFor="name" className='font-medium text-sm'>Item Name</label>
         <input
           type="text" placeholder="Item Name"
           value={name} onChange={e=>setName(e.target.value)}
-          className="input"
+          className="input w-full"
           required
         />
+
+        <label htmlFor="description" className='font-medium text-sm'>Description</label>
         <textarea
           placeholder="Description"
           value={description} onChange={e=>setDescription(e.target.value)}
           rows={3}
-          className="input resize-none"
+          className="input resize-none w-full"
           required
         />
+
+        <label htmlFor="basePrice" className='font-medium text-sm'>Base Price</label>
         <input
           type="number" placeholder="Base Price"
           value={basePrice} onChange={e=>setBasePrice(e.target.value)}
-          className="input"
+          className="input w-full"
           required
         />
+
+        <label htmlFor="branch" className='font-medium text-sm'>Branches</label>
         <select
           value={branch} onChange={e=>setBranch(e.target.value)}
-          className="input"
+          className="input w-full"
           required
         >
           <option value="">Choose Branch</option>
@@ -120,9 +137,11 @@ export default function ComboItemForm({
             <option key={b.value} value={b.value}>{b.label}</option>
           ))}
         </select>
+
+        <label htmlFor="category" className='font-medium text-sm'>Choose Category</label>
         <select
           value={category} onChange={e=>setCategory(e.target.value)}
-          className="input"
+          className="input w-full"
           required
         >
           <option value="">Choose Category</option>
@@ -130,33 +149,42 @@ export default function ComboItemForm({
             <option key={c.value} value={c.value}>{c.label}</option>
           ))}
         </select>
+
+        <label htmlFor="cookingTime" className='font-medium text-sm'>Cooking Time</label> 
         <input
           type="number" placeholder="Cooking Time (mins)"
           value={cookingTime} onChange={e=>setCookingTime(e.target.value)}
-          className="input"
+          className="input w-full"
           required
         />
+
+        <label htmlFor="ingredient" className='font-medium text-sm'>Ingredients</label> 
         <input
           type="text" placeholder="Ingredients"
           value={ingredient} onChange={e=>setIngredient(e.target.value)}
-          className="input"
+          className="input w-full"
         />
+
       </div>
 
       {/* Section 2: Components */}
-      <div className="border-b pb-2 mb-4 flex justify-between items-center">
+      <div className="border-b border-border-text pb-2 mb-4 flex justify-between items-center">
+
         <h4 className="font-semibold">Components</h4>
         <button type="button" onClick={startAddComponent} className="btn btn-tonal flex items-center gap-1">
           <PlusIcon className="w-4 h-4"/> Add Component
         </button>
+
       </div>
 
       {editing ? (
-        <div className="p-4 border rounded-lg mb-4 space-y-4">
+        <div className="p-4 border border-border-text rounded-lg mb-4 space-y-4">
+
           <div className="flex justify-between items-center">
             <h5 className="font-medium">New Component</h5>
             <button type="button" onClick={()=>setEditing(null)}><DeleteIcon className="w-5 h-5 text-red-600"/></button>
           </div>
+
           <div className="flex gap-4">
             <input
               type="text" placeholder="Component Name"
@@ -171,6 +199,7 @@ export default function ComboItemForm({
               /> Required
             </label>
           </div>
+
           <div className="flex gap-4">
             <input
               type="number" placeholder="Min"
@@ -185,15 +214,18 @@ export default function ComboItemForm({
           </div>
 
           {/* Options subsection */}
-          <div className="border-t pt-2">
+          <div className="border-t border-border-text pt-2">
+
             <div className="flex justify-between items-center mb-2">
               <h5 className="font-medium">Options</h5>
               <button type="button" onClick={addOption} className="btn btn-tonal flex items-center gap-1">
                 <PlusIcon className="w-4 h-4"/> Add Option
               </button>
             </div>
+
             {editing.options.map((opt, idx)=>(
               <div key={opt.id} className="flex gap-4 items-center mb-2">
+
                 <select
                   value={opt.item}
                   onChange={e=>updateOption(idx,'item',e.target.value)}
@@ -204,6 +236,7 @@ export default function ComboItemForm({
                     <option key={si.value} value={si.value}>{si.label}</option>
                   ))}
                 </select>
+
                 <input
                   type="number"
                   placeholder="Price"
@@ -211,7 +244,9 @@ export default function ComboItemForm({
                   onChange={e=>updateOption(idx,'price',e.target.value)}
                   className="input w-32"
                 />
+
                 <button type="button" onClick={()=>deleteOption(idx)}><DeleteIcon className="w-5 h-5 text-red-600"/></button>
+
               </div>
             ))}
           </div>
@@ -219,10 +254,12 @@ export default function ComboItemForm({
           <button type="button" onClick={saveComponent} className="btn btn-filled mt-4">
             Save Component
           </button>
+
         </div>
       ) : (
         components.map(comp => (
-          <div key={comp.id} className="p-4 border rounded-lg mb-4 flex justify-between items-center">
+          <div key={comp.id} className="p-4 border border-border-text bg-sec-text rounded-lg mb-4 flex justify-between items-center">
+
             <div>
               <div className="flex items-center gap-2">
                 <h5 className="font-medium">{comp.name}</h5>
@@ -232,10 +269,12 @@ export default function ComboItemForm({
               </div>
               <p className="text-sm">Min: {comp.min} – Max: {comp.max}</p>
             </div>
+
             <div className="flex gap-2">
               <button type="button" onClick={()=>editComponent(comp)}><PencilIcon className="w-5 h-5 text-gray-600"/></button>
               <button type="button" onClick={()=>deleteComponent(comp.id)}><DeleteIcon className="w-5 h-5 text-red-600"/></button>
             </div>
+            
           </div>
         ))
       )}

@@ -1,4 +1,5 @@
 import ClientMenuInner from "../../components/pages/menu/clientMenuInner"
+import { OptionProvider } from "../../components/context/optionsContext"
 
 export const dynamic = 'force-dynamic'
 
@@ -22,20 +23,23 @@ export default async function MenuPage({ searchParams }) {
 
 
   //fetch options for filter
-  const [branchesRes, catsRes] = await Promise.all([
+  const [branchesRes, catsRes, menuRes] = await Promise.all([
     fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/common/branches`),
     fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/common/product-categories`),
+    fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/common/products`),
   ])
 
-  const [branchesJson, catsJson] = await Promise.all([
+  const [branchesJson, catsJson, menuJson] = await Promise.all([
     branchesRes.json(),
     catsRes.json(),
+    menuRes.json(),
   ])
 
-  const [branches, categories] = [branchesJson.data.data, catsJson.data.data]
+  const [branches, categories, menus] = [branchesJson.data.data, catsJson.data.data, menuJson.data.data]
 
   const branchOptions = branches.map(b => ({ value: b.id, label: b.name }))
   const categoryOptions = categories.map(c => ({ value: c.id, label: c.name }))
+  const singleItemOptions = menus.map(i => ({ value: i.id, label: i.name }))
 
 
   // 2️⃣ build the query URL for products or categories
@@ -63,17 +67,23 @@ export default async function MenuPage({ searchParams }) {
 
   // 4️⃣ render the client UI, passing all of it down
   return (
-    <ClientMenuInner
-      segment={segment}
-      search={search}
-      branchOptions={branchOptions}
-      categoryOptions={categoryOptions}
-      filters={{ branch, category }}
-      sortConfig={name ? { key: 'name', direction: name } : null}
-      tableData={tableData}
-      totalCount={totalCount}
-      currentPage={pageIdx}
-      pageSize={pageSize}
-    />
+    <OptionProvider 
+      branchOptions={branchOptions} 
+      categoryOptions={categoryOptions} 
+      singleItemOptions={singleItemOptions}
+    >
+
+      <ClientMenuInner
+        segment={segment}
+        search={search}
+        filters={{ branch, category }}
+        sortConfig={name ? { key: 'name', direction: name } : null}
+        tableData={tableData}
+        totalCount={totalCount}
+        currentPage={pageIdx}
+        pageSize={pageSize}
+      />
+
+    </OptionProvider>
   )
 }

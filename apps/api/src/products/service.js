@@ -63,6 +63,15 @@ export async function deleteProduct(productId){
 export async function deleteProductComponents(){}
 export async function editProductComponents(){}
 
+export async function getAllSingleMenu({
+  range = [0,99] 
+}={}){
+  const select = ("name, id")
+  const filter = {is_combo : false}
+
+  return repos.product.findAll({range, select, filter})
+}
+
 
 
 

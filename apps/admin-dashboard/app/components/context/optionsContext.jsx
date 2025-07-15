@@ -1,4 +1,6 @@
-import { createContext } from "react";
+"use client"
+
+import { createContext, useContext } from "react";
 
 const OptionsContext = createContext({
   branchOptions:   [],
