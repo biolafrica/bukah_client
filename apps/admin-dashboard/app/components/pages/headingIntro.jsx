@@ -89,7 +89,7 @@ export default function HeadingIntro({
                 </button>
 
                 {finalOpen && (
-                  <ul className="absolute mt-1 right-0 w-48 bg-white border border-gray-200 rounded shadow">
+                  <ul className="absolute mt-1 right-0 w-48 bg-white border border-gray-200 rounded shadow z-50">
                     {finalOptions.map((opt, idx) => (
                       <li
                         key={`${opt.label}-${idx}`}

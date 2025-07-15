@@ -6,6 +6,7 @@ export default function DataTable({
   data, 
   onEdit, 
   onDelete,
+  onMore,
   currentPage,
   pageSize,
   totalCount,
@@ -51,11 +52,17 @@ export default function DataTable({
                 </td>
               ))}
               <td className="px-4 py-3 flex items-center gap-2">
-                <button type="button" onClick={() => onEdit(row)} aria-label="Edit">
-                  <solid.PencilIcon className="w-5 h-5 text-green-600" aria-hidden="true" />
+
+                <button type="button" onClick={() => onMore(row)} aria-label="More">
+                  <solid.DocumentTextIcon className="w-5 h-5 text-green-600 cursor-pointer" aria-hidden="true" />
                 </button>
+
+                <button type="button" onClick={() => onEdit(row)} aria-label="Edit">
+                  <solid.PencilIcon className="w-5 h-5 text-green-600 cursor-pointer" aria-hidden="true" />
+                </button>
+
                 <button type="button" onClick={() => onDelete(row)} aria-label="Delete">
-                  <solid.TrashIcon className="w-5 h-5 text-red-600" aria-hidden="true" />
+                  <solid.TrashIcon className="w-5 h-5 text-red-600 cursor-pointer" aria-hidden="true" />
                 </button>
               </td>
             </tr>

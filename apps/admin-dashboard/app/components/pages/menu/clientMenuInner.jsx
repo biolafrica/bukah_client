@@ -9,6 +9,8 @@ import SegmentedToolbars from '../segment'
 import EmptyState from '../../common/emptyState'
 import { useState } from 'react'
 import AddItems from './addItems'
+import AddComboItems from './addComboItems'
+import ItemDetails from './itemDetails'
 
 
 export default function ClientMenuInner({
@@ -27,6 +29,44 @@ export default function ClientMenuInner({
   const params = useSearchParams()
 
   const [sideScreenOpen, setSideScreenOpen] = useState(false)
+  const [itemSideScreenOpen, setItemSideScreenOpen] = useState(false)
+  const [comboSideScreenOpen, setComboSideScreenOpen] = useState(false)
+  const [detailsSideScreenOpen, setDetailsSideScreenOpen] = useState(false)
+
+  const closeAll = () => {
+    setSideScreenOpen(false)
+    setItemSideScreenOpen(false)
+    setComboSideScreenOpen(false)
+    setDetailsSideScreenOpen(false)
+  }
+
+  const handleSingleScreen = () => {
+    setSideScreenOpen(true)
+    setItemSideScreenOpen(true)
+    setComboSideScreenOpen(false)
+    setDetailsSideScreenOpen(false)
+  }
+
+  const handleComboScreen = () => {
+    setSideScreenOpen(true)
+    setComboSideScreenOpen(true)
+    setItemSideScreenOpen(false)
+    setDetailsSideScreenOpen(false)
+  }
+
+  const handleMoreScreen = (row) => {
+    console.log('details for', row)
+    setSideScreenOpen(true)
+    setDetailsSideScreenOpen(true)
+    setItemSideScreenOpen(false)
+    setComboSideScreenOpen(false)
+  }
+
+  const handleEdit = (row) => {
+    if (row.is_combo) handleComboScreen()
+    else              handleSingleScreen()
+  }
+
 
   // helper to update URL without full reload
   const updateParams = (patch) => {
@@ -53,15 +93,27 @@ export default function ClientMenuInner({
         <div className='fixed inset-0 z-60 flex'>
           <div 
             className='absolute inset-0 bg-black opacity-50'
-            onClick={()=> setSideScreenOpen(false)}
+            onClick={closeAll}
           />
 
           <div className='relative z-65'>
-            <AddItems 
-              branchOptions={branchOptions} 
-              categoryOptions={categoryOptions}
-              setSideScreenOpen={setSideScreenOpen}
-            />
+
+            {itemSideScreenOpen && (
+              <AddItems 
+                branchOptions={branchOptions} 
+                categoryOptions={categoryOptions}
+                onClose= {closeAll}
+              />
+            )}
+
+            {comboSideScreenOpen && (
+              <AddComboItems onClose= {closeAll}/>
+            )}
+
+            {detailsSideScreenOpen && (
+              <ItemDetails onClose= {closeAll}/>
+            )}
+
           </div>
 
         </div>
@@ -72,7 +124,10 @@ export default function ClientMenuInner({
         moduleIntro="Create, update, organize menu items"
         Icon={outline.PlusIcon}
         buttonText="Add Item"
-        onButtonClick={()=>setSideScreenOpen(true)}
+        finalOptions={[
+          {label: "single item", onClick:handleSingleScreen}, 
+          {label: "combo meal", onClick:handleComboScreen}
+        ]}
       />
 
       <SegmentedToolbars
@@ -128,8 +183,9 @@ export default function ClientMenuInner({
             : menu.categoriesColumns
           }
           data={tableData}
-          onEdit={()=>console.log("delete")}
+          onEdit={handleEdit}
           onDelete={()=>console.log("delete")}
+          onMore={handleMoreScreen}
           currentPage={currentPage}
           pageSize={pageSize}
           totalCount={totalCount}

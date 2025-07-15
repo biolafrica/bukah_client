@@ -3,7 +3,7 @@ import Form from '../../common/form'
 import { ImageUploadField } from '../../common/imageUploadField'
 import CloseButton from '../../common/closeButton'
 
-export default function AddItems({branchOptions, categoryOptions, setSideScreenOpen}){
+export default function AddItems({branchOptions, categoryOptions, onClose}){
 
   const [imageFile, setImageFile] = useState(null)
 
@@ -75,7 +75,7 @@ export default function AddItems({branchOptions, categoryOptions, setSideScreenO
 
       <CloseButton 
         title='Add Items'
-        onCancelClick={()=>setSideScreenOpen(false)}
+        onCancelClick={onClose}
       />
 
       <div className='p-5 flex flex-col gap-3'>
