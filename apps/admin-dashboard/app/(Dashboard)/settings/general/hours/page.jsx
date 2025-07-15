@@ -1,10 +1,10 @@
 "use client"
 
 import SettingsNav from "../../../../components/layout/settingsNav"
-import SettingsHeadingIntro from "../../../../components/pages/settingsHeadingIntro"
+import SettingsHeadingIntro from "../../../../components/pages/settings/settingsHeadingIntro"
 import BackButton from "../../../../components/common/backButton"
 import { initial } from "../../../../data/formFields"
-import WeeklySchedule from "../../../../components/pages/businessHourTable"
+import WeeklySchedule from "../../../../components/pages/settings/businessHourTable"
 
 export default function Hours(){
   function handleSave(updatedSchedules) {

@@ -1,11 +1,11 @@
 "use client"
-import HeadingIntro from "../headingIntro";
+import HeadingIntro from "../../common/headingIntro";
 import * as outline    from '@heroicons/react/24/outline'
 import { order } from "../../../data/order";
-import MetricsContainer from "../metricsCont";
-import SegmentedToolbars from "../segment";
+import MetricsContainer from "../../common/metricsCont";
+import SegmentedToolbars from "../../common/segment";
 import EmptyState from "../../common/emptyState";
-import DataTable from "../dataTable";
+import DataTable from "../../common/dataTable";
 import { useSearchParams, useRouter } from "next/navigation";
 
 

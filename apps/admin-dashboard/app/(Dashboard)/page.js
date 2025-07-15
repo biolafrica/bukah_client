@@ -1,11 +1,11 @@
 "use client"
 
-import HeadingIntro from "../components/pages/headingIntro";
+import HeadingIntro from "../components/common/headingIntro";
 import * as outline  from "@heroicons/react/24/outline"
 import { formatNaira, formatNumber } from "../utils/format";
-import MetricsContainer from "../components/pages/metricsCont";
-import DataTable from "../components/pages/dataTable";
-import ListingCard from "../components/pages/listCard";
+import MetricsContainer from "../components/common/metricsCont";
+import DataTable from "../components/common/dataTable";
+import ListingCard from "../components/common/listCard";
 import Carousel from "../components/uiComponents/carousel";
 
 export default function Home() {

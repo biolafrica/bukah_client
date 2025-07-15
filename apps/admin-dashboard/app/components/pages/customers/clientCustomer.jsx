@@ -2,12 +2,12 @@
 
 import React from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
-import HeadingIntro     from '../headingIntro'
-import MetricsContainer from '../metricsCont'
-import SegmentedToolbar from '../segment'
+import HeadingIntro     from '../../common/headingIntro'
+import MetricsContainer from '../../common/metricsCont'
+import SegmentedToolbar from '../../common/segment'
 import EmptyState       from '../../common/emptyState'
-import DataTable        from '../dataTable'
-import ListingCard      from '../listCard'
+import DataTable        from '../../common/dataTable'
+import ListingCard      from '../../common/listCard'
 import * as outline     from '@heroicons/react/24/outline'
 import { formatNaira }  from '../../../utils/format'
 

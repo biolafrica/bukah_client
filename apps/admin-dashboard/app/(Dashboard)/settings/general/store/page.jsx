@@ -2,7 +2,7 @@
 import SettingsNav from "../../../../components/layout/settingsNav"
 import Form from "../../../../components/common/form"
 import { storeFields } from "../../../../data/formFields"
-import SettingsHeadingIntro from "../../../../components/pages/settingsHeadingIntro"
+import SettingsHeadingIntro from "../../../../components/pages/settings/settingsHeadingIntro"
 import BackButton from "../../../../components/common/backButton"
 
 export default function Store(){

@@ -1,5 +1,5 @@
 import { useState } from "react"
-import Switch from "../uiComponents/switch"
+import Switch from "../../uiComponents/switch"
 
 export function DaySchedule({ day, enabled, from, to, onChange }) {
   const [isEnabled, setIsEnabled] = useState(enabled)

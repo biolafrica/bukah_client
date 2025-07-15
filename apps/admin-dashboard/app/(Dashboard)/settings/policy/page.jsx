@@ -2,7 +2,7 @@
 
 import {PolicyBody } from "../../../components/layout/settingsMainNav"
 import SettingsNav from "../../../components/layout/settingsNav"
-import SettingsHeadingIntro from "../../../components/pages/settingsHeadingIntro"
+import SettingsHeadingIntro from "../../../components/pages/settings/settingsHeadingIntro"
 
 export default function Policy() {
   return (

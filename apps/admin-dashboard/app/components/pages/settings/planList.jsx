@@ -1,6 +1,6 @@
 import * as outline from '@heroicons/react/24/outline'
-import { formatNaira } from '../../utils/format'
-import { planData } from "../../data/plan";
+import { formatNaira } from '../../../utils/format'
+import { planData } from "../../../data/plan";
 
 
 export default function PlanList({year}){

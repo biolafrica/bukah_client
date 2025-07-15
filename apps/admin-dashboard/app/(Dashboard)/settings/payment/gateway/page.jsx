@@ -2,7 +2,7 @@
 import BackButton from "../../../../components/common/backButton";
 import Form from "../../../../components/common/form";
 import SettingsNav from "../../../../components/layout/settingsNav";
-import SettingsHeadingIntro from "../../../../components/pages/settingsHeadingIntro";
+import SettingsHeadingIntro from "../../../../components/pages/settings/settingsHeadingIntro";
 import { gatewayFields } from "../../../../data/formFields";
 
 export default function Gateway(){

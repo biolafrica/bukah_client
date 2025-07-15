@@ -1,9 +1,9 @@
 "use client"
 
 import { useRouter, useSearchParams } from 'next/navigation'
-import HeadingIntro     from '../headingIntro'
-import SegmentedToolbar from '../segment'
-import DataTable        from '../dataTable'
+import HeadingIntro     from '../../common/headingIntro'
+import SegmentedToolbar from '../../common/segment'
+import DataTable        from '../../common/dataTable'
 import EmptyState       from '../../common/emptyState'
 import Permission from './permission'
 import * as outline     from '@heroicons/react/24/outline'

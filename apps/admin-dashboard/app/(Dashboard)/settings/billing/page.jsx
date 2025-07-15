@@ -1,10 +1,10 @@
 'use client'
 
 import SettingsNav from "../../../components/layout/settingsNav";
-import SettingsHeadingIntro from "../../../components/pages/settingsHeadingIntro";
+import SettingsHeadingIntro from "../../../components/pages/settings/settingsHeadingIntro";
 import * as solid  from "@heroicons/react/24/solid"
 import { formatNaira } from "../../../utils/format";
-import DataTable from "../../../components/pages/dataTable";
+import DataTable from "../../../components/common/dataTable";
 import Link from "next/link";
 
 export default function Billing() {

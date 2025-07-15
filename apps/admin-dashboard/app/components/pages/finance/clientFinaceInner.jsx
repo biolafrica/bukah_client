@@ -2,13 +2,13 @@
 
 import React from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
-import HeadingIntro     from '../headingIntro'
-import MetricsContainer from '../metricsCont'
-import DataTable        from '../dataTable'
+import HeadingIntro     from '../../common/headingIntro'
+import MetricsContainer from '../../common/metricsCont'
+import DataTable        from '../../common/dataTable'
 import EmptyState       from '../../common/emptyState'
 import * as outline     from '@heroicons/react/24/outline'
 import { formatNaira }  from '../../../utils/format'
-import SegmentedToolbars from '../segment'
+import SegmentedToolbars from '../../common/segment'
 
 export default function ClientFinanceInner({
   segment,

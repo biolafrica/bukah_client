@@ -1,7 +1,7 @@
 "use client"
 import { useState } from "react";
 import BackButton from "../components/common/backButton";
-import PlanList from "../components/pages/planList";
+import PlanList from "../components/pages/settings/planList";
 
 export default function Plans(){
   const [monthPlan, setMonthPlan] = useState(true)

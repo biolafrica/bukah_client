@@ -1,9 +1,9 @@
 "use client"
-import SettingListCard from "../../../../components/pages/settingListCard";
+import SettingListCard from "../../../../components/pages/settings/settingListCard";
 import BackButton from "../../../../components/common/backButton";
 import SettingsNav from "../../../../components/layout/settingsNav";
-import SettingsHeadingIntro from "../../../../components/pages/settingsHeadingIntro";
-import { AddSection } from "../../../../components/pages/addSettingsItemCard";
+import SettingsHeadingIntro from "../../../../components/pages/settings/settingsHeadingIntro";
+import { AddSection } from "../../../../components/pages/settings/addSettingsItemCard";
 import { formatNaira } from "../../../../utils/format";
 
 export default function Tables(){

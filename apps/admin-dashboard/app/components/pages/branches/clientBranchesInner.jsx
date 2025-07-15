@@ -3,8 +3,8 @@
 
 import React from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
-import HeadingIntro from '../headingIntro'
-import DataTable    from '../dataTable'
+import HeadingIntro from '../../common/headingIntro'
+import DataTable    from '../../common/dataTable'
 import EmptyState   from '../../common/emptyState'
 import * as outline from '@heroicons/react/24/outline'
 

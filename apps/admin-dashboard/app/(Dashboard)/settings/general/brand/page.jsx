@@ -1,8 +1,8 @@
 "use client"
 
-import { ColorInput, LogoInput } from "../../../../components/pages/logoInputField"
+import { ColorInput, LogoInput } from "../../../../components/common/logoInputField"
 import BackButton from "../../../../components/common/backButton"
-import SettingsHeadingIntro from "../../../../components/pages/settingsHeadingIntro"
+import SettingsHeadingIntro from "../../../../components/pages/settings/settingsHeadingIntro"
 import SettingsNav from "../../../../components/layout/settingsNav"
 
 
