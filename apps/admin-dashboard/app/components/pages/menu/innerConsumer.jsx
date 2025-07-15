@@ -7,6 +7,8 @@ import * as outline    from '@heroicons/react/24/outline'
 import { menu }        from '../../../data/menu'
 import SegmentedToolbars from '../segment'
 import EmptyState from '../../common/emptyState'
+import { useState } from 'react'
+import AddItems from './addItems'
 
 
 export default function ClientMenuInner({
@@ -23,6 +25,8 @@ export default function ClientMenuInner({
 }) {
   const router = useRouter()
   const params = useSearchParams()
+
+  const [sideScreenOpen, setSideScreenOpen] = useState(false)
 
   // helper to update URL without full reload
   const updateParams = (patch) => {
@@ -45,12 +49,29 @@ export default function ClientMenuInner({
   return (
     <div className="p-5 pt-30 lg:pl-75">
 
+      {sideScreenOpen && (
+        <div className='fixed inset-0 z-60 flex'>
+          <div 
+            className='absolute inset-0 bg-black opacity-50'
+            onClick={()=> setSideScreenOpen(false)}
+          />
+
+          <div className='relative z-65'>
+            <AddItems 
+              branchOptions={branchOptions} 
+              categoryOptions={categoryOptions}
+            />
+          </div>
+
+        </div>
+      )}
+
       <HeadingIntro
         module="Items"
         moduleIntro="Create, update, organize menu items"
         Icon={outline.PlusIcon}
         buttonText="Add Item"
-        onButtonClick={()=>console.log("add items")}
+        onButtonClick={()=>setSideScreenOpen(true)}
       />
 
       <SegmentedToolbars
@@ -88,6 +109,7 @@ export default function ClientMenuInner({
           onClear: () => updateParams({  name:null}),
           label: 'Sort',
         }}
+
       />
 
       {tableData.length === 0 && 
@@ -113,6 +135,7 @@ export default function ClientMenuInner({
           onPageChange={(newPage) => updateParams({ page: newPage })}
         />
       }
+
 
     </div>
   )

@@ -61,7 +61,20 @@ export default function Form({
                   </option>
                 ))}
               </select>
-            ) : (
+            ):type === 'textarea' ? (
+              <textarea
+                id={name}
+                name={name}
+                placeholder={placeholder}
+                value={values[name] ?? ''}
+                onChange={handleChange}
+                rows={rows || 4}
+                className={`mt-1 block w-full rounded-md border px-3 py-2 sm:text-sm focus:outline-none focus:ring-2 focus:ring-pri-text focus:border-pri-text ${
+                  showError ? 'border-red-500' : 'border-gray-300'
+                }`}
+              />
+
+            ):(
               <input
                 id={name}
                 name={name}
