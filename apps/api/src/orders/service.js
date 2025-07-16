@@ -1,4 +1,6 @@
+import { startOfDay } from "date-fns";
 import { repos } from "../lib/repos";
+import { buildWindows } from "../lib/windows";
 
 export async function getAllOrders({
   searchTerm = "",
@@ -49,3 +51,50 @@ export async function getOrderFeedback(orderId){
   const count = true;
   return repos.feedback.findAll({filters, count})
 }
+
+export async function getOrderMetrics() {
+  const todayStart = startOfDay(new Date())
+  const windows    = buildWindows(todayStart)
+
+  const result = {
+    'Total Orders':   {},
+    'Completed':      {},
+    'Preparing':      {},
+    'Cancelled':      {}
+  }
+
+  for (const [key, { current, previous }] of Object.entries(windows)) {
+    result['Total Orders'][key]  = {
+      current:  await repos.order.countRows({
+        table:     'orders',
+        dateField: 'placed_at',
+        dateRange: current
+      }),
+      previous: await repos.order.countRows({
+        table:     'orders',
+        dateField: 'placed_at',
+        dateRange: previous
+      })
+    }
+
+    for (const status of ['completed','preparing','cancelled']) {
+      result[status[0].toUpperCase() + status.slice(1)][key] = {
+        current:  await repos.order.countRows({
+          table:     'orders',
+          dateField: 'placed_at',
+          dateRange: current,
+          filters:   { status }
+        }),
+        previous: await repos.order.countRows({
+          table:     'orders',
+          dateField: 'placed_at',
+          dateRange: previous,
+          filters:   { status }
+        })
+      }
+    }
+  }
+
+  return result
+}
+

@@ -139,28 +139,6 @@ export class BaseRepo{
     return data
   }
 
-  
-  async countByGroup(groupKey, groupValue, {filters = {}, searchKey, searchTerm}={}) {
-    let query = supabase
-    .from(this.table)
-    .select('*', { count: 'exact', head: true })
-    .eq(groupKey, groupValue);
-
-    if(searchTerm){
-      query = query.ilike(searchKey, `%${searchTerm}%`)
-    }
-  
-    for (const [key, value] of Object.entries(filters)) {
-      query = query.eq(key, value);
-    }
-
-    const { count, error } = await query;
-    if (error) {
-      throw new Error(`${this.table} countByGroup failed: ${error.message}`);
-    }
-    return count;
-  }
-
   async sumColumn({table,column, dateRange = {}, filters = {}}){
     let query = supabase
     .from(this.table)
@@ -187,6 +165,34 @@ export class BaseRepo{
 
     return data.reduce((acc, row) => acc + (row[column] ?? 0), 0)
 
+  }
+
+  async countRows({
+    table,
+    dateField = 'created_at',
+    dateRange = {},
+    filters   = {}  
+  }) {
+    let q = supabase
+      .from(table)
+      .select('*', { head: true, count: 'exact' })
+
+    if (dateRange.from) {
+      q = q.gte(dateField, dateRange.from.toISOString())
+    }
+    if (dateRange.to) {
+      q = q.lt(dateField, dateRange.to.toISOString())
+    }
+    for (const [k, v] of Object.entries(filters)) {
+      q = q.eq(k, v)
+    }
+
+    const { count, error } = await q
+    if (error) {
+      console.error(`countRows failed on ${table}.${dateField}`, error)
+      throw error
+    }
+    return count ?? 0
   }
 
   async deactivate(id){
