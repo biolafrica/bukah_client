@@ -1,0 +1,35 @@
+import * as outline from '@heroicons/react/24/outline'
+
+function MetricItem({ label, value, percentage, comparison, trend }) {
+  const Icon = trend === 'down'
+    ? outline.ArrowTrendingDownIcon
+    : outline.ArrowTrendingUpIcon
+  const colorClass = trend === 'down' ? 'text-red-600' : 'text-green-600'
+
+  return (
+    <div className="flex flex-col gap-3 min-w-[200px]">
+      <span className="text-gray-600 text-sm">{label}</span>
+      <span className="text-2xl font-semibold text-gray-900">{value}</span>
+      <div className={`flex items-center gap-2 ${colorClass}`}>
+        <Icon className="w-5 h-5" aria-hidden="true" />
+        <span className="font-semibold">{percentage}</span>
+        <span className="text-sm text-sec-text">{comparison}</span>
+      </div>
+    </div>
+  )
+}
+
+export default function MetricsContainer({ metrics }) {
+  return (
+    <div className="border border-border-text rounded-md flex items-center flex-1 p-3 my-5 gap-4 bg-white overflow-x-auto">
+      {metrics.map((metric, idx) => (
+        <div
+          key={metric.label}
+          className={idx < metrics.length - 1 ? 'border-r border-gray-300 pr-5 flex-1' : 'flex-1'}
+        >
+          <MetricItem {...metric} />
+        </div>
+      ))}
+    </div>
+  )
+}

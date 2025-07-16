@@ -47,7 +47,7 @@ export async function getAllTopCustomers(){
       top_spenders: topSpenders
     }
     
-  } catch (error) {
+  } catch (err) {
     throw new Error(`Error fetching top users: ${err.message}`)
   }
 }

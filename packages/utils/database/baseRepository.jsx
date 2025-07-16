@@ -161,6 +161,33 @@ export class BaseRepo{
     return count;
   }
 
+  async sumColumn({table,column, dateRange = {}, filters = {}}){
+    let query = supabase
+    .from(this.table)
+    .select(column, { head: false })
+ 
+    if (dateRange.from) {
+      query = query.gte("created_at", dateRange.from.toISOString())
+    }
+
+    if (dateRange.to) {
+      query = query.lt("created_at", dateRange.to.toISOString())
+    }
+
+    for (const [key, value] of Object.entries(filters)) {
+      query = query.eq(key, value)
+    }
+
+    const { data, error } = await query
+
+    if (error) {
+      console.error(`sumColumn failed on ${table}.${column}:`, error)
+      throw error
+    }
+
+    return data.reduce((acc, row) => acc + (row[column] ?? 0), 0)
+
+  }
 
   async deactivate(id){
     const {data, error} = await supabase
