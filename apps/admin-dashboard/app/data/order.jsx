@@ -1,5 +1,6 @@
 import { date } from "zod"
 import { formatNaira, formatNumber } from "../utils/format"
+import { useMemo, useState } from "react"
 
 export const order = {
   columns :[
@@ -36,14 +37,6 @@ export const order = {
     },
   ],
 
-
-  metrics :[
-    { label: 'Total Orders', value: formatNumber(2500), percentage: '+11.02%', comparison: 'vs last month', trend: 'up' },
-    { label: 'Completed', value: formatNumber(2400), percentage: '+5.00%', comparison: 'vs last month', trend: 'up' },
-    { label: 'In Progress', value: formatNumber(90), percentage: '-3.50%', comparison: 'vs last month', trend: 'down' },
-    { label: 'Cancelled', value: formatNumber(19), percentage: '-3.50%', comparison: 'vs last month', trend: 'down' },
-  ],
-
   segment: [
     { key: 'all', label: 'All' },
     { key: 'preparing', label: 'Preparing' },
@@ -66,5 +59,48 @@ export const order = {
   sortOptions : [
     { key: "price", label: "Price" },
   ],
+
+  filterConfig(dateRange, branchOptions){
+    const [drStart, drEnd] = (dateRange || '').split(',')
+    
+    return [
+      { key:'branch',label:'Branch',type:'select',options: branchOptions},
+      { key:'channel',label:'channel', type:'select', options:this.channelOption},
+      { key:'dateRange',label:'Date Created',type:  'date-range',
+        value: { from: drStart, to: drEnd },
+      },
+
+    ]
+
+  },
+
+  useOrderMetrics(rawData){
+    const [range, setRange] = useState('today')
+
+    const metrics = useMemo(() => {
+      if (!rawData) return []
+
+      return Object.entries(rawData).map(([label, periods]) => {
+
+        const window = periods?.[range] ?? { current: 0, previous: 0 }
+        const { current, previous } = window
+        const diff = current - previous
+        const pct  = previous > 0 ? (diff / previous) * 100 : 0
+
+        return {
+          label,
+          value: formatNumber(current),
+          percentage: `${diff >= 0 ? '+' : ''}${pct.toFixed(2)}%`,
+          comparison:
+            range === 'today'  ? 'vs yesterday'
+          : range === 'last7'  ? 'vs prior 7 days'
+          :                      'vs prior 30 days',
+          trend: diff >= 0 ? 'up' : 'down',
+        }
+      })
+    }, [rawData, range])
+
+    return { metrics, range, setRange }
+  }
 
 }

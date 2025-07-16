@@ -1,4 +1,5 @@
 "use client"
+
 import HeadingIntro from "../../common/headingIntro";
 import * as outline    from '@heroicons/react/24/outline'
 import { order } from "../../../data/order";
@@ -22,11 +23,11 @@ export default function ClientOrderInner({
   totalCount,
   currentPage,
   pageSize,
+  metricData
 }){
 
   const router = useRouter()
   const params = useSearchParams()
-  const [drStart, drEnd] = (dateRange || '').split(',')
 
   const [sideScreenOpen, setSideScreenOpen] = useState(false)
   const [moreArray, setMoreArray] = useState(null)
@@ -36,22 +37,11 @@ export default function ClientOrderInner({
   const handleMore = (row)=>{
     setMoreArray(row)
     setSideScreenOpen(true)
-
   }
 
-  let config = [
-    { key:'branch',   label:'Branch',   type:'select', options: branchOptions },
+  const filterConfig = order.filterConfig(dateRange, branchOptions);
 
-    { key:'channel', label:'channel', type:'select', options: order.channelOption },
-
-    {
-      key:   'dateRange',
-      label: 'Date Created',
-      type:  'date-range',
-      value: { from: drStart, to: drEnd },
-    },
-
-  ]
+  const { metrics, range, setRange} = order.useOrderMetrics(metricData)
 
   // helper to update URL without full reload
   const updateParams = (patch) => {
@@ -98,7 +88,10 @@ export default function ClientOrderInner({
       />
 
       <MetricsContainer
-        metrics={order.metrics}
+        metrics={metrics} 
+        range={range}
+        onRangeChange={setRange}
+        ranges={['today','last7','last30']}
       />
 
       <SegmentedToolbars
@@ -112,7 +105,7 @@ export default function ClientOrderInner({
         filterProps={
           {
             filters,
-            config,
+            config :filterConfig,
             onChange: (k, v) => updateParams({ [k]: v }),
             onApply:  () => {}, 
             onClear:  () => updateParams({ branch: '', channel: '', dateRange:''}),

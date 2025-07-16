@@ -28,7 +28,6 @@ export function getAllCustomersWithCounts({
   return repos.customer.findAll({search, filters, range, orderBy})
 }
 
-
 export async function getAllTopCustomers(){
   const range = [0,4]
   const ordersOrderBy = {"total_orders": false}

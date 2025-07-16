@@ -38,7 +38,7 @@ export default async function Orders({searchParams}){
   params.set('range', `${start},${end}`)
 
   // Fetch paginated orders
-  const orderRes    = await fetch(
+  const orderRes  = await fetch(
     `${process.env.NEXT_PUBLIC_API_URL}/api/orders?${params}`
   )
 
@@ -46,7 +46,14 @@ export default async function Orders({searchParams}){
   const tableData  = orderJson.data.data
   const totalCount = orderJson.data.count
 
-  console.log("data", tableData, "count", totalCount)
+
+  // Fetch metrics for orders
+  const metricsRes = await fetch(
+    `${process.env.NEXT_PUBLIC_API_URL}/api/orders/metrics`
+  )
+  const metricsJson  = await metricsRes.json();
+  const metric  = metricsJson.data;
+
 
   return (
     <ClientOrderInner
@@ -60,6 +67,7 @@ export default async function Orders({searchParams}){
       totalCount={totalCount}
       currentPage={pageIdx}
       pageSize={pageSize}
+      metricData={metric}
     />
   )
 }
