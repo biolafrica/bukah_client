@@ -44,7 +44,14 @@ export default async function CustomersPage({ searchParams }) {
   const topOrders     = topsJson.data.most_orders.data
   const topSpenders   = topsJson.data.top_spenders.data
 
+
   // Fetch customer metrics
+  const metricsRes = await fetch(
+    `${process.env.NEXT_PUBLIC_API_URL}/api/customers/metrics`
+  )
+  const metricsJson  = await metricsRes.json();
+  const metric  = metricsJson.data;
+
   const metrics=[
     { label: 'Total Customers', value: formatNumber(312), percentage: '+11.02%', comparison: 'vs last month', trend: 'up' },
     { label: 'Registered', value: formatNumber(300), percentage: '+5.00%', comparison: 'vs last month', trend: 'up' },
@@ -63,7 +70,7 @@ export default async function CustomersPage({ searchParams }) {
       pageSize={pageSize}
       topOrders={topOrders}
       topSpenders={topSpenders}
-      metrics={metrics}
+      metricData={metric}
     />
   )
 }

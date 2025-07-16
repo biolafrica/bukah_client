@@ -27,7 +27,7 @@ export default function ClientFinanceInner({
   const params = useSearchParams()
 
   const filterConfig = transaction.filterConfig(dateRange, branchOptions);
-  
+
   const { metrics, range, setRange} = transaction.useFinanceMetrics(metricData)
 
   // Helper to update URL params
@@ -49,6 +49,7 @@ export default function ClientFinanceInner({
 
   return (
     <div className="p-5 pt-30 lg:pl-75">
+      
       <HeadingIntro
         module="Finances"
         moduleIntro="View and manage all your money in one place"

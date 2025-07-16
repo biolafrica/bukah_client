@@ -11,6 +11,7 @@ import ListingCard      from '../../common/listCard'
 import * as outline     from '@heroicons/react/24/outline'
 import { formatNaira }  from '../../../utils/format'
 import CustomerDetails from './customerDetails'
+import { customer } from '../../../data/customer'
 
 export default function ClientCustomerInner({
   segment,
@@ -23,12 +24,10 @@ export default function ClientCustomerInner({
   pageSize,
   topOrders,
   topSpenders,
-  metrics,
+  metricData,
 }) {
   const router = useRouter()
   const params = useSearchParams()
-
-  const [drStart, drEnd] = (dateRange || '').split(',')
 
   const [sideScreenOpen, setSideScreenOpen] = useState(false)
   const [moreArray, setMoreArray] = useState(null)
@@ -40,20 +39,9 @@ export default function ClientCustomerInner({
     setSideScreenOpen(true)
   }
 
-  // Filter config: only date-range for customers
-  const filterConfig = [
-    {
-      key:   'dateRange',
-      label: 'Date Registered',
-      type:  'date-range',
-      value: { from: drStart, to: drEnd },
-    },
-  ]
+  const filterConfig = customer.filterConfig(dateRange)
 
-  // Sort options: totalOrders or totalSpent
-  const sortOptions = [
-    { key: 'totalSpent', label: 'Total Spent'  }
-  ]
+  const { metrics, range, setRange} = customer.useCustomerMetrics(metricData)
 
   const updateParams = (patch) => {
     const next = new URLSearchParams(params.toString())
@@ -97,7 +85,12 @@ export default function ClientCustomerInner({
         onButtonClick={() => console.log('Export CSV')}
       />
 
-      <MetricsContainer metrics={metrics} />
+      <MetricsContainer 
+        metrics={metrics} 
+        range={range}
+        onRangeChange={setRange}
+        ranges={['today','last7','last30']}
+      />
 
       <div className="flex gap-5">
 
@@ -105,11 +98,7 @@ export default function ClientCustomerInner({
         <div className="flex-1 lg:w-4/7">
           
           <SegmentedToolbar
-            segments={[
-              { key: 'all',        label: 'All' },
-              { key: 'registered', label: 'Registered' },
-              { key: 'guest',      label: 'Guest' },
-            ]}
+            segments={customer.segments}
             defaultActive={segment}
             onSegmentChange={(key) => updateParams({ segment: key })}
             onSearch={(q) => updateParams({ searchTerm: q })}
@@ -122,7 +111,7 @@ export default function ClientCustomerInner({
               title:      'Filter by Registration Date',
             }}
             sortProps={{
-              options:    sortOptions,
+              options:customer.sortOptions,
               sortConfig,
               onSort:     (key) => {
                 const dir = sortConfig?.key === key && sortConfig.direction === 'ascending'
@@ -148,16 +137,7 @@ export default function ClientCustomerInner({
             />
           ) : (
             <DataTable
-              columns={[
-                { key: 'name',header: 'Name',minWidth: '200px' },
-                { key: 'total_orders',header: 'Total Orders',    minWidth: '150px' },
-                {key: 'total_spent',header: 'Total Spent',    minWidth: '150px',
-                  render: (row) => formatNaira(row.total_spent)
-                },
-                {key: 'created_at', header: 'Date Registered', minWidth: '150px',
-                  render: (row) => new Date(row.created_at).toLocaleDateString('en-GB')
-                },
-              ]}
+              columns={customer.columns}
               data={tableData}
               edit={false}
               onDelete={() => console.log("delete") }
