@@ -7,6 +7,8 @@ import SegmentedToolbars from "../../common/segment";
 import EmptyState from "../../common/emptyState";
 import DataTable from "../../common/dataTable";
 import { useSearchParams, useRouter } from "next/navigation";
+import { useState } from "react";
+import { OrderDetails } from "./orderDetails";
 
 
 export default function ClientOrderInner({
@@ -25,6 +27,17 @@ export default function ClientOrderInner({
   const router = useRouter()
   const params = useSearchParams()
   const [drStart, drEnd] = (dateRange || '').split(',')
+
+  const [sideScreenOpen, setSideScreenOpen] = useState(false)
+  const [moreArray, setMoreArray] = useState(null)
+
+  const close = () => {setSideScreenOpen(false)}
+
+  const handlMore = (row)=>{
+    setMoreArray(row)
+    setSideScreenOpen(true)
+
+  }
 
   let config = [
     { key:'branch',   label:'Branch',   type:'select', options: branchOptions },
@@ -60,6 +73,20 @@ export default function ClientOrderInner({
 
   return(
     <div className="p-5 pt-30 lg:pl-75">
+
+      {sideScreenOpen && (
+        <div className='fixed inset-0 z-60 flex'>
+          <div 
+            className='absolute inset-0 bg-black opacity-50'
+            onClick={close}
+          />
+
+          <div className='relative z-65'>
+            <OrderDetails onClose= {close} data={moreArray}/>
+          </div>
+
+        </div>
+      )}
 
       <HeadingIntro 
         module="Orders" 
@@ -119,8 +146,9 @@ export default function ClientOrderInner({
         <DataTable
           columns={order.columns} 
           data={tableData}
-          onEdit={()=>console.log("delete")}
+          edit={false}
           onDelete={()=>console.log("delete")}
+          onMore={handlMore}
           currentPage={currentPage}
           pageSize={pageSize}
           totalCount={totalCount}
