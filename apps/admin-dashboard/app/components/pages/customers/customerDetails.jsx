@@ -1,17 +1,16 @@
 import { useState } from "react";
 import CloseButton from "../../common/closeButton";
+import AISuggestionContainer from "./aiSuggestionContainer";
 import DetailsContainer from "./detailsContainer";
-import FeedbackContainer from "./feedbackContainer";
-import TimelineContainer from "./timelineContainer";
+import OrderHistoryContainer from "./orderHistoryContainer";
 
-export function OrderDetails({onClose, data}){
+export default function CustomerDetails({onClose, data}){
   const [segment, setSegment] = useState("details")
-  
   return(
     <div className='w-screen lg:w-1/2 fixed right-0 h-screen bg-white overflow-y-auto'>
 
       <CloseButton  
-        title='Order Details'
+        title='Customer Details'
         onCancelClick={onClose}
       />
 
@@ -26,17 +25,17 @@ export function OrderDetails({onClose, data}){
           </div>
 
           <div 
-            className={`segmented__option flex-1 ${segment === "timeline" ? "segmented__option--selected": "segmented__option--unselected" }`}
-            onClick={()=>setSegment('timeline')}
+            className={`segmented__option flex-1 ${segment === "orderHistory" ? "segmented__option--selected": "segmented__option--unselected" }`}
+            onClick={()=>setSegment('orderHistory')}
           >
-            Timeline
+            Order History
           </div>
 
           <div 
-            className={`segmented__option flex-1 ${segment === "feedback" ? "segmented__option--selected": "segmented__option--unselected" }`} 
-            onClick={()=>setSegment('feedback')}
+            className={`segmented__option flex-1 ${segment === "aiSuggestion" ? "segmented__option--selected": "segmented__option--unselected" }`} 
+            onClick={()=>setSegment('aiSuggestion')}
           >
-            Feedback
+            AI Suggestions
           </div>
 
         </div>
@@ -45,16 +44,17 @@ export function OrderDetails({onClose, data}){
 
           (
             <DetailsContainer/>
-          ) : segment === "timeline" ? 
+          ) : segment === "orderHistory" ? 
 
           (
-            <TimelineContainer/> ):
+            <OrderHistoryContainer/> ):
           (
-            <FeedbackContainer/>
+            <AISuggestionContainer/>
           )
         }
 
-        
+
+
       </div>
 
     </div>

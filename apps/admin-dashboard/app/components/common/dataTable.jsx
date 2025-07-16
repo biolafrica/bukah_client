@@ -1,4 +1,6 @@
 import * as solid from '@heroicons/react/24/solid'
+import * as outline from '@heroicons/react/24/outline'
+
 import TableFooter from './tableFooter'
 
 export default function DataTable({ 
@@ -7,11 +9,16 @@ export default function DataTable({
   onEdit, 
   onDelete,
   onMore,
+  onFeedbacks,
+  onExport,
   currentPage,
   pageSize,
   totalCount,
   onPageChange,
-  edit=true
+  edit=true,
+  chatIcon = false,
+  exportIcon = false,
+  deleteIcon =true
 }) {
   return (
     <div className="w-full h-fit overflow-auto bg-white rounded-lg border border-border-text">
@@ -57,6 +64,7 @@ export default function DataTable({
                 <button type="button" onClick={() => onMore(row)} aria-label="More">
                   <solid.DocumentTextIcon className="w-5 h-5 text-green-600 cursor-pointer" aria-hidden="true" />
                 </button>
+
                 {edit && 
                   ( 
                     <button type="button" onClick={() => onEdit(row)} aria-label="Edit">
@@ -65,9 +73,27 @@ export default function DataTable({
                   )
                 }
 
-                <button type="button" onClick={() => onDelete(row)} aria-label="Delete">
-                  <solid.TrashIcon className="w-5 h-5 text-red-600 cursor-pointer" aria-hidden="true" />
-                </button>
+                {deleteIcon && 
+                  ( <button type="button" onClick={() => onDelete(row)} aria-label="Delete">
+                      <solid.TrashIcon className="w-5 h-5 text-red-600 cursor-pointer" aria-hidden="true" />
+                    </button>
+                  )
+                }
+
+                {exportIcon && 
+                  ( <button type="button" onClick={() => onExport(row)} aria-label="Export">
+                      <outline.ArrowUpTrayIcon className="w-5 h-5 cursor-pointer" aria-hidden="true" />
+                    </button>
+                  )
+                }
+
+                {chatIcon && 
+                  ( <button type="button" onClick={() => onFeedbacks(row)} aria-label="Feedback">
+                      <outline.ChatBubbleBottomCenterTextIcon className="w-5 h-5 cursor-pointer" aria-hidden="true" />
+                    </button>
+                  )
+                }
+
               </td>
             </tr>
           ))}

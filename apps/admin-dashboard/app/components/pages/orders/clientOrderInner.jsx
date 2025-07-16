@@ -33,7 +33,7 @@ export default function ClientOrderInner({
 
   const close = () => {setSideScreenOpen(false)}
 
-  const handlMore = (row)=>{
+  const handleMore = (row)=>{
     setMoreArray(row)
     setSideScreenOpen(true)
 
@@ -148,7 +148,7 @@ export default function ClientOrderInner({
           data={tableData}
           edit={false}
           onDelete={()=>console.log("delete")}
-          onMore={handlMore}
+          onMore={handleMore}
           currentPage={currentPage}
           pageSize={pageSize}
           totalCount={totalCount}

@@ -1,6 +1,6 @@
 "use client"
 
-import React from 'react'
+import React, { useState } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import HeadingIntro     from '../../common/headingIntro'
 import MetricsContainer from '../../common/metricsCont'
@@ -10,6 +10,7 @@ import DataTable        from '../../common/dataTable'
 import ListingCard      from '../../common/listCard'
 import * as outline     from '@heroicons/react/24/outline'
 import { formatNaira }  from '../../../utils/format'
+import CustomerDetails from './customerDetails'
 
 export default function ClientCustomerInner({
   segment,
@@ -28,6 +29,16 @@ export default function ClientCustomerInner({
   const params = useSearchParams()
 
   const [drStart, drEnd] = (dateRange || '').split(',')
+
+  const [sideScreenOpen, setSideScreenOpen] = useState(false)
+  const [moreArray, setMoreArray] = useState(null)
+
+  const close = () => {setSideScreenOpen(false)}
+
+  const handleMore = (row)=>{
+    setMoreArray(row)
+    setSideScreenOpen(true)
+  }
 
   // Filter config: only date-range for customers
   const filterConfig = [
@@ -63,6 +74,20 @@ export default function ClientCustomerInner({
   return (
     <div className="p-5 pt-30 lg:pl-75">
 
+      {sideScreenOpen && (
+        <div className='fixed inset-0 z-60 flex'>
+          <div 
+            className='absolute inset-0 bg-black opacity-50'
+            onClick={close}
+          />
+
+          <div className='relative z-65'>
+            <CustomerDetails onClose= {close} data={moreArray}/>
+          </div>
+
+        </div>
+      )}
+
       <HeadingIntro
         module="Customers"
         moduleIntro="Understand your customers to improve service"
@@ -75,8 +100,10 @@ export default function ClientCustomerInner({
       <MetricsContainer metrics={metrics} />
 
       <div className="flex gap-5">
+
         {/* Left Column: Table and Controls */}
         <div className="flex-1 lg:w-4/7">
+          
           <SegmentedToolbar
             segments={[
               { key: 'all',        label: 'All' },
@@ -122,20 +149,19 @@ export default function ClientCustomerInner({
           ) : (
             <DataTable
               columns={[
-                { key: 'name',           header: 'Name',            minWidth: '200px' },
-                { key: 'total_orders',   header: 'Total Orders',    minWidth: '150px' },
-                {
-                  key: 'total_spent', header: 'Total Spent',    minWidth: '150px',
+                { key: 'name',header: 'Name',minWidth: '200px' },
+                { key: 'total_orders',header: 'Total Orders',    minWidth: '150px' },
+                {key: 'total_spent',header: 'Total Spent',    minWidth: '150px',
                   render: (row) => formatNaira(row.total_spent)
                 },
-                {
-                  key: 'created_at', header: 'Date Registered', minWidth: '150px',
+                {key: 'created_at', header: 'Date Registered', minWidth: '150px',
                   render: (row) => new Date(row.created_at).toLocaleDateString('en-GB')
                 },
               ]}
               data={tableData}
-              onEdit={() => {} }
-              onDelete={() => {} }
+              edit={false}
+              onDelete={() => console.log("delete") }
+              onMore={handleMore}
               currentPage={currentPage}
               pageSize={pageSize}
               totalCount={totalCount}
