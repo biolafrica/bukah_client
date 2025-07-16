@@ -50,17 +50,12 @@ export default async function FinancePage({ searchParams }) {
   const totalCount = txJson.data.count
 
   // Fetch metrics for transactions
-  {/*const metricsRes = await fetch(
+  const metricsRes = await fetch(
     `${process.env.NEXT_PUBLIC_API_URL}/api/transactions/metrics`
   )
-  const metricsJson  = await metricsRes.json()
-  const metrics      = metricsJson.data */}
-  
-  const metrics = [
-    { label: 'Total Sales', value: formatNaira(125500000), percentage: '+11.02%', comparison: 'vs last month', trend: 'up' },
-    { label: 'Registered', value: formatNaira(1300000), percentage: '+5.00%', comparison: 'vs last month', trend: 'up' },
-    { label: 'Net Revenue', value: formatNaira(124200000), percentage: '-3.50%', comparison: 'vs last month', trend: 'up' },
-  ]
+  const metricsJson  = await metricsRes.json();
+  const metric  = metricsJson.data;
+
 
   return (
     <ClientFinanceInner
@@ -74,7 +69,7 @@ export default async function FinancePage({ searchParams }) {
       currentPage={pageIdx}
       pageSize={pageSize}
       branchOptions={branchOptions}
-      metrics={metrics}
+      metricData={metric}
     />
   )
 }

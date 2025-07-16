@@ -1,4 +1,5 @@
 import * as outline from '@heroicons/react/24/outline'
+import { useEffect, useState , useRef} from 'react'
 
 function MetricItem({ label, value, percentage, comparison, trend }) {
   const Icon = trend === 'down'
@@ -19,17 +20,66 @@ function MetricItem({ label, value, percentage, comparison, trend }) {
   )
 }
 
-export default function MetricsContainer({ metrics }) {
+export default function MetricsContainer({
+  metrics,
+  range = 'Today',
+  onRangeChange = () => {},
+  ranges = ['Today', 'Last 7 Days', 'Last 30 Days']
+}) {
+  const [open, setOpen] = useState(false)
+  const ref = useRef(null)
+
+  // close on outside click
+  useEffect(() => {
+    const handleOutside = e => {
+      if (ref.current && !ref.current.contains(e.target)) {
+        setOpen(false)
+      }
+    }
+    document.addEventListener('mousedown', handleOutside)
+    return () => document.removeEventListener('mousedown', handleOutside)
+  }, [])
+
   return (
-    <div className="border border-border-text rounded-md flex items-center flex-1 p-3 my-5 gap-4 bg-white overflow-x-auto">
-      {metrics.map((metric, idx) => (
-        <div
-          key={metric.label}
-          className={idx < metrics.length - 1 ? 'border-r border-gray-300 pr-5 flex-1' : 'flex-1'}
+    <div className="bg-white border border-border-text rounded-md p-3 my-5 flex items-center gap-5">
+      {/* Range selector */}
+
+      <div ref={ref} className="relative inline-block mb-3">
+        <button
+          type="button"
+          onClick={() => setOpen(o => !o)}
+          className="flex items-center gap-2 px-3 py-1 border border-gray-300 rounded-md hover:bg-gray-50 transition"
         >
-          <MetricItem {...metric} />
-        </div>
-      ))}
+          <outline.CalendarIcon className="w-5 h-5 text-gray-600" />
+          <span className="text-sm text-gray-800">{range}</span>
+          <outline.ChevronDownIcon className={`w-4 h-4 transition-transform ${open ? 'rotate-180' : ''}`} />
+        </button>
+        {open && (
+          <ul className="absolute mt-1 w-40 bg-white border border-gray-200 rounded shadow-lg z-10">
+            {ranges.map(r => (
+              <li
+                key={r}
+                onClick={() => { onRangeChange(r); setOpen(false) }}
+                className="px-4 py-2 hover:bg-gray-100 cursor-pointer"
+              >
+                {r}
+              </li>
+            ))}
+          </ul>
+        )}
+      </div>
+
+      {/* Metrics row */}
+      <div className="flex flex-1 items-center gap-4 overflow-x-auto">
+        {metrics.map((m, idx) => (
+          <div
+            key={m.label}
+            className={idx < metrics.length - 1 ? 'border-r border-gray-300 pr-5 flex-1' : 'flex-1'}
+          >
+            <MetricItem {...m} />
+          </div>
+        ))}
+      </div>
     </div>
   )
 }
