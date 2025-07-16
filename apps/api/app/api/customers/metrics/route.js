@@ -1,14 +1,14 @@
+import { getCustomerMetrics } from "../../../../src/customers/service"
 import { handleServerError } from "../../../../src/lib/errorHandler"
-import { getOrderMetrics } from "../../../../src/orders/service"
 import { NextResponse } from "next/server"
 
 export async function GET(_,req){
   try {
-    const data = await getOrderMetrics()
+    const data = await getCustomerMetrics()
     return NextResponse.json({data}, {status: 201})
     
   } catch (err) {
-    return handleServerError(err, "error fetching order metrics")
+    return handleServerError(err, "error fetching customer metrics")
   }
 
 }
