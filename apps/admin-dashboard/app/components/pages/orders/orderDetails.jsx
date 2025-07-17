@@ -44,7 +44,7 @@ export function OrderDetails({onClose, data}){
         {segment === "details" ? 
           (<DetailsContainer data={data}/>) : segment === "timeline" ? 
           (<TimelineContainer data={data}/>):
-          (<FeedbackContainer/>)
+          (<FeedbackContainer id={data?.id}/>)
         }
         
       </div>

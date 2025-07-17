@@ -5,8 +5,9 @@ import { useEffect, useState } from "react"
 
 export default function DetailsContainer({data}){
   
+  const [items, setItems] = useState([])
   const [loadingItems, setLoading] = useState(true)
-  
+
   useEffect(() => {
     if (!data?.id) return
     let cancelled = false
@@ -15,11 +16,11 @@ export default function DetailsContainer({data}){
       try {
         const res  = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/order-items?orderId=${data.id}`)
         const json = await res.json()
-        if (!cancelled) console.log(json.data || [])
+        if (!cancelled) setItems(json.data.data || [])
       } catch (e) {
         console.error(e)
       } finally {
-        if (!cancelled) console.log("false")
+        if (!cancelled) setLoading(false)
       }
     }
     load()
@@ -50,12 +51,6 @@ export default function DetailsContainer({data}){
     { label: 'Service Fee', value:data.service_charge ?? 0},
     { label: 'Tax',  value:data.tax_amount ?? 0},
     { label: 'Total', value:data.total_amount},
-  ]
-
-  const  itemsData = [
-    {key: 1, item:'Ofada Rice', quantity:"5" , price:"5000", src:"/images/food.png"},
-    {key: 2, item:'Meat', quantity:"2" , price:"2000", src:"/images/food.png"},
-    {key: 3, item:'Plantain', quantity:"1" , price:"500", src:"/images/food.png"}
   ]
 
   return(
@@ -104,34 +99,30 @@ export default function DetailsContainer({data}){
         
         <div className="p-5 border border-border-text rounded-md w-full flex flex-col gap-5">
 
-          <div className="flex flex-col gap-3">
-            {itemsData.map((item)=>(
-              <div 
-                className="flex items-center justify-between font-light tex-sm 2 border border-border-text p-5 max-h-[91px] rounded-md"
-                key={item.key}
-              >
-                <div className="flex items-center gap-3">
-              
-                  <Image
-                    src={item.src}
-                    width={70}
-                    height={64}
-                    alt ={item.item}
-                  />
-                  
-                  <h4>
-                    {item.item}<span className="ml-2">X{item.quantity}</span>
-                  </h4>
+          {loadingItems
+            ? <h4>Loading items…</h4>
+            : items.map(item => (
+                <div
+                  className="flex items-center justify-between p-4 border border-border-text rounded-md"
+                  key={item.id}
+                >
+                  <div className="flex items-center gap-3">
+                    <Image
+                      src={item.product.image_url || '/images/food.png'}
+                      width={70}
+                      height={64}
+                      alt={item.name || "food image"}
+                      className="object-contain"
+                    />
+                    <span>
+                      {item.product.name} <span className="text-sec-text">×{item.quantity}</span>
+                    </span>
+                  </div>
 
+                  <span>{formatNaira(item.price / item.quantity)}</span>
                 </div>
-
-                <div>
-                  <h4>{formatNaira(item.price)}</h4>
-                </div>
-              
-              </div>
-            ))}
-          </div>
+              ))
+          }
 
           <div className=" flex flex-col gap-3 items-end text-sec-text font-medium">
             {amountEntries.map(({label, value})=>(
