@@ -27,6 +27,11 @@ export const repos = {
     process.env.NEXT_PUBLIC_RESTAURANT_ID 
   ),
 
+  orderItems : new BaseRepo(
+    "order_items", 
+    process.env.NEXT_PUBLIC_RESTAURANT_ID 
+  ),
+
   feedback : new BaseRepo(
     "feedbacks", 
     process.env.NEXT_PUBLIC_RESTAURANT_ID 
