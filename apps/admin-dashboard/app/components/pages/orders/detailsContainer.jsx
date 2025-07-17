@@ -1,22 +1,33 @@
 import Image from "next/image"
 import { formatNaira } from "../../../utils/format"
+import { format } from "date-fns"
 
-export default function DetailsContainer(){
-  const summarydata =[
-    {key: 1, label:'Order ID', value:"#901234"},
-    {key: 2, label:'Status', value:"Completed"},
-    {key: 3, label:'Date', value:"14-05-2025"},
-    {key: 4, label:'Time', value:"12:00pm"},
-    {key: 5, label:'Branch', value:"Branch A"},
-    {key: 6, label:'Staff', value:"Abiodun Biobaku"},
-    {key: 7, label:'Order Channel', value:"Online"},
-    {key: 8, label:'Payment Method', value:"POS"},
+export default function DetailsContainer({data}){
+  
+  const summaryEntries = [
+    { label: 'Order ID',  value: data.order_code },
+    { label: 'Status', value: data.status },
+    { label: 'Date',   value: format(new Date(data.placed_at), 'dd-MM-yyyy') },
+    { label: 'Time',   value: format(new Date(data.placed_at), 'hh:mm a') },
+    { label: 'Branch', value: data.branch?.name ?? '-' },
+    { label: 'Staff',   value: data.accepted_by?.first_name ?? '-' },
+    { label: 'Order Channel',  value: data.order_channel },
+    { label: 'Payment Method', value: data.payment_method },
   ]
-  const customerDetails = [
-    {key: 1, label:'Type', value:"Registered Customer"},
-    {key: 2, label:'Name', value:"John Dumebi"},
-    {key: 3, label:'Email', value:"john@gmail.com"},
-    {key: 4, label:'Phone Number', value:"08185191968"},
+
+  const cust = data.customer || {}
+  const customerEntries = [
+    { label: 'Type', value: cust.is_registered ? 'Registered' : 'Guest' },
+    { label: 'Name', value: cust.name ?? '-' },
+    { label: 'Email',  value: cust.email ?? '-' },
+    { label: 'Phone Number', value: cust.phone ?? '-' },
+  ]
+
+  const amountEntries = [
+    { label: 'Sub-total', value:data.sub_total },
+    { label: 'Service Fee', value:data.service_charge ?? 0},
+    { label: 'Tax',  value:data.tax_amount ?? 0},
+    { label: 'Total', value:data.total_amount},
   ]
 
   const  itemsData = [
@@ -26,16 +37,17 @@ export default function DetailsContainer(){
   ]
 
   return(
+
     <div className="mt-5 text-sm">
 
       <div className="order_summary_container mb-6">
         <h4 className="font-medium mb-2">Order Summary</h4>
         <div className="p-5 border border-border-text rounded-md flex flex-col gap-3 w-full">
 
-          {summarydata.map((item)=>(
-            <div className="flex items-center justify-between font-light tex-sm" key={item.key}>
-              <h4 className=" text-sec-text">{item.label}:</h4>
-              <h4>{item.value}</h4>
+          {summaryEntries.map(({label, value})=>(
+            <div className="flex items-center justify-between font-light tex-sm" key={label}>
+              <h4 className=" text-sec-text">{label}:</h4>
+              <h4>{value}</h4>
             </div>
           ))}
 
@@ -45,14 +57,25 @@ export default function DetailsContainer(){
       <div className="customer_details_container mb-6">
         <h4 className="font-medium mb-2">Customer Details</h4>
         <div className="p-2 border border-border-text rounded-md w-full">
-          {customerDetails.map((item)=>(
-            <div className="flex items-center justify-between font-light tex-sm mb-2" key={item.key}>
-              <h4 className=" text-sec-text">{item.label}:</h4>
-              <h4>{item.value}</h4>
+          {customerEntries.map(({label,value})=>(
+            <div className="flex items-center justify-between font-light tex-sm mb-2" key={label}>
+              <h4 className=" text-sec-text">{label}:</h4>
+              <h4>{value}</h4>
             </div>
           ))}
         </div>
       </div>
+
+      {data.notes &&(
+        <div className="notes_details_container mb-6">
+          <h4 className="font-medium mb-2">Customer Notes</h4>
+
+          <div className="p-5 min-h-[132px] border border-border-text rounded-md w-full">
+          <h4 className="text-sec-text">{data.notes}</h4>
+          </div>
+        </div>
+
+      )}
 
       <div className="customer_details_container mb-6">
         <h4 className=" font-medium mb-2">Items(s) Ordered</h4>
@@ -86,13 +109,15 @@ export default function DetailsContainer(){
               
               </div>
             ))}
-           
           </div>
 
-          <div className=" flex flex-col gap-3 items-end text-sec-text font-medium text-left">
-            <h4>Sub-total: <span className="ml-20 text-pri-text">{formatNaira(16400)}</span></h4>
-            <h4>Service Fee: <span className="ml-20 text-pri-text">{formatNaira(650)}</span></h4>
-            <h4>Total: <span className="ml-20 text-pri-text">{formatNaira(17050000)}</span></h4>
+          <div className=" flex flex-col gap-3 items-end text-sec-text font-medium">
+            {amountEntries.map(({label, value})=>(
+              <h4 className="flex items-center justify-between w-1/2" key={label}>
+                <span>{label}:</span> 
+                <span className=" text-pri-text">{formatNaira(value)}</span>
+              </h4>
+            ))}
           </div>
 
         </div>

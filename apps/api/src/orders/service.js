@@ -26,8 +26,9 @@ export async function getAllOrders({
 
   const joins = {
     branch: 'branches(name)',
-    customer: 'customers(name)',
+    customer: 'customers(name, is_registered, email, phone)',
     accepted_by: 'users(first_name)', 
+    processed_by: 'users(first_name)', 
   }
 
   const  search = searchTerm ? ['order_code', searchTerm] : []

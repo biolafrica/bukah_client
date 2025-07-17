@@ -1,31 +1,10 @@
-
-export default function TimelineContainer() {
+export default function TimelineContainer({data}) {
 
   const stages = [
-    {
-      label: 'Order Placed',
-      description: 'Waiting to confirm order',
-      timestamp: '2025-07-01T09:15:00Z'
-    },
-    {
-      label: 'Order Accepted',
-      description: 'Accepted by a waiter',
-      timestamp: '2025-07-01T09:17:30Z'
-    },
-    {
-      label: 'Preparing Order',
-      description: 'Items are being prepared',
-      timestamp: null 
-    },
-    {
-      label: 'Processing Order',
-      description: 'Cooking in progress'
-    },
-    {
-      label: 'Order Completed',
-      description: 'Order is ready',
-      timestamp: null
-    },
+    { label: 'Order Placed', description: 'Waiting to confirm order', timestamp: data.placed_at},
+    { label: 'Order Accepted', description: `Accepted by ${data.accepted_by.first_name ||"a waiter"}`, timestamp: data.accepted_at},
+    { label: 'Processing Order', description: `Cooking in progress by ${data.processed_by.first_name ||"chef"}`, timestamp: data.processed_at },
+    { label: 'Order Completed', description: 'Order is ready', timestamp: data.served_at},
   ]
 
   return (

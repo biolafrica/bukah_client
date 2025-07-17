@@ -43,7 +43,7 @@ export default function CustomerDetails({onClose, data}){
         {segment === "details" ? 
 
           (
-            <DetailsContainer/>
+            <DetailsContainer data={data}/>
           ) : segment === "orderHistory" ? 
 
           (

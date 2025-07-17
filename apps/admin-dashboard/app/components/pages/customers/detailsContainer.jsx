@@ -1,20 +1,22 @@
 import Image from "next/image"
 import { formatNaira, formatNumber } from "../../../utils/format"
 import { order } from "../../../data/order"
+import { format } from "date-fns"
+import { getInitials } from "../../../utils/initials"
 
-export default function DetailsContainer(){
+export default function DetailsContainer({data}){
 
-  const customerDetails =[
-    {key: 1, label:"Name", value:"John Dumebi"},
-    {key: 2, label:"Type", value:"Registered Customer"},
-    {key: 3, label:"Email", value:null},
-    {key: 4, label:"Phone Number", value:"08035836465"}
+  const customerEnteries =[
+    {label:"Name", value:data.name},
+    {label:"Type", value: data.is_registered ? 'Registered' : 'Guest' },
+    {label:"Email", value:data.email},
+    {label:"Phone Number", value:data.phone}
   ]
 
   const customerMetrics =[
-    {key: 1, label:"Total Spent", value:formatNaira(150000)},
-    {key: 2, label:"Total Orders", value:`${formatNumber(20)} orders`},
-    {key: 3, label:"Registered Date", value:"12-01-2024"},
+    {label:"Total Spent", value:formatNaira(data.total_spent)},
+    {label:"Total Orders", value:`${formatNumber(data.total_orders)} orders`},
+    {label:"Registered Date", value:format(new Date(data.created_at), 'dd-MM-yyyy')},
   ]
 
   const orderedMeal =[
@@ -34,14 +36,14 @@ export default function DetailsContainer(){
 
         <div className="flex items-center gap-3 ">
           <div className="w-[109px] h-[109px] bg-purple-200 text-4xl font-bold rounded-full flex items-center justify-center">
-            JD
+            {getInitials(data.name)}
           </div>
 
           <div className="flex flex-col gap-1">
-            {customerDetails.map((i)=>(
-              <h4 key={i.key}>
-                <span className="text-sec-text mr-4">{i.label}:</span> 
-                {i.value || "--:--"}
+            {customerEnteries.map(({label, value})=>(
+              <h4 key={label}>
+                <span className="text-sec-text mr-4">{label}:</span> 
+                {value || "--:--"}
               </h4>
             ))}
           </div>
@@ -49,10 +51,10 @@ export default function DetailsContainer(){
       </div>
 
       <div className="metric_container border border-border-text rounded-md p-3 flex felx-1 ">
-        {customerMetrics.map((c,i)=>(
-          <div className={`px-5 ${i===2 ? "": "border-r border-border-text"} flex-1`} key={c.key}>
-            <h4 className="text-xs text-sec-text mb-3">{c.label}</h4>
-            <h4 className="text-xl">{c.value}</h4>
+        {customerMetrics.map(({label,value},i)=>(
+          <div className={`px-5 ${i===2 ? "": "border-r border-border-text"} flex-1`} key={label}>
+            <h4 className="text-xs text-sec-text mb-3">{label}</h4>
+            <h4 className="text-xl">{value}</h4>
           </div>
 
         ))}
@@ -81,7 +83,6 @@ export default function DetailsContainer(){
             </div>
 
           ))}
-
         </div>
 
       </div>
