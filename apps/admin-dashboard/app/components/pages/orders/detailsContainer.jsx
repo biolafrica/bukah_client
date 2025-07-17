@@ -1,9 +1,31 @@
 import Image from "next/image"
 import { formatNaira } from "../../../utils/format"
 import { format } from "date-fns"
+import { useEffect, useState } from "react"
 
 export default function DetailsContainer({data}){
   
+  const [loadingItems, setLoading] = useState(true)
+  
+  useEffect(() => {
+    if (!data?.id) return
+    let cancelled = false
+    async function load() {
+      setLoading(true)
+      try {
+        const res  = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/order-items?orderId=${data.id}`)
+        const json = await res.json()
+        if (!cancelled) console.log(json.data || [])
+      } catch (e) {
+        console.error(e)
+      } finally {
+        if (!cancelled) console.log("false")
+      }
+    }
+    load()
+    return () => { cancelled = true }
+  }, [data?.id])
+
   const summaryEntries = [
     { label: 'Order ID',  value: data.order_code },
     { label: 'Status', value: data.status },

@@ -42,18 +42,10 @@ export function OrderDetails({onClose, data}){
         </div>
 
         {segment === "details" ? 
-
-          (
-            <DetailsContainer data={data}/>
-          ) : segment === "timeline" ? 
-
-          (
-            <TimelineContainer data={data}/> ):
-          (
-            <FeedbackContainer/>
-          )
+          (<DetailsContainer data={data}/>) : segment === "timeline" ? 
+          (<TimelineContainer data={data}/>):
+          (<FeedbackContainer/>)
         }
-
         
       </div>
 

@@ -52,12 +52,6 @@ export default async function CustomersPage({ searchParams }) {
   const metricsJson  = await metricsRes.json();
   const metric  = metricsJson.data;
 
-  const metrics=[
-    { label: 'Total Customers', value: formatNumber(312), percentage: '+11.02%', comparison: 'vs last month', trend: 'up' },
-    { label: 'Registered', value: formatNumber(300), percentage: '+5.00%', comparison: 'vs last month', trend: 'up' },
-    { label: 'Guest', value: formatNumber(12), percentage: '-3.50%', comparison: 'vs last month', trend: 'down' },
-  ]
-
   return (
     <ClientCustomerInner
       segment={segment}

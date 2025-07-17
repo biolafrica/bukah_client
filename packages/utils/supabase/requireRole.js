@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import {getSessionUser} from "@/packages/utils/supabase/auth"
+import {getSessionUser} from "./auth"
 
 export function requireRole(allowedRoles =[]){
   return async(request)=>{
