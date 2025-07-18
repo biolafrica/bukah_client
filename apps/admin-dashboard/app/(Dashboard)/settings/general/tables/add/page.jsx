@@ -8,10 +8,17 @@ import SettingsHeadingIntro from "../../../../../components/pages/settings/setti
 import { useRouter } from "next/navigation";
 import Alert from "../../../../../components/common/alert";
 
-export default function AddTables(){
+export default function AddTables({data}){
   const router = useRouter()
 
-  const initialData = { tableName: '', capacity: '' , section: '', serviceCharge:''}
+  const initialData = { 
+    tableName: data?.name || "", 
+    capacity: data?.capacity || '' , 
+    section: data?.type || '', 
+    serviceCharge: data?.service_charge || '',
+    branchId: data?.branch_id
+  }
+
   const [branchOptions, setBranchOptions] = useState([])
   const [submitting, setSubmitting] = useState(false)
   const [errorMsg,   setErrorMsg]   = useState(null)
@@ -30,7 +37,7 @@ export default function AddTables(){
         
       } catch (error) {
         console.error("error fetching branches", error.message)
-        throw new Error(`error fetching branches ${error.message}`)
+        throw new Error(error.message)
       }
     }
 
@@ -57,6 +64,8 @@ export default function AddTables(){
   ]
 
   async function handleSubmit(values) {
+    const endpoint = data ? `/api/tables/${data.id}` : "/api/tables";
+    const method = data ? "PUT" : "POST"
 
     setSubmitting(true)
     setErrorMsg(null)
@@ -65,18 +74,17 @@ export default function AddTables(){
       name: values.tableName,
       capacity: values.capacity,
       type: values.section,
-      service_charge: values.serviceCharge,
+      service_charge: Number(values.serviceCharge),
       branch_id : values.branchId,
       is_active : true,
       restaurant_id: process.env.NEXT_PUBLIC_RESTAURANT_ID,
     }
-    console.log(payload)
 
     try {
       const res  = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/tables`,
+        `${process.env.NEXT_PUBLIC_API_URL}${endpoint}`,
         {
-          method: 'POST',
+          method,
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(payload)
         }
@@ -96,8 +104,6 @@ export default function AddTables(){
     } finally {
       setSubmitting(false)
     }
-
-   
   }
   
   return(
@@ -105,7 +111,7 @@ export default function AddTables(){
       {errorMsg && (
         <Alert
           type="error"
-          heading="Failed to add table"
+          heading={`Failed to ${ data? "update" : 'add'} table`}
           subheading={errorMsg}
           duration={5000}
           onClose={() => setErrorMsg(null)}
@@ -115,8 +121,8 @@ export default function AddTables(){
       {showSuccess && (
         <Alert
           type="success"
-          heading="Table added!"
-          subheading="table added succesfully."
+          heading={`Table ${ data? "updated" : 'added'}!`}
+          subheading={`table ${ data? "updated" : 'added'} succesfully.`}
           duration={2000}
           onClose={() => setShowSuccess(false)}
         />
@@ -135,7 +141,7 @@ export default function AddTables(){
             </div>
 
             <div className=" w-full lg:w-3/4 border p-5 rounded-md border-border-text">
-              <BackButton info="Add Table"/>
+              <BackButton info={`${ data? "Edit table" : 'Add table'}`}/>
 
               <div className="xl:w-2/3">
                 <Form   
@@ -143,7 +149,7 @@ export default function AddTables(){
                   initialValues={initialData}
                   validate={()=>[]} 
                   onSubmit={handleSubmit}
-                  submitLabel={submitting ? 'Adding Table…' : 'Add Table'}
+                  submitLabel={submitting ? `${ data? "Updateding table..." : 'Adding table...'}` : `${ data? "Update table" : 'Add table'}`}
                 />
               </div>
             </div>

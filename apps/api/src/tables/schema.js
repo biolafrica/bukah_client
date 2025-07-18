@@ -6,6 +6,7 @@ export const createTableSchema = z.object({
   name: z.string().min(1, "table name is required"),
   type: z.string().min(1, "table type is required"),
   capacity: z.string().min(1, "capacity is required"),
+  service_charge: z.number().positive("service charge must be > 0"),
   is_active: z.boolean()
 
 })
