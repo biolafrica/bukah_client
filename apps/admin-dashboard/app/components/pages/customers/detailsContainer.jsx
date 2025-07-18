@@ -1,6 +1,5 @@
 import Image from "next/image"
 import { formatNaira, formatNumber } from "../../../utils/format"
-import { order } from "../../../data/order"
 import { format } from "date-fns"
 import { getInitials } from "../../../utils/initials"
 

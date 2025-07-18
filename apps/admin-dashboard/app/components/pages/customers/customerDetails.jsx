@@ -47,7 +47,7 @@ export default function CustomerDetails({onClose, data}){
           ) : segment === "orderHistory" ? 
 
           (
-            <OrderHistoryContainer/> ):
+            <OrderHistoryContainer id={data.id}/> ):
           (
             <AISuggestionContainer/>
           )

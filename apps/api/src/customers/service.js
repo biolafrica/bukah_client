@@ -21,7 +21,6 @@ export function getAllCustomersWithCounts({
 
   if(totalOrders) orderBy.total_orders = totalOrders;
   if(totalSpent) orderBy.total_spent = totalSpent;
-  console.log("taotal",  orderBy)
 
   const search = searchTerm ? ['name', searchTerm] : [];
 
@@ -70,7 +69,11 @@ export async function getCustomerOrders(customerId,{
 }={}){
 
   const filters = {customer_id : customerId}
-  return repos.order.findAll({filters, range})
+  const joins = {
+    branch: 'branches(name)',
+    accepted_by: 'users(first_name)',
+  }
+  return repos.order.findAll({filters, range, joins})
 }
 
 export async function getCustomerMetrics() {

@@ -103,7 +103,6 @@ export class BaseRepo{
  
   }
 
-
   async create(payload){
     const {data, error} = await supabase
     .from(this.table)
@@ -114,7 +113,6 @@ export class BaseRepo{
     if(error) throw new Error((`${this.table} item creation failed: ${error.message}`))
     return data.id
   }
-
 
   async update(id, payload){
     const {data, error} = await supabase
@@ -127,7 +125,6 @@ export class BaseRepo{
     if(error) throw new Error((`${this.table} item update failed: ${error.message}`))
     return data.id
   }
-
 
   async delete(id){
     const {data, error} = await supabase
