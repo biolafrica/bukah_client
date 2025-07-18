@@ -7,7 +7,7 @@ import DataTable        from '../../common/dataTable'
 import EmptyState       from '../../common/emptyState'
 import Permission from './permission'
 import * as outline     from '@heroicons/react/24/outline'
-import { useState } from 'react'
+import {useState } from 'react'
 import AddEmployee from './addEmployee'
 import { employee } from '../../../data/employee'
 
@@ -25,7 +25,31 @@ export default function ClientEmployeeInner({
   const router = useRouter()
   const params = useSearchParams()
 
-  const [sideScreenOpen,setSideScreenOpen] = useState(false)
+  const [sideScreenOpen,setSideScreenOpen]=useState(false)
+  const [editSideScreenOpen,setEditSideScreenOpen]=useState(false)
+  const [addSideScreenOpen,setAddSideScreenOpen]=useState(false)
+  const [items, setItems] = useState({})
+
+  const closeAll=()=>{
+    setSideScreenOpen(false)
+    setEditSideScreenOpen(false)
+    setAddSideScreenOpen(false)
+  }
+
+  const handleEditScreen = row=>{
+    console.log('details for', row)
+    setItems(row)
+    setSideScreenOpen(true)
+    setEditSideScreenOpen(true)
+    setAddSideScreenOpen(false)
+  }
+
+  const handleAddScreen =()=>{
+    setSideScreenOpen(true)
+    setEditSideScreenOpen(false)
+    setAddSideScreenOpen(true)
+
+  }
 
   const filterConfig = employee.filterConfig(branchOptions);
 
@@ -54,7 +78,15 @@ export default function ClientEmployeeInner({
           <div className='absolute inset-0 bg-black opacity-50' onClick={()=> setSideScreenOpen(false)}/>
 
           <div className='relative z-65'>
-            <AddEmployee branchOptions={branchOptions} setSideScreenOpen={setSideScreenOpen}/>
+
+            {addSideScreenOpen && (
+              <AddEmployee branchOptions={branchOptions} onClose={closeAll}/>
+            )}
+
+            {editSideScreenOpen && (
+              <AddEmployee branchOptions={branchOptions} onClose={closeAll} row={items} />
+            )}
+          
           </div>
 
         </div>
@@ -68,7 +100,7 @@ export default function ClientEmployeeInner({
         Icon={outline.PlusIcon}
         buttonText="Add Employee"
         branches={false}
-        onButtonClick={() => setSideScreenOpen(true)}
+        onButtonClick={handleAddScreen}
       />
 
       <SegmentedToolbar
@@ -120,8 +152,9 @@ export default function ClientEmployeeInner({
           <DataTable
             columns={employee.columns}
             data={tableData}
-            onEdit={(row) => console.log('Edit', row)}
+            onEdit={handleEditScreen}
             onDelete={(row) => console.log('Delete', row)}
+            moreIcon ={false}
             currentPage={currentPage}
             pageSize={pageSize}
             totalCount={totalCount}

@@ -5,7 +5,7 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Alert from '../../common/alert';
 
-export default function AddEmployee({branchOptions, setSideScreenOpen}){
+export default function AddEmployee({branchOptions, onClose, row}){
   const router = useRouter()
 
   const [submitting, setSubmitting] = useState(false)
@@ -15,12 +15,12 @@ export default function AddEmployee({branchOptions, setSideScreenOpen}){
   const addEmployeeFormFields = employee.addField(branchOptions)
 
   const initialData = { 
-    firstName: '', 
-    lastName: '',
-    email: '',
-    phoneNumber: '',
-    role : '',
-    branchId: '' 
+    firstName: row?.first_name || "", 
+    lastName: row?.last_name || "", 
+    email: row?.email || "",
+    phoneNumber: row?.phone_number || "", 
+    role : row?.role || "", 
+    branchId: row?.branch_id || "" 
   };
 
   function validate(values) {
@@ -38,6 +38,9 @@ export default function AddEmployee({branchOptions, setSideScreenOpen}){
   }
 
   async function handleSubmit(values){ 
+    const endpoint = row ?  `/api/users/${row.id}`:'/api/users';
+    const method = row ? 'PUT' : "POST";
+
     setSubmitting(true)
     setErrorMsg(null)
 
@@ -54,13 +57,14 @@ export default function AddEmployee({branchOptions, setSideScreenOpen}){
 
     try {
       const res  = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/users`,
+        `${process.env.NEXT_PUBLIC_API_URL}${endpoint}`,
         {
-          method: 'POST',
+          method,
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(payload)
         }
       )
+
       const json = await res.json()
       if (!res.ok) throw new Error(json.error || 'Unknown error')
 
@@ -68,7 +72,7 @@ export default function AddEmployee({branchOptions, setSideScreenOpen}){
     
       setTimeout(() => {
         setShowSuccess(false)
-        setSideScreenOpen(false)
+        onClose()
         router.push('/employees')
       }, 2000)
 
@@ -107,7 +111,7 @@ export default function AddEmployee({branchOptions, setSideScreenOpen}){
 
         <CloseButton 
           title="Add Employee" 
-          onCancelClick={()=>setSideScreenOpen(false)} 
+          onCancelClick={onClose} 
         />
 
         <div className='p-5'>

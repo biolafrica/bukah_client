@@ -18,7 +18,8 @@ export default function DataTable({
   edit=true,
   chatIcon = false,
   exportIcon = false,
-  deleteIcon =true
+  deleteIcon =true,
+  moreIcon = true
 }) {
   return (
     <div className="w-full h-fit overflow-auto bg-white rounded-lg border border-border-text">
@@ -59,11 +60,12 @@ export default function DataTable({
                   {col.render ? col.render(row) : row[col.key]}
                 </td>
               ))}
+
               <td className="px-4 py-3 flex items-center gap-2">
 
-                <button type="button" onClick={() => onMore(row)} aria-label="More">
+                {moreIcon && (<button type="button" onClick={() => onMore(row)} aria-label="More">
                   <solid.DocumentTextIcon className="w-5 h-5 text-green-600 cursor-pointer" aria-hidden="true" />
-                </button>
+                </button>)}
 
                 {edit && 
                   ( 
