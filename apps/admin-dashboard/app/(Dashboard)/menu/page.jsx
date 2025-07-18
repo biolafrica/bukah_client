@@ -56,8 +56,8 @@ export default async function MenuPage({ searchParams }) {
   params.set('range', `${start},${end}`)
 
   const endpoint = segment === 'items' 
-    ? 'api/products' 
-    : 'api/product-categories'
+    ? '/api/products' 
+    : '/api/product-categories'
 
   // 3️⃣ fetch the table rows
   const rowsRes = await fetch(`${process.env.NEXT_PUBLIC_API_URL}${endpoint}?${params}`)

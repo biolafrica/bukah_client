@@ -42,6 +42,7 @@
     "@supabase/ssr": "^0.6.1",
     "@supabase/supabase-js": "^2.50.0",
     "date-fns": "^4.1.0",
+    "nodemailer": "^7.0.5",
     "zod": "^3.25.67"
   }
 }

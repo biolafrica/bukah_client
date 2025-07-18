@@ -1,15 +1,8 @@
 
 import React, { useState } from 'react';
 import {ChevronDownIcon, ChevronUpIcon} from '@heroicons/react/24/solid'
+import { employee } from '../../../data/employee';
 
-const roles = [
-  'Owner',
-  'Manager',
-  'Supervisor',
-  'Waiter',
-  'Bartender',
-  'Chef',
-];
 
 // Mapping checkbox state to SVG file names in public folder
 const checkboxIcons = {
@@ -18,99 +11,11 @@ const checkboxIcons = {
   indeterminate: '/icons/indeterminate check box.svg',
 };
 
-// Example permission data
-const permissionGroups = [
-  {
-    title: 'Menu',
-    state: {
-      Owner: 'checked',
-      Manager: 'indeterminate',
-      Supervisor: 'indeterminate',
-      Waiter: 'unchecked',
-      Bartender: 'unchecked',
-      Chef: 'unchecked',
-    },
-    children: [
-      {
-        title: 'Add items to the menu',
-        state: {
-          Owner: 'checked',
-          Manager: 'checked',
-          Supervisor: 'unchecked',
-          Waiter: 'unchecked',
-          Bartender: 'unchecked',
-          Chef: 'unchecked',
-        },
-      },
-      {
-        title: 'Add categories to the menu',
-        state: {
-          Owner: 'checked',
-          Manager: 'checked',
-          Supervisor: 'unchecked',
-          Waiter: 'unchecked',
-          Bartender: 'unchecked',
-          Chef: 'unchecked',
-        },
-      },
-      {
-        title: 'Edit and delete items',
-        state: {
-          Owner: 'checked',
-          Manager: 'checked',
-          Supervisor: 'unchecked',
-          Waiter: 'unchecked',
-          Bartender: 'unchecked',
-          Chef: 'unchecked',
-        },
-      },
-      {
-        title: 'Generate menu bar-code',
-        state: {
-          Owner: 'checked',
-          Manager: 'checked',
-          Supervisor: 'unchecked',
-          Waiter: 'unchecked',
-          Bartender: 'unchecked',
-          Chef: 'unchecked',
-        },
-      },
-      
-    ],
-  },
-  {
-    title: 'Orders',
-    state: {
-      Owner: 'checked',
-      Manager: 'indeterminate',
-      Supervisor: 'indeterminate',
-      Waiter: 'unchecked',
-      Bartender: 'unchecked',
-      Chef: 'unchecked',
-    },
-    children: [
-      {
-        title: 'Add items to the order',
-        state: {
-          Owner: 'checked',
-          Manager: 'checked',
-          Supervisor: 'unchecked',
-          Waiter: 'unchecked',
-          Bartender: 'unchecked',
-          Chef: 'unchecked',
-        },
-      },
-
-    ],
-  },
-  
-];
-
 export default function Permission() {
 
   const [openGroups, setOpenGroups] = useState(
     // Initialize all groups as open
-    permissionGroups.reduce((acc, grp) => ({ ...acc, [grp.title]: true }), {})
+    employee.permissionGroup.reduce((acc, grp) => ({ ...acc, [grp.title]: true }), {})
   );
 
   const toggleGroup = (title) => {
@@ -125,14 +30,14 @@ export default function Permission() {
         <thead className='font-normal text-sec-text rouded-lg bg-[#F5F5F6]'>
           <tr>
             <th className="min-w-[200px] px-4 py-3 font-light sticky left-0 z-40 bg-[#F5F5F6] shadow">Permission</th>
-            {roles.map((role) => (
+            {employee.roles.map((role) => (
               <th key={role} className="min-w-[100px] px-4 py-3 font-light truncate">{role}</th>
             ))}
           </tr>
         </thead>
 
         <tbody className='divide-y divide-gray-200' >
-          {permissionGroups.map((group) => (
+          {employee.permissionGroup.map((group) => (
             <React.Fragment key={group.title}>
               {/* Group header row */}
               <tr className="bg-[#E2E6E9] text-left">
@@ -150,7 +55,7 @@ export default function Permission() {
                   <span className="font-medium">{group.title}</span>
                 </td>
 
-                {roles.map((role) => {
+                {employee.roles.map((role) => {
                   const state = group.state[role] || 'unchecked';
                   return (
                     <td key={role} className="px-4 py-3 truncate">
@@ -169,7 +74,7 @@ export default function Permission() {
                 group.children.map((perm) => (
                   <tr key={perm.title} >
                     <td className="pl-12 px-4 py-3 sticky left-0 z-50 bg-white">{perm.title}</td>
-                    {roles.map((role) => {
+                    {employee.roles.map((role) => {
                       const state = perm.state[role] || 'unchecked';
                       return (
                         <td key={role} className="px-4 py-3 truncate">

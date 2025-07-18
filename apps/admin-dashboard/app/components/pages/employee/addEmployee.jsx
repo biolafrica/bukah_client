@@ -1,49 +1,22 @@
 import Form from '../../common/form'
 import CloseButton from '../../common/closeButton';
+import { employee } from '../../../data/employee';
+import { useState } from 'react';
 
 export default function AddEmployee({branchOptions, setSideScreenOpen}){
 
-  const addEmployeeFormFields = [
-    { name: 'firstName', label: 'First Name', placeholder:"Enter first name", type: 'text', required: true },
+  const [submitting, setSubmitting] = useState(false)
+  const [error, setError] = useState(null)
 
-    { name: 'lastName', label: 'Last Name',  placeholder:"Enter last name", type: 'text', required: true },
-
-    { name: 'emailAddress', label: 'Email Address', type: 'email', placeholder:"Enter email address", required: true },
-
-    { name: 'phoneNumber', label: 'Phone Number', type: 'text',  placeholder:"Enter phone number", required: true },
-
-    { name: 'role', label: 'Role', type: 'select',
-      options: [
-        { value: '',      label: 'Choose role' },
-        { value: 'supervisor',  label: 'supervisor' },
-        { value: 'manager', label: 'Manager' },
-        { value: 'waiter', label: 'Waiter' },
-        { value: 'chef', label: 'Chef' },
-        { value: 'bartender', label: 'Bartender' },
-      ],
-      required: true 
-    },
-
-    { name: 'branch', label: 'Branch', type: 'select',
-      options: [
-        { value: '', label: 'Choose branch' },
-        ...branchOptions.map(branch => ({
-          value: branch.value,
-          label: branch.label
-        }))
-        
-      ],
-      required: true 
-    },
-  ];
+  const addEmployeeFormFields = employee.addField(branchOptions)
 
   const initialData = { 
     firstName: '', 
-    firstName: "",
-    emailAddress: '',
+    lastName: '',
+    email: '',
     phoneNumber: '',
     role : '',
-    branch : '' 
+    branchId: '' 
   };
 
   function validate(values) {
@@ -54,12 +27,43 @@ export default function AddEmployee({branchOptions, setSideScreenOpen}){
       errors.phoneNumber = 'Phone number must be eleven digits.'
     }
 
-
     return errors
   }
 
-  async function handleSubmit(values){
-    console.log(values)
+  async function handleSubmit(values){ 
+    setSubmitting(true)
+    setError(null)
+
+    const payload ={
+      first_name: values.firstName,
+      last_name: values.lastName,
+      email: values.email,
+      phone_number: values.phoneNumber,
+      role: values.role,
+      branch_id: values.branchId,
+      restaurant_id: process.env.NEXT_PUBLIC_RESTAURANT_ID,
+      is_active: true
+    }
+
+    try {
+      const res  = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/api/users`,
+        {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        }
+      )
+      const json = await res.json()
+      if (!res.ok) throw new Error(json.error || 'Unknown error')
+      console.log(json)
+    } catch (err) {
+      setError(err.message)
+    } finally {
+      setSubmitting(false)
+ 
+    }
+
   }
 
 

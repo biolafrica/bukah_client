@@ -11,7 +11,7 @@ export const createUserSchema = z.object({
   .regex(/^\d+$/, "Phone can only contain digits"),
   email:   z.string().email("Invalid email"),
   role:   z.enum([
-    "admin",
+    "manager",
     "supervisor", 
     "waiter", 
     "chef", 
@@ -34,7 +34,7 @@ const userFields={
   isActive: z.string().optional(),
   name: z.string().optional(),
   role: z.enum([
-    'admin',
+    'manager',
     'supervisor',
     'waiter',
     'chef',

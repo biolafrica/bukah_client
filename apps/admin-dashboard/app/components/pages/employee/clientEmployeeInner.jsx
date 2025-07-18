@@ -9,6 +9,7 @@ import Permission from './permission'
 import * as outline     from '@heroicons/react/24/outline'
 import { useState } from 'react'
 import AddEmployee from './addEmployee'
+import { employee } from '../../../data/employee'
 
 export default function ClientEmployeeInner({
   segment,
@@ -26,43 +27,7 @@ export default function ClientEmployeeInner({
 
   const [sideScreenOpen,setSideScreenOpen] = useState(false)
 
-  // Filter config for employees
-  const filterConfig = [
-    {
-      key:    'branch',
-      label:  'Branch',
-      type:   'select',
-      options: branchOptions,
-    },
-    {
-      key:    'isActive',
-      label:  'Status',
-      type:   'select',
-      options: [
-        { value: 'true',  label: 'Active'   },
-        { value: 'false', label: 'Inactive' },
-      ],
-    },
-    {
-      key:    'role',
-      label:  'Role',
-      type:   'select',
-      options: [
-        { value: '',          label: 'All Roles' },
-        { value: 'admin',     label: 'Admin'     },
-        { value: 'manager',   label: 'Manager'   },
-        { value: 'waiter',    label: 'Waiter'    },
-        { value: 'chef',      label: 'Chef'      },
-        { value: 'bartender', label: 'Bartender' },
-        { value: 'supervisor',label: 'Supervisor'},
-      ],
-    },
-  ]
-
-  // Sort options: only name
-  const sortOptions = [
-    { key: 'name', label: 'Name' },
-  ]
+  const filterConfig = employee.filterConfig(branchOptions);
 
   const updateParams = (patch) => {
     const next = new URLSearchParams(params.toString())
@@ -80,44 +45,6 @@ export default function ClientEmployeeInner({
     return val != null && val !== ''
   })
 
-  // Columns for DataTable
-  const columns = [
-    {
-      key: 'name',
-      header: 'Name',
-      minWidth: '150px',
-      render: row => `${row.first_name} ${row.last_name}`
-    },
-    { key: 'role',           header: 'Role',            minWidth: '150px' },
-    { key: 'email',          header: 'Email',           minWidth: '200px' },
-    {
-      key: 'branch',
-      header: 'Branch',
-      minWidth: '150px',
-      render: row => row.branch?.name ?? '-' 
-    },
-    {
-      key: 'created_at',
-      header: 'Date Registered',
-      minWidth: '150px',
-      render: row => new Date(row.created_at).toLocaleDateString('en-GB')
-    },
-    {
-      key: 'isActive',
-      header: 'Status',
-      minWidth: '100px',
-      render: row => {
-        const cls = row.is_active
-          ? 'bg-green-100 text-green-800'
-          : 'bg-red-100 text-red-800'
-        return (
-          <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${cls}`}>
-            {row.is_active ? 'Active' : 'Inactive'}
-          </span>
-        )
-      }
-    }
-  ]
 
   return (
     <div className="p-5 pt-30 lg:pl-75">
@@ -145,10 +72,7 @@ export default function ClientEmployeeInner({
       />
 
       <SegmentedToolbar
-        segments={[
-          { key: 'employees',   label: 'Employees'   },
-          { key: 'permissions', label: 'Permissions' }
-        ]}
+        segments={employee.segment}
         defaultActive={segment}
         onSegmentChange={(key) => updateParams({ segment: key })}
         search={segment === 'employees' ? true : false }
@@ -164,7 +88,7 @@ export default function ClientEmployeeInner({
           title:    'Filter Employees'
         }}
         sortProps={segment === 'employees' &&{
-          options:    sortOptions,
+          options: employee.sortOptions,
           sortConfig,
           onSort:     (key) => {
             const dir = sortConfig?.key === key && sortConfig.direction === 'ascending'
@@ -194,7 +118,7 @@ export default function ClientEmployeeInner({
           />
         ) : (
           <DataTable
-            columns={columns}
+            columns={employee.columns}
             data={tableData}
             onEdit={(row) => console.log('Edit', row)}
             onDelete={(row) => console.log('Delete', row)}
