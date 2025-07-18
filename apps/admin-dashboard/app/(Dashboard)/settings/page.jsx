@@ -2,7 +2,7 @@ import { SettingsSectionNav } from "../../components/layout/settingsMainNav";
 import SettingsNav from "../../components/layout/settingsNav";
 import SettingsHeadingIntro from "../../components/pages/settings/settingsHeadingIntro";
 
-export default function Settings() {
+export default async function Settings() {
   const generalItems = [
     { key: 'store',   href: '/settings/general/store',label: 'Store Info',description: 'Edit your business name, email, etc.'},
     { key: 'hours',  href: '/settings/general/hours',label: 'Business Hours',description: 'Manage your opening hours' },
@@ -11,7 +11,9 @@ export default function Settings() {
     { key: 'tax', href: '/settings/general/tax', label: 'Tax',description:'Set your tax percentage'},
   ];
 
+
   return (
+
     <div className="settings_cont p-5 pt-30 lg:pl-75">
       <SettingsHeadingIntro/>
 
@@ -32,5 +34,6 @@ export default function Settings() {
 
       
     </div>
+
   )
 }

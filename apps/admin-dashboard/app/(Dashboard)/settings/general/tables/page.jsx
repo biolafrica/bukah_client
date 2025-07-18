@@ -13,6 +13,7 @@ export default function Tables(){
     button:"Add Table",
     link : '/settings/general/tables/add'
   }
+
   const listCard =[
     {id : 1, name : "Table 1", head : "4 seater - Main Lounge", subHead: `service charge ${formatNaira(500)}`},
     {id : 2, name : "Table 2", head : "2 seater - Main Lounge", subHead: `service charge ${formatNaira(10000)}`},

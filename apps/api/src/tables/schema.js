@@ -5,7 +5,7 @@ export const createTableSchema = z.object({
   branch_id : z.string().uuid("Invalid branch ID"),
   name: z.string().min(1, "table name is required"),
   type: z.string().min(1, "table type is required"),
-  service_charge: z.number().positive("service charge must be > 0"),
+  capacity: z.string().min(1, "capacity is required"),
   is_active: z.boolean()
 
 })

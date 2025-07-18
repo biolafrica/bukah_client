@@ -1,10 +1,10 @@
-'use client'
 
 import { SettingsSectionNav } from "../../../components/layout/settingsMainNav";
 import SettingsNav from "../../../components/layout/settingsNav"
 import SettingsHeadingIntro from "../../../components/pages/settings/settingsHeadingIntro"
 
 export default function General() {
+
   const generalItems = [
     { key: 'store',   href: '/settings/general/store',   label: 'Store Info',     description: 'Edit your business name, email, etc.' },
     { key: 'hours',  href: '/settings/general/hours',  label: 'Business Hours',   description: 'Manage your opening hours' },
@@ -12,6 +12,7 @@ export default function General() {
     { key: 'tables', href: '/settings/general/tables', label: 'Table Management',  description: 'Manage tables & service charges' },
     { key: 'tax',    href: '/settings/general/tax',    label: 'Tax',              description: 'Set your tax percentage' },
   ];
+
   return (
     <div className="general_cont p-5 pt-30 lg:pl-75">
       <SettingsHeadingIntro/>

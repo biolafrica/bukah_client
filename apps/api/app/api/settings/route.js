@@ -1,9 +1,9 @@
 import { handleServerError } from "../../../src/lib/errorHandler"
 import { NextResponse } from "next/server"
-import {BaseRepository} from "../../../../../packages/utils/database/baseRepository"
+import {BaseRepo} from "../../../../../packages/utils/database/baseRepository"
 //import { requireRole } from "@/apps/api/middleware/requireRole"
 
-const repo = new BaseRepository("restaurant_settings", process.env.NEXT_PUBLIC_RESTAURANT_ID)
+const repo = new BaseRepo("restaurant_settings", process.env.NEXT_PUBLIC_RESTAURANT_ID)
 
 //export const middleware = requireRole(["admin", "supervisor"])
 

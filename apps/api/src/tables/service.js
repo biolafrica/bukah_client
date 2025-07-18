@@ -1,6 +1,6 @@
-import {BaseRepository} from "../../../../packages/utils/database/baseRepository"
+import {BaseRepo} from "../../../../packages/utils/database/baseRepository"
 
-const repo = new BaseRepository("tables", process.env.NEXT_PUBLIC_RESTAURANT_ID)
+const repo = new BaseRepo("tables", process.env.NEXT_PUBLIC_RESTAURANT_ID)
 
 export async function getAllTables({count =true}){
   return repo.findAll({count})

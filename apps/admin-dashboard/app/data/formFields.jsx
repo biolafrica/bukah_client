@@ -10,8 +10,6 @@ export const storeFields = [
   { name: 'prefix', label: 'Prefix(Two letters before your OrderID)', type: 'text', required: true },
 ]
 
-
-
 export const initial = [
   { day: 'Monday',    enabled: true,  from: '09:00', to: '17:00' },
   { day: 'Tuesday',   enabled: true,  from: '09:00', to: '17:00' },
@@ -27,6 +25,17 @@ export const addTableFields = [
   { name: 'capacity', label: 'Capacity', type: 'text', required: true },
   { name: 'section', label: 'Section', type: 'text', required: true },
   { name: 'serviceCharge', label: 'Service Charge', type: 'number', required: true },
+  { name: 'branchId', label: 'Branch', type: 'select',
+    options: [
+      { value: '', label: 'Choose branch' },
+      ...branchOptions.map(branch => ({
+        value: branch.value,
+        label: branch.label
+      }))
+      
+    ],
+    required: true 
+  },
 ]
 
 export const gatewayFields = [
