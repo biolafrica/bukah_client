@@ -10,6 +10,7 @@ import DataTable from "../../common/dataTable";
 import { useSearchParams, useRouter } from "next/navigation";
 import { useState } from "react";
 import { OrderDetails } from "./orderDetails";
+import Alert from "../../common/alert";
 
 
 export default function ClientOrderInner({
@@ -31,6 +32,8 @@ export default function ClientOrderInner({
 
   const [sideScreenOpen, setSideScreenOpen] = useState(false)
   const [moreArray, setMoreArray] = useState(null)
+
+  const[show , setShow] = useState(false)
 
   const close = () => {setSideScreenOpen(false)}
 
@@ -77,6 +80,14 @@ export default function ClientOrderInner({
 
         </div>
       )}
+
+     { show && <Alert
+        type="error"
+        heading="Payment Failed"
+        subheading="Please try again or contact support."
+        duration={8000}
+        onClose={() => setShow(false)}
+      />}
 
       <HeadingIntro 
         module="Orders" 
