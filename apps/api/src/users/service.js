@@ -36,6 +36,7 @@ export async function addStaff({ first_name, last_name, email, role, branch_id, 
 }){
 
   const staff_code = await generateUniqueStaffCode(restaurant_id)
+  console.log(staff_code)
 
   let authUser = null
   if (['supervisor','manager'].includes(role.toLowerCase())) {
@@ -49,6 +50,8 @@ export async function addStaff({ first_name, last_name, email, role, branch_id, 
     if (error) throw new Error(`Auth signup failed: ${error.message}`)
     authUser = data.user;
   }
+
+  console.log(authUser);
  
 
   const { data: newUser, error: insertErr } = await supabase

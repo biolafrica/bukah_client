@@ -2,11 +2,15 @@ import Form from '../../common/form'
 import CloseButton from '../../common/closeButton';
 import { employee } from '../../../data/employee';
 import { useState } from 'react';
+import { useRouter } from 'next/navigation';
+import Alert from '../../common/alert';
 
 export default function AddEmployee({branchOptions, setSideScreenOpen}){
+  const router = useRouter()
 
   const [submitting, setSubmitting] = useState(false)
-  const [error, setError] = useState(null)
+  const [errorMsg,   setErrorMsg]   = useState(null)
+  const [showSuccess, setShowSuccess] = useState(false)
 
   const addEmployeeFormFields = employee.addField(branchOptions)
 
@@ -23,6 +27,9 @@ export default function AddEmployee({branchOptions, setSideScreenOpen}){
     const errors = {}
     const phoneNumber = (values.phoneNumber ?? '').trim()
 
+    if (!values.email.match(/^[^@]+@[^@]+\.[^@]+$/))
+      errors.email = 'Invalid email address'
+
     if (phoneNumber.length < 11 || phoneNumber.length > 11) {
       errors.phoneNumber = 'Phone number must be eleven digits.'
     }
@@ -32,7 +39,7 @@ export default function AddEmployee({branchOptions, setSideScreenOpen}){
 
   async function handleSubmit(values){ 
     setSubmitting(true)
-    setError(null)
+    setErrorMsg(null)
 
     const payload ={
       first_name: values.firstName,
@@ -56,36 +63,65 @@ export default function AddEmployee({branchOptions, setSideScreenOpen}){
       )
       const json = await res.json()
       if (!res.ok) throw new Error(json.error || 'Unknown error')
-      console.log(json)
+
+      setShowSuccess(true)
+    
+      setTimeout(() => {
+        setShowSuccess(false)
+        setSideScreenOpen(false)
+        router.push('/employees')
+      }, 2000)
+
     } catch (err) {
-      setError(err.message)
+      setErrorMsg(err.message)
     } finally {
       setSubmitting(false)
- 
     }
 
   }
 
-
   return(
-    <div className='w-screen lg:w-1/2 fixed right-0 h-screen bg-white'>
+    <>
 
-      <CloseButton 
-        title="Add Employee" 
-        onCancelClick={()=>setSideScreenOpen(false)} 
-      />
-
-      <div className='p-5'>
-        <Form
-          fields={addEmployeeFormFields}
-          initialValues={initialData}
-          validate={validate}
-          onSubmit={handleSubmit}
-          submitLabel='Send Invite'
+      {errorMsg && (
+        <Alert
+          type="error"
+          heading="Failed to add employee"
+          subheading={errorMsg}
+          duration={5000}
+          onClose={() => setErrorMsg(null)}
         />
-        
-      </div>
-    </div>
+      )}
 
+      {showSuccess && (
+        <Alert
+          type="success"
+          heading="Employee added!"
+          subheading="You will be redirected shortly."
+          duration={2000}
+          onClose={() => setShowSuccess(false)}
+        />
+      )}
+  
+      <div className='w-screen lg:w-1/2 fixed right-0 h-screen bg-white'>
+
+        <CloseButton 
+          title="Add Employee" 
+          onCancelClick={()=>setSideScreenOpen(false)} 
+        />
+
+        <div className='p-5'>
+          <Form
+            fields={addEmployeeFormFields}
+            initialValues={initialData}
+            validate={validate}
+            onSubmit={handleSubmit}
+            submitLabel={submitting ? 'Sending…' : 'Send Invite'}
+          />
+          
+        </div>
+      </div>
+
+    </>
   )
 }

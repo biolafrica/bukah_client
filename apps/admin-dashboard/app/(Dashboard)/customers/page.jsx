@@ -1,7 +1,6 @@
 // app/customers/page.jsx (Server Component)
 
 import ClientCustomerInner from "../../components/pages/customers/clientCustomer"
-import { formatNumber } from "../../utils/format"
 
 
 export const dynamic = 'force-dynamic'
