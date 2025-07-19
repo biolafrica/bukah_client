@@ -70,7 +70,13 @@ export const repos = {
   productCategory : new BaseRepo(
     "product_categories",
     process.env.NEXT_PUBLIC_RESTAURANT_ID
-  )
+  ),
+
+  settings: new BaseRepo(
+    "restaurant_settings",
+    process.env.NEXT_PUBLIC_RESTAURANT_ID
+  ),
+
 
 
 }

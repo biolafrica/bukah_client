@@ -25,7 +25,7 @@ export default function AddEmployee({branchOptions, onClose, row}){
 
   function validate(values) {
     const errors = {}
-    const phoneNumber = (values.phoneNumber ?? '').trim()
+    
 
     if (!values.email.match(/^[^@]+@[^@]+\.[^@]+$/))
       errors.email = 'Invalid email address'

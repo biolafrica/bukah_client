@@ -2,7 +2,9 @@ export const storeFields = [
   { name: 'businessName', label: 'Business Name', type: 'text', required: true },
   { name: 'address', label: 'Address', type: 'text', required: true },
   { name: 'emailAddress', label: 'Email Address', type: 'email', required: true },
+  { name: 'tagline', label: 'Tagline', type: 'text', required: false , placeholder: "your restaurant tagline"},
   { name: 'phoneNumber', label: 'Phone Number', type: 'text', required: true },
+
   { name: 'twitterLink', label: 'Twitter Link', type: 'text', required: false },
   { name: 'facebookLink', label: 'Facebook Link', type: 'text', required: false },
   { name: 'instagramLink', label: 'Instagram Link', type: 'text', required: false },
@@ -18,24 +20,6 @@ export const initial = [
   { day: 'Friday',   enabled: true,  from: '09:00', to: '17:00' },
   { day: 'Satday',   enabled: true,  from: '09:00', to: '17:00' },
   { day: 'Sunday',   enabled: false,  from: '09:00', to: '17:00' },
-]
-
-export const addTableFields = [
-  { name: 'tableName', label: 'Table Name/Number', type: 'text', required: true },
-  { name: 'capacity', label: 'Capacity', type: 'text', required: true },
-  { name: 'section', label: 'Section', type: 'text', required: true },
-  { name: 'serviceCharge', label: 'Service Charge', type: 'number', required: true },
-  { name: 'branchId', label: 'Branch', type: 'select',
-    options: [
-      { value: '', label: 'Choose branch' },
-      ...branchOptions.map(branch => ({
-        value: branch.value,
-        label: branch.label
-      }))
-      
-    ],
-    required: true 
-  },
 ]
 
 export const gatewayFields = [
