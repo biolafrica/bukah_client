@@ -18,7 +18,7 @@ export const initial = [
   { day: 'Wednesday',   enabled: true,  from: '09:00', to: '17:00' },
   { day: 'Thursday',   enabled: true,  from: '09:00', to: '17:00' },
   { day: 'Friday',   enabled: true,  from: '09:00', to: '17:00' },
-  { day: 'Satday',   enabled: true,  from: '09:00', to: '17:00' },
+  { day: 'Saturday',   enabled: true,  from: '09:00', to: '17:00' },
   { day: 'Sunday',   enabled: false,  from: '09:00', to: '17:00' },
 ]
 

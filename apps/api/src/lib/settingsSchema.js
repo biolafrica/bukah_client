@@ -10,10 +10,10 @@ export const createSocialLinks = z.object({
 
 
 export const createBusinessHour = z.object({
-  day: z.enum(["mon","tue","wed","thu","fri","sat","sun"]),
-  start: z.string().regex(/^[0-2]\d:[0-5]\d$/, "Invalid start time, expected HH.MM"),
-  end: z.string().regex(/^[0-2]\d:[0-5]\d$/, "Invalid end time, expected HH.MM"),
-  is_active: z.boolean(), 
+  day: z.enum(["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"]),
+  from: z.string().regex(/^[0-2]\d:[0-5]\d$/, "Invalid start time, expected HH.MM"),
+  to: z.string().regex(/^[0-2]\d:[0-5]\d$/, "Invalid end time, expected HH.MM"),
+  enabled: z.boolean(), 
 })
 
 export const createCustomerNotifications = z.object({

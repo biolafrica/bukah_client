@@ -26,7 +26,7 @@ export default function Store(){
         const settingsData = settingsJson.settings.data[0];
         setItems(settingsData)
       } catch (error) {
-        console.error("error fetching branches", error.message)
+        console.error("error fetching settings", error.message)
         throw new Error(error.message)
       }
     }
@@ -100,7 +100,6 @@ export default function Store(){
       restaurant_id: process.env.NEXT_PUBLIC_RESTAURANT_ID,
     }
 
-    console.log(payload)
     try {
       const res  = await fetch(
         `${process.env.NEXT_PUBLIC_API_URL}/api/settings/${items.id}`,
@@ -124,6 +123,7 @@ export default function Store(){
     }finally{
       setSubmitting(false)
     }
+    
   }
 
   return(

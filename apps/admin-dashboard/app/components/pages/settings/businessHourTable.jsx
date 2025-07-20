@@ -1,3 +1,5 @@
+"use client"
+
 import { useState } from "react"
 import Switch from "../../uiComponents/switch"
 
@@ -15,6 +17,7 @@ export function DaySchedule({ day, enabled, from, to, onChange }) {
     setFromTime(value)
     onChange(day, { enabled: isEnabled, from: value, to: toTime })
   }
+
   const handleTo = e => {
     const value = e.target.value
     setToTime(value)
@@ -24,7 +27,7 @@ export function DaySchedule({ day, enabled, from, to, onChange }) {
   return (
     <div className="md:flex md:items-center md:justify-between mb-4">
       <div className="md:w-1/3 flex items-center gap-5 mb-1">
-        <Switch initial={()=>isEnabled} onChange={handleToggle} />
+        <Switch initial={()=>isEnabled} onChange={handleToggle } />
         <h4 className="text-base font-medium">{day}</h4>
       </div>
       <div className="md:w-2/3 mb-1">
