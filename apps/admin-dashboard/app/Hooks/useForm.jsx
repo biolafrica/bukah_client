@@ -15,7 +15,7 @@ export function useForm({
   // Reset values when initialValues change
   useEffect(() => {
     setValues(initialValues)
-  }, [initialValues])
+  }, [])
 
   // Validate on values change
   useEffect(() => {

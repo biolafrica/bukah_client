@@ -4,38 +4,38 @@ import Form from "../../../../components/common/form"
 import { storeFields } from "../../../../data/formFields"
 import SettingsHeadingIntro from "../../../../components/pages/settings/settingsHeadingIntro"
 import BackButton from "../../../../components/common/backButton"
-import { useEffect, useState } from "react"
 import Alert from "../../../../components/common/alert"
+
 import { useRouter } from "next/navigation"
+import {useState } from "react"
+import { useSettings } from "../../../../hooks/useSettings"
 
 export default function Store(){
+
+  const { raw, isLoading, isError, updateSettings } = useSettings();
   const router = useRouter()
-  const [items, setItems] = useState({})
   const [submitting, setSubmitting] = useState(false)
   const [errorMsg,   setErrorMsg]   = useState(null)
   const [showSuccess, setShowSuccess] = useState(false)
-  
-  useEffect(()=>{
-    const fetchSettings = async()=>{
-      try {
-        const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/settings`)
-        const settingsJson = await res.json()
 
-        if (!res.ok) throw new Error(json.error || 'Unknown error')
+  if (isLoading) return <p>Loading…</p>
+  if (isError ) return <p>Failed to load settings</p>
+  console.log(raw)
 
-        const settingsData = settingsJson.settings.data[0];
-        setItems(settingsData)
-      } catch (error) {
-        console.error("error fetching settings", error.message)
-        throw new Error(error.message)
-      }
-    }
+  const initialValues = {
+    businessName:   raw.name ?? "",
+    address:        raw.address ?? "",
+    emailAddress:   raw.email ?? "",
+    phoneNumber:    raw.phone ?? "",
+    twitterLink:    raw.social_links?.twitter ?? "",
+    facebookLink:   raw.social_links?.facebook ?? "",
+    instagramLink:  raw.social_links?.instagram ?? "",
+    tiktokLink:     raw.social_links?.tiktok ?? "",
+    prefix:         raw.prefix ?? "",
+    tagline:        raw.tagline ?? "",
+  }
 
-    fetchSettings()
-
-  },[])
-
-  function validate(values) {
+  function validateStoreInfo(values) {
     const errors = {}
     const prefix = (values.prefix ?? '').trim()
     const phoneNumber = (values.phoneNumber ?? '').trim()
@@ -53,31 +53,14 @@ export default function Store(){
     if(phoneNumber.length < 11 || phoneNumber.length > 11) {
       errors.phoneNumber = 'Phone number must be eleven digits.'
     }
+    
+    for (const key of ['twitterLink','facebookLink','instagramLink','tiktokLink']) {
+      if (values[key] && !urlPattern.test(values[key])) {
+        errors[key] = 'Invalid URL'
+      }
+    }
 
-    if (!urlPattern.test(values.twitterLink || '')) {
-      errors.twitterLink = 'Invalid URL';
-    }
-    if (!urlPattern.test(values.facebookLink || '')) {
-      errors.facebookLink = 'Invalid URL';
-    }
-    if (!urlPattern.test(values.instagramLink || '')) {
-      errors.instagramLink = 'Invalid URL';
-    }
-  
     return errors
-  }
-
-  const initialData = {
-    businessName :items?.name || "",
-    address: items?.address || "",
-    emailAddress: items?.email || "",
-    phoneNumber: items?.phone || "",
-    twitterLink:items?.social_links?.twitter || "",
-    facebookLink:items?.social_links?.facebook || "",
-    instagramLink:items?.social_links?.instagram|| "",
-    tiktokLink: items?.social_links?.tiktok|| "",
-    prefix: items?.prefix || "",
-    tagline: items?.tagline || ""
   }
 
   async function handleSubmit(values) {
@@ -85,41 +68,32 @@ export default function Store(){
     setErrorMsg(null)
     
     const payload = {
-      name: values.businessName,
-      address: values.address,
-      email: values.emailAddress,
-      phone: values.phoneNumber,
-      social_links : {
-        twitter : values.twitterLink,
-        facebook : values.facebookLink,
-        instagram : values.instagramLink,
-        tiktok : values.tiktokLink
+      name:         values.businessName,
+      address:      values.address,
+      email:        values.emailAddress,
+      phone:        values.phoneNumber,
+      social_links: {
+        twitter:   values.twitterLink,
+        facebook:  values.facebookLink,
+        instagram: values.instagramLink,
+        tiktok:    values.tiktokLink,
       },
-      prefix :values.prefix,
-      tagline : values.tagline,
+      prefix:       values.prefix,
+      tagline:      values.tagline,
       restaurant_id: process.env.NEXT_PUBLIC_RESTAURANT_ID,
     }
 
     try {
-      const res  = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/settings/${items.id}`,
-        {
-          method:"PUT",
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(payload)
-        }
-      )
+      await updateSettings(payload)
 
-      const json = await res.json()
-      if (!res.ok) throw new Error(json.error || 'Unknown error')
       setShowSuccess(true)
       setTimeout(() => {
         router.refresh();
         setShowSuccess(false)
       }, 2000)
+
     } catch (err) {
-      console.log(err.error)
-      setErrorMsg(err.message)
+      setErrorMsg(err.message || 'Unknown error')
     }finally{
       setSubmitting(false)
     }
@@ -167,8 +141,8 @@ export default function Store(){
               <div className="xl:w-2/3">
                 <Form   
                   fields={storeFields}
-                  initialValues={initialData}
-                  validate={validate} 
+                  initialValues={initialValues}
+                  validate={validateStoreInfo} 
                   onSubmit={handleSubmit}
                   submitLabel={submitting ? "updating...": "update"}
                 />

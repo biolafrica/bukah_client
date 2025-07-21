@@ -118,12 +118,13 @@ export class BaseRepo{
     const {data, error} = await supabase
     .from(this.table)
     .update(payload)
-    .select('id')  
+    .select("*")  
     .eq("id", id)
     .single()
 
     if(error) throw new Error((`${this.table} item update failed: ${error.message}`))
-    return data.id
+    console.log(data)
+    return data
   }
 
   async delete(id){

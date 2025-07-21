@@ -3,6 +3,9 @@
 import Header from "../components/layout/header";
 import Sider from "../components/layout/sider";
 import { useState } from "react";
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
+
+const queryClient = new QueryClient()
 
 export default function DashboardLayout({children}){
 
@@ -32,9 +35,10 @@ export default function DashboardLayout({children}){
           </div>
         )}
      
-        
         <main className="flex-1 w-full">
-          {children}
+          <QueryClientProvider client={queryClient}>
+            {children}
+          </QueryClientProvider>
         </main>
       </div>
   

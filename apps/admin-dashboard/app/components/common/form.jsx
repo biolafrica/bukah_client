@@ -1,4 +1,4 @@
-import { useForm } from "../../Hooks/useForm"
+import { useForm } from "../../hooks/useForm"
 
 
 export default function Form({
@@ -106,6 +106,3 @@ export default function Form({
     </form>
   )
 }
-
-
-
