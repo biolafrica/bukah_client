@@ -4,6 +4,7 @@ export const storeFields = [
   { name: 'emailAddress', label: 'Email Address', type: 'email', required: true },
   { name: 'tagline', label: 'Tagline', type: 'text', required: false , placeholder: "your restaurant tagline"},
   { name: 'phoneNumber', label: 'Phone Number', type: 'text', required: true },
+  { name: 'tax', label: 'Tax(%)', type: 'number', required: false },
 
   { name: 'twitterLink', label: 'Twitter Link', type: 'text', required: false },
   { name: 'facebookLink', label: 'Facebook Link', type: 'text', required: false },

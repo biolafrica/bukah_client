@@ -72,7 +72,7 @@ export default function Tables(){
   const handleEdit = (id)=>{
     router.push(`/settings/general/tables/${id}`)
   }
-
+  
   return(
     <>
 

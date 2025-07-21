@@ -12,7 +12,7 @@ export function useForm({
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [globalError, setGlobalError] = useState('')
 
-  // Reset values when initialValues change
+  // Reset values when the screen reloads
   useEffect(() => {
     setValues(initialValues)
   }, [])

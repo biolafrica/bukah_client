@@ -33,6 +33,7 @@ export default function Store(){
     tiktokLink:     raw.social_links?.tiktok ?? "",
     prefix:         raw.prefix ?? "",
     tagline:        raw.tagline ?? "",
+    tax:            raw.tax ?? "",
   }
 
   function validateStoreInfo(values) {

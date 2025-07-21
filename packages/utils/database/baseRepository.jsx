@@ -107,11 +107,11 @@ export class BaseRepo{
     const {data, error} = await supabase
     .from(this.table)
     .insert([payload])
-    .select('id')  
+    .select('*')  
     .single()
 
     if(error) throw new Error((`${this.table} item creation failed: ${error.message}`))
-    return data.id
+    return data
   }
 
   async update(id, payload){

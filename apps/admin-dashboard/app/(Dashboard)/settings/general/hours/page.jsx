@@ -4,39 +4,24 @@ import SettingsNav from "../../../../components/layout/settingsNav"
 import SettingsHeadingIntro from "../../../../components/pages/settings/settingsHeadingIntro"
 import BackButton from "../../../../components/common/backButton"
 import WeeklySchedule from "../../../../components/pages/settings/businessHourTable"
-import { useEffect, useState } from "react"
+import {useState } from "react"
 import Alert from "../../../../components/common/alert"
 import { useRouter } from "next/navigation"
+import { useSettings } from "../../../../hooks/useSettings"
+
 
 export default function Hours(){
+  const{raw, isLoading, isError, updateSettings} = useSettings();
+
   const router = useRouter();
-  const [items, setItems] = useState(null)
-  const [id,setId] = useState("")
   const [submitting, setSubmitting] = useState(false)
   const [errorMsg,   setErrorMsg]   = useState(null)
   const [showSuccess, setShowSuccess] = useState(false)
 
-  useEffect(()=>{
-    const fetchSettings = async()=>{
-      try {
-        const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/settings`)
-        const settingsJson = await res.json()
+  if (isLoading) return <p>Loading…</p>
+  if (isError ) return <p>Failed to load settings</p>
 
-        if (!res.ok) throw new Error(json.error || 'Unknown error')
-
-        const settingsData = settingsJson.settings.data[0];
-        setItems(settingsData.business_hours)
-        setId(settingsData.id)
-      } catch (error) {
-        console.error("error fetching settings", error.message)
-        throw new Error(error.message)
-      }
-    }
-
-    fetchSettings()
-
-  },[])
-
+  const initialSchedules = raw.business_hours ?? null
 
   async function handleSave(updatedSchedules) {
     setSubmitting(true)
@@ -48,24 +33,14 @@ export default function Hours(){
     }
 
     try {
-      const res  = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/settings/${id}`,
-        {
-          method:"PUT",
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(payload)
-        }
-      )
-
-      const json = await res.json()
-      if (!res.ok) throw new Error(json.error || 'Unknown error')
+      await updateSettings(payload)
       setShowSuccess(true)
       setTimeout(() => {
         router.refresh();
         setShowSuccess(false)
       }, 2000)
+      
     } catch (err) {
-      console.log(err.error)
       setErrorMsg(err.message)
     }finally{
       setSubmitting(false)
@@ -109,14 +84,13 @@ export default function Hours(){
 
             <div className=" w-full lg:w-3/4 border p-5 rounded-md border-border-text">
               <BackButton info="Business Hours"/>
-          
-            { items &&
+            
               <WeeklySchedule
-                initialSchedules={items}
+                initialSchedules={initialSchedules || []}
                 onSave={handleSave}
                 isSubmitting={submitting}
               />
-            }
+            
             </div>
 
           </div>

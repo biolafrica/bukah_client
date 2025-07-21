@@ -4,71 +4,40 @@ import { ColorInput, LogoInput } from "../../../../components/common/logoInputFi
 import BackButton from "../../../../components/common/backButton"
 import SettingsHeadingIntro from "../../../../components/pages/settings/settingsHeadingIntro"
 import SettingsNav from "../../../../components/layout/settingsNav"
-import { useEffect, useState } from "react"
 import Alert from "../../../../components/common/alert"
+
 import { useRouter } from "next/navigation"
+import {useState } from "react"
+import { useSettings } from "../../../../hooks/useSettings"
 
 
 export default function Brand(){
 
+  const { raw, isLoading, isError, updateSettings } = useSettings();
   const router = useRouter();
-  const [items, setItems] = useState(null);
   const [errorMsg,   setErrorMsg] = useState(null)
   const [showSuccess, setShowSuccess] = useState(false)
 
-  const [primaryColor, setPrimaryColor] = useState("")
-  const [secondaryColor, setSecondaryColor] = useState("")
+  if (isLoading) return <p>Loading…</p>
+  if (isError ) return <p>Failed to load settings</p>
 
-  
-  useEffect(()=>{
-    const fetchSettings = async()=>{
-      try {
-        const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/settings`)
-        const settingsJson = await res.json()
-
-        if (!res.ok) throw new Error(json.error || 'Unknown error')
-
-        const settingsData = settingsJson.settings.data[0];
-        setItems(settingsData)
-
-        setPrimaryColor(settingsData.primary_color   || "#A8DF46");
-        setSecondaryColor(settingsData.secondary_color || "#243837");
-
-      } catch (error) {
-        console.error("error fetching settings", error.message)
-        throw new Error(error.message)
-      }
-    }
-
-    fetchSettings()
-
-  },[])
 
   const handleLogo = (e) => {
     const files = e.target.files
     console.log("pri file",files[0])
   }
 
-  const handlePriColor = async(e) => {
-    setPrimaryColor(e.target.value)
-  
-    const payload ={
-      primary_color :e.target.value,
-      restaurant_id: process.env.NEXT_PUBLIC_RESTAURANT_ID,
+  const handleColorChange = async(field, color) => {  
+    setErrorMsg(null)
+
+    const payload={
+      [field]: color.target.value,
+      restaurant_id: process.env.NEXT_PUBLIC_RESTAURANT_ID, 
     }
 
     try {
-      const res  = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/settings/${items.id}`,
-        {
-          method:"PUT",
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(payload)
-        }
-      )
+      await updateSettings(payload)
 
-      const json = await res.json()
-      if (!res.ok) throw new Error(json.error || 'Unknown error')
       setShowSuccess(true)
       setTimeout(() => {
         router.refresh();
@@ -76,14 +45,10 @@ export default function Brand(){
       }, 2000)
       
     } catch (err) {
-      console.log(err.error)
+      console.log(err.message)
       setErrorMsg(err.message)
     }
 
-  }
-
-  const handleSecColor = (e) => {
-    setSecondaryColor(e.target.value)
   }
 
 
@@ -147,9 +112,16 @@ export default function Brand(){
               />
 
              <div className="grid gap-5 grid-cols-1 md:grid-cols-2">
-               <ColorInput label="Primary Colour" handleColorInputChange={handlePriColor} selectedColor={primaryColor} />
+                <ColorInput 
+                  label="Primary Colour" 
+                  handleColorInputChange={(c) => handleColorChange('primary_color', c)} 
+                  selectedColor={raw.primary_color ?? "#A8DF46" } 
+                />
                 
-                <ColorInput label="Secondary Colour" handleColorInputChange={handleSecColor} selectedColor={secondaryColor}/>
+                <ColorInput 
+                  label="Secondary Colour" 
+                  handleColorInputChange={(c) => handleColorChange('secondary_color', c)} selectedColor={raw.secondary_color ?? "#243837"}
+                />
               </div> 
 
             </div>
