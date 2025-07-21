@@ -61,3 +61,24 @@ export const cardUpdateFields = [
   { name: 'cvv', label: 'CVV', type: 'number', required: true },
 
 ]
+
+export function tableField(branchOptions){
+  return[
+    { name: 'tableName', label: 'Table Name/Number', type: 'text', required: true },
+    { name: 'capacity', label: 'Capacity', type: 'text', required: true },
+    { name: 'section', label: 'Section', type: 'text', required: true },
+    { name: 'serviceCharge', label: 'Service Charge', type: 'number', required: true },
+    { name: 'branchId', label: 'Branch', type: 'select',
+      options: [
+        { value: '', label: 'Choose branch' },
+        ...branchOptions.map(branch => ({
+          value: branch.value,
+          label: branch.label
+        }))
+        
+      ],
+      required: true 
+    },
+  ]
+
+}
