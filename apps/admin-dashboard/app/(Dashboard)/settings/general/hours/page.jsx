@@ -37,8 +37,6 @@ export default function Hours(){
 
   },[])
 
-  console.log(items)
-
 
   async function handleSave(updatedSchedules) {
     setSubmitting(true)
@@ -48,7 +46,6 @@ export default function Hours(){
       business_hours :updatedSchedules,
       restaurant_id: process.env.NEXT_PUBLIC_RESTAURANT_ID,
     }
-    console.log(payload)
 
     try {
       const res  = await fetch(
@@ -75,7 +72,7 @@ export default function Hours(){
     }
 
   }
-  console.log("taye")
+
   return(
     <>
       {errorMsg && (
@@ -117,6 +114,7 @@ export default function Hours(){
               <WeeklySchedule
                 initialSchedules={items}
                 onSave={handleSave}
+                isSubmitting={submitting}
               />
             }
             </div>

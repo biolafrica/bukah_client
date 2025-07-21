@@ -55,7 +55,7 @@ export function DaySchedule({ day, enabled, from, to, onChange }) {
   )
 }
 
-export default function WeeklySchedule({ initialSchedules, onSave }) {
+export default function WeeklySchedule({ initialSchedules, onSave, isSubmitting }) {
   const [schedules, setSchedules] = useState(initialSchedules)
 
   const handleChange = (day, data) => {
@@ -84,8 +84,9 @@ export default function WeeklySchedule({ initialSchedules, onSave }) {
         type="button"
         onClick={handleSave}
         className="btn btn-filled mt-6 w-full"
+        disabled ={isSubmitting}
       >
-        Save Changes
+        {isSubmitting ? 'Saving...' : "Save Changes"}
       </button>
     </div>
   )

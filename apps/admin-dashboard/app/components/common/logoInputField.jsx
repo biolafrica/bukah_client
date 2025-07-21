@@ -47,7 +47,7 @@ export function LogoInput({label, src, name, handleFileInputChange}){
 }
 
 
-export function ColorInput({label, selectedColor, handleColorInputChange}){
+export function ColorInput({label, selectedColor, handleColorInputChange,}){
   const colorInputRef = useRef(null)
 
   const handleUploadClick = () => {
@@ -70,7 +70,7 @@ export function ColorInput({label, selectedColor, handleColorInputChange}){
       <div className="flex items-center gap-2 mt-3">
 
         <div className='border border-border-text rounded-md p-2 w-[152px] h-[76px] hidden' 
-          style={{ backgroundColor: selectedColor || "#243837" }}
+          style={{ backgroundColor: selectedColor }}
         >
           
         </div>
@@ -81,9 +81,8 @@ export function ColorInput({label, selectedColor, handleColorInputChange}){
           value={selectedColor}
           onChange={handleColorInputChange}
           className="w-[152px] h-[76px]"
-         
         />
-
+        
       </div>
 
     </div>
