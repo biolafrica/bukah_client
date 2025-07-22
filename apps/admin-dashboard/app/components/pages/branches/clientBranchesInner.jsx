@@ -1,12 +1,15 @@
-
 'use client'
 
-import React from 'react'
-import { useRouter, useSearchParams } from 'next/navigation'
 import HeadingIntro from '../../common/headingIntro'
 import DataTable    from '../../common/dataTable'
 import EmptyState   from '../../common/emptyState'
+import { branch } from '../../../data/branch'
+
 import * as outline from '@heroicons/react/24/outline'
+import React, { useState } from 'react'
+import { useRouter, useSearchParams } from 'next/navigation'
+import AddBranches from './addBranches'
+
 
 export default function ClientBranchesInner({
   tableData,
@@ -16,6 +19,12 @@ export default function ClientBranchesInner({
 }) {
   const router = useRouter()
   const params = useSearchParams()
+
+  const [sideScreenOpen,setSideScreenOpen]=useState(false)
+  const [editSideScreenOpen,setEditSideScreenOpen]=useState(false)
+  const [addSideScreenOpen,setAddSideScreenOpen]=useState(false)
+  const [items, setItems] = useState({})
+
 
   // Pagination helper
   const updateParams = (patch) => {
@@ -27,53 +36,60 @@ export default function ClientBranchesInner({
     router.replace(`?${next.toString()}`)
   }
 
-  // CRUD action placeholders
-  const handleAddBranch = () => console.log('Add branch')
-  const handleEdit      = (row) => console.log('Edit branch', row)
-  const handleDelete    = (row) => console.log('Delete branch', row)
-
-  // Table columns
-  const columns = [
-    { key: 'name',       header: 'Name',       minWidth: '150px' },
-    { key: 'address',    header: 'Address',    minWidth: '300px' },
-    {
-      key:    'created_at',
-      header: 'Date Added',
-      minWidth: '150px',
-      render: row => new Date(row.created_at).toLocaleDateString('en-GB')
-    },
-    {
-      key:    'is_active',
-      header: 'Status',
-      minWidth: '100px',
-      render: row => {
-        const cls   = row.is_active
-          ? 'bg-green-100 text-green-800'
-          : 'bg-red-100 text-red-800'
-        const label = row.is_active ? 'Active' : 'Inactive'
-        return (
-          <span
-            className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${cls}`}
-          >
-            {label}
-          </span>
-        )
-      }
-    },
-  ]
 
   const hasQuery = tableData.length === 0
 
+  const closeAll=()=>{
+    setSideScreenOpen(false)
+    setEditSideScreenOpen(false)
+    setAddSideScreenOpen(false)
+  }
+
+  const handleEditScreen = row=>{
+    setItems(row)
+    setSideScreenOpen(true)
+    setEditSideScreenOpen(true)
+    setAddSideScreenOpen(false)
+  }
+
+  const handleAddScreen =()=>{
+    setSideScreenOpen(true)
+    setEditSideScreenOpen(false)
+    setAddSideScreenOpen(true)
+
+  }
+
   return (
     <div className="branch-container p-5 pt-30 lg:pl-75">
+
+      {sideScreenOpen && (
+        <div className='fixed inset-0 z-60 flex'>
+          <div className='absolute inset-0 bg-black opacity-50' onClick={()=> setSideScreenOpen(false)}/>
+
+          <div className='relative z-65'>
+
+            {addSideScreenOpen && (
+              <AddBranches onClose={closeAll}/>
+            )}
+
+            {editSideScreenOpen && (
+              <AddBranches onClose={closeAll} row={items} />
+            )}
+          
+          </div>
+
+        </div>
+
+      )}
+
       <div className='flex flex-col gap-4'>
         <HeadingIntro
           module="Branches"
           moduleIntro="Oversee and coordinate all your business locations with ease"
-          Icon={outline.BuildingStorefrontIcon}
+          Icon={outline.PlusIcon}
           buttonText="Add Branch"
           branches={false}
-          onButtonClick={handleAddBranch}
+          onButtonClick={handleAddScreen}
         />
 
         {tableData.length === 0 ? (
@@ -84,10 +100,11 @@ export default function ClientBranchesInner({
           />
         ) : (
           <DataTable
-            columns={columns}
+            columns={branch.columns}
             data={tableData}
-            onEdit={handleEdit}
-            onDelete={handleDelete}
+            onEdit={handleEditScreen}
+            onDelete={()=>console.log("delete")}
+            moreIcon ={false}
             currentPage={currentPage}
             pageSize={pageSize}
             totalCount={totalCount}

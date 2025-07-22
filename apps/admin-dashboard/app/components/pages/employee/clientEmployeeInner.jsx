@@ -37,7 +37,6 @@ export default function ClientEmployeeInner({
   }
 
   const handleEditScreen = row=>{
-    console.log('details for', row)
     setItems(row)
     setSideScreenOpen(true)
     setEditSideScreenOpen(true)

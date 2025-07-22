@@ -4,7 +4,7 @@ import { makeQuerySchema } from "../lib/queryBuilder";
 // The base branch payload
 export const branchBaseSchema = z.object({
   restaurant_id: z.string().uuid("Invalid restaurant ID"),
-  supervisor_id: z.string().uuid("Invalid supervisor ID"),
+  supervisor_id: z.string().uuid("Invalid supervisor ID").optional(),
   name: z.string().min(1, "Branch name is required"),
   address: z.string().min(2, "Branch address is required"),
   phone: z
@@ -12,9 +12,9 @@ export const branchBaseSchema = z.object({
   .length(11, "Phone must be exactly 11 digits")
   .regex(/^\d+$/, "Phone can only contain digits"),
   offers_pickup: z.boolean(),
-  pickup_charge: z.number().positive("Pickup charge must be > 0").optional(),
+  pickup_charge: z.number().nonnegative("pickup charge must be >= 0").optional(),
   offers_eatin: z.boolean(),
-  eatin_charge: z.number().positive("Eat-in charge must be > 0").optional(),
+  eatin_charge: z.number().nonnegative("eatin charge must be >= 0").optional(),
   is_active: z.boolean(),
 })
 
