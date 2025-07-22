@@ -1,6 +1,4 @@
 import ClientFinanceInner from "../../components/pages/finance/clientFinaceInner"
-import { formatNaira } from "../../utils/format";
-
 
 export const dynamic = 'force-dynamic'
 

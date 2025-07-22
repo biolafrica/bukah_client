@@ -1,14 +1,17 @@
 "use client"
 
-import React from 'react'
-import { useRouter, useSearchParams } from 'next/navigation'
 import HeadingIntro     from '../../common/headingIntro'
 import MetricsContainer from '../../common/metricsCont'
 import DataTable        from '../../common/dataTable'
 import EmptyState       from '../../common/emptyState'
-import * as outline     from '@heroicons/react/24/outline'
 import SegmentedToolbars from '../../common/segment'
 import { transaction } from '../../../data/transaction'
+import MoreTransaction from './moreTransaction'
+
+import React, { useState } from 'react'
+import { useRouter, useSearchParams } from 'next/navigation'
+import * as outline     from '@heroicons/react/24/outline'
+
 
 export default function ClientFinanceInner({
   segment,
@@ -25,6 +28,9 @@ export default function ClientFinanceInner({
 }) {
   const router = useRouter()
   const params = useSearchParams()
+
+  const [sideScreenOpen, setSideScreenOpen] = useState(false)
+  const [items, setItems] = useState(false)
 
   const filterConfig = transaction.filterConfig(dateRange, branchOptions);
 
@@ -47,8 +53,25 @@ export default function ClientFinanceInner({
     return val != null && val !== ''
   })
 
+  const handleMoreScreen =(row)=>{
+    setItems(row)
+    setSideScreenOpen(true)
+  }
+
   return (
     <div className="p-5 pt-30 lg:pl-75">
+
+      {sideScreenOpen && (
+        <div className='fixed inset-0 z-60 flex'>
+          <div className='absolute inset-0 bg-black opacity-50' onClick={()=> setSideScreenOpen(false)}/>
+
+          <div className='relative z-65'>
+            <MoreTransaction onClose={()=> setSideScreenOpen(false)} data={items}/>
+          </div>
+
+        </div>
+
+      )}
       
       <HeadingIntro
         module="Finances"
@@ -111,8 +134,11 @@ export default function ClientFinanceInner({
         <DataTable
           columns={transaction.colums}
           data={tableData}
-          onEdit={() => {} }
-          onDelete={() => {} }
+          deleteIcon={false}
+          edit={false}
+          exportIcon ={true}
+          onExport={()=>console.log("export")}
+          onMore={handleMoreScreen}
           currentPage={currentPage}
           pageSize={pageSize}
           totalCount={totalCount}
