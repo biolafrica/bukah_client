@@ -1,19 +1,17 @@
 import Form from '../../common/form'
 import CloseButton from '../../common/closeButton';
 import { employee } from '../../../data/employee';
+import Alert from '../../common/alert';
+import { useEmployee } from '../../../hooks/useEmployee';
+
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import Alert from '../../common/alert';
 
 export default function AddEmployee({branchOptions, onClose, row}){
   const router = useRouter()
+  const {add, update} = useEmployee()
 
-  const [submitting, setSubmitting] = useState(false)
-  const [errorMsg,   setErrorMsg]   = useState(null)
-  const [showSuccess, setShowSuccess] = useState(false)
-
-  const addEmployeeFormFields = employee.addField(branchOptions)
-
+  const isEdit  = Boolean(row)
   const initialData = { 
     firstName: row?.first_name || "", 
     lastName: row?.last_name || "", 
@@ -23,10 +21,16 @@ export default function AddEmployee({branchOptions, onClose, row}){
     branchId: row?.branch_id || "" 
   };
 
+  const [submitting, setSubmitting] = useState(false)
+  const [errorMsg,   setErrorMsg]   = useState(null)
+  const [showSuccess, setShowSuccess] = useState(false)
+
+  const addEmployeeFormFields = employee.addField(branchOptions)
+
   function validate(values) {
     const errors = {}
+    const phoneNumber = (values.phoneNumber ?? '').trim()
     
-
     if (!values.email.match(/^[^@]+@[^@]+\.[^@]+$/))
       errors.email = 'Invalid email address'
 
@@ -38,9 +42,6 @@ export default function AddEmployee({branchOptions, onClose, row}){
   }
 
   async function handleSubmit(values){ 
-    const endpoint = row ?  `/api/users/${row.id}`:'/api/users';
-    const method = row ? 'PUT' : "POST";
-
     setSubmitting(true)
     setErrorMsg(null)
 
@@ -56,20 +57,13 @@ export default function AddEmployee({branchOptions, onClose, row}){
     }
 
     try {
-      const res  = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}${endpoint}`,
-        {
-          method,
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(payload)
-        }
-      )
-
-      const json = await res.json()
-      if (!res.ok) throw new Error(json.error || 'Unknown error')
+      if (isEdit) {
+        await update({ id: row.id, ...payload })
+      } else {
+        await add(payload)
+      }
 
       setShowSuccess(true)
-    
       setTimeout(() => {
         setShowSuccess(false)
         onClose()
@@ -110,7 +104,7 @@ export default function AddEmployee({branchOptions, onClose, row}){
       <div className='w-screen lg:w-1/2 fixed right-0 h-screen bg-white'>
 
         <CloseButton 
-          title="Add Employee" 
+          title={`${isEdit ? "Update Employee":"Add Employee"}` } 
           onCancelClick={onClose} 
         />
 
@@ -120,7 +114,10 @@ export default function AddEmployee({branchOptions, onClose, row}){
             initialValues={initialData}
             validate={validate}
             onSubmit={handleSubmit}
-            submitLabel={submitting ? 'Sending…' : 'Send Invite'}
+            submitLabel={submitting ? 
+              `${isEdit ? "Updating…":"Sending…"}` : 
+              `${isEdit? "Update User":"Send Invite"}`
+            }
           />
           
         </div>
