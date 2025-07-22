@@ -1,5 +1,6 @@
-import { useForm } from "../../hooks/useForm"
+"use client"
 
+import { useForm } from "../../hooks/useForm"
 
 export default function Form({
   fields,
@@ -42,7 +43,7 @@ export default function Form({
 
         return (
           <div key={name}>
-            <label htmlFor={name} className="block text-sm font-medium text-pri-text">
+            <label htmlFor={name} className="block text-sm font-medium ">
               {label}{required && <span className="text-red-500">*</span>}
             </label>
 

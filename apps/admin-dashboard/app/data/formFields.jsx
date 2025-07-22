@@ -62,6 +62,20 @@ export const cardUpdateFields = [
 
 ]
 
+export const signInFields = [
+  {name: "email", label: "Email", type: "email", required: true},
+  {name: "password", label: "Password", type: "password", required: true}
+]
+
+export const PasswordResetFields = [
+  {name: "newPassword", label: "New Password", type: "password", required: true},
+  {name: "confirmPassword", label: "Confirm Password", type: "password", required: true}
+]
+
+export const emailInviteFields = [
+  {name: "email", label: "Email", type: "email", required: true},
+]
+
 export function tableField(branchOptions){
   return[
     { name: 'tableName', label: 'Table Name/Number', type: 'text', required: true },
