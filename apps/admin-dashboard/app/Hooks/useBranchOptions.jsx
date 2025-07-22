@@ -1,25 +1,10 @@
-import { useQuery } from '@tanstack/react-query'
-
-async function fetchBranches() {
-  const res = await fetch(
-    `${process.env.NEXT_PUBLIC_API_URL}/api/common/branches`
-  )
-
-  if (!res.ok) {
-    const json = await res.json().catch(() => ({}))
-    throw new Error(json.error || 'Failed to load branches')
-  }
-
-  const json = await res.json()
-  const raw = json.data?.data ?? []
-  return raw.map(b => ({ value: b.id, label: b.name }))
-}
+import { useOptions } from './useOptions'
 
 export function useBranchOptions() {
-  return useQuery({
-    queryKey: ['branchOptions'],
-    queryFn:   fetchBranches,
-    staleTime: Infinity,
-    cacheTime: Infinity,
+  return useOptions({
+    queryKey: 'branchOptions',
+    url: `${process.env.NEXT_PUBLIC_API_URL}/api/common/branches`,
+    mapItem: b => ({ value: b.id, label: b.name }),
+    config: { staleTime: 60 * 60 * 1000 },
   })
 }

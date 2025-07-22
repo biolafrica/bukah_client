@@ -23,7 +23,7 @@ export const branch = {
     },
   ],
 
-  AddBranches(){
+  AddBranches(supervisorOptions){
     return[
       { name: 'branchName', label: 'Branch Name', placeholder:"Enter branch name", type: 'text', required: true },
 
@@ -33,12 +33,13 @@ export const branch = {
 
       { name: 'supervisor', label: 'Supervisor', type: 'select',
         options: [
-          { value: '', label: 'Choose staff ' },
-          { value: '1',  label: 'Taye' },
-          { value: '2', label: 'Olalade' },
-        ],
-        required:false  
-      },
+        { value: '', label: 'Choose supervisor' },
+        ...supervisorOptions.map(supervisor => ({
+          value: supervisor.value,
+          label: supervisor.label
+        }))
+        
+      ],required:false },
 
       { name: 'offerPickup', label: 'Offer Pickup?', type: 'select',
         options: [

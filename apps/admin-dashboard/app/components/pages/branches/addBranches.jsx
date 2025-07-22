@@ -6,6 +6,7 @@ import Alert from "../../common/alert";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useBranch } from "../../../hooks/useBranch";
+import { useSupervisorOptions } from "../../../hooks/useSupervisorOptions";
 
 export default function AddBranches({onClose, row}){
   const router = useRouter();
@@ -28,10 +29,25 @@ export default function AddBranches({onClose, row}){
   const [errorMsg,   setErrorMsg]   = useState(null)
   const [showSuccess, setShowSuccess] = useState(false)
 
-  const addBranchesFormFields = branch.AddBranches()
+  const {
+    data: supervisorOption,
+    isLoading,
+    isError,
+    error,
+  } = useSupervisorOptions()
+
+  if (isLoading) return <p>Loading users…</p>
+  if (isError)   return <p>Error: {error.message}</p>
+
+  const addBranchesFormFields = branch.AddBranches(supervisorOption)
 
   const validate=(values)=>{
     const errors = {}
+    const phone = (values.phone ?? '').trim()
+
+    if (phone.length < 11 || phone.length > 11) {
+      errors.phone = 'Phone number must be eleven digits.'
+    }
 
     if (values.offerPickup === 'true') {
       if (values.pickUpCharges == null || values.pickUpCharges === '') {
@@ -56,16 +72,21 @@ export default function AddBranches({onClose, row}){
     setSubmitting(true)
     setErrorMsg(null)
 
+    const booleanValue=(item)=>{
+      return item === "true" ? true : false
+    }
+
     const payload ={
       name: values.branchName,
       address:  values.address,
       phone:  values.phone,
-      offers_pickup:  values.offerPickup,
-      pickup_charge:  values.pickupCharges,
-      offers_eatin: values.offerEatIn,
-      eatin_charge: values.eatInCharges,
-      is_active:  values.isActive,
+      offers_pickup:  booleanValue(values.offerPickup),
+      pickup_charge:  Number(values.pickupCharges),
+      offers_eatin:   booleanValue(values.offerEatIn),
+      eatin_charge: Number(values.eatInCharges),
+      is_active:   booleanValue(values.isActive),
       supervisor_id:  values.supervisor,
+      restaurant_id: process.env.NEXT_PUBLIC_RESTAURANT_ID,
     }
 
     try {

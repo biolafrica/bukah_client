@@ -141,3 +141,12 @@ async function generateUniqueStaffCode(restaurantId) {
 
   return code
 }
+
+export function fetchSupervisors(){
+  const filters = {role : "supervisor"}
+  const select = ("first_name, last_name, id")
+  const range = [0,99]
+
+  return repos.user.findAll({filters,range,select})
+
+}
