@@ -1,25 +1,16 @@
-import { date } from "zod"
 import { formatNaira, formatNumber } from "../utils/format"
 import { useMemo, useState } from "react"
+
 
 export const order = {
   columns :[
     { key: 'order_code', header: 'Order ID', minWidth: '150px' },
-
     { key: "order_channel", header: "Channel", minWidth: "120px",},
-
     { key: 'branch', header: 'Branch', minWidth: '150px',render: row => row.branch?.name ?? '-' },
-
-    { key: 'staff', header: 'Staff', minWidth: '150px',render: row => row.accepted_by?.first_name ?? '-' },
-
-    { key: 'amount', header: 'Amount', minWidth: '150px',render: (row) => formatNaira(row.total_amount),},
-
+    { key: 'staff', header: 'Staff', minWidth: '150px',render: row => row.accepted?.first_name ?? '-' },
+    { key: 'amount', header: 'Amount', minWidth: '150px',render: (row) => formatNaira(row.total_amount)},
     { key: 'dateAndTime', header: 'Date and Time', minWidth: '150px',render: row => new Date(row.placed_at).toLocaleString('en-GB') },
-
-    {
-      key: 'status',
-      header: 'Status',
-      minWidth: '100px',
+    { key: 'status', header: 'Status', minWidth: '100px',
       render: row => {
         const colors = {
           completed: 'bg-green-100 text-green-800',
@@ -136,6 +127,8 @@ export const order = {
       { name: 'ingredient', label: '  Ingredient', placeholder:"What are the ingredient used?", type: 'text', required: false},
     ];
 
-  }
+  },
+
+
 
 }

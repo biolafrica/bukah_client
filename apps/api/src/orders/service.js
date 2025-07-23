@@ -8,6 +8,7 @@ export async function getAllOrders({
   status = null,
   channel = null,
   dateRange = null,
+  user=null,
   range = [0,9],
   orderNumber = null,
   price = null
@@ -15,23 +16,24 @@ export async function getAllOrders({
   const filters = {}
   const orderBy = {}
 
-  if (branch) filters.branch_id = branch
-  if (status) filters.status = status
-  if (channel) filters.order_channel = channel
+  if (branch) filters.branch_id = branch;
+  if (status) filters.status = status;
+  if (channel) filters.order_channel = channel;
+  if (user) filters.accepted_by = user;
   if (dateRange) {
     filters.placed_at = { start: dateRange.start, end: dateRange.end }
-  }
-  if(orderNumber)orderBy.order_code = orderNumber
-  if(price)orderBy.total_amount = price
+  };
+  if(orderNumber)orderBy.order_code = orderNumber;
+  if(price)orderBy.total_amount = price;
 
   const joins = {
     branch: 'branches(name)',
     customer: 'customers(name, is_registered, email, phone)',
-    accepted_by: 'users(first_name)', 
+    accepted: 'users(first_name)', 
     processed_by: 'users(first_name)', 
-  }
+  };
 
-  const  search = searchTerm ? ['order_code', searchTerm] : []
+  const  search = searchTerm ? ['order_code', searchTerm] : [];
 
 
   return repos.order.findAll({filters, joins, search, range, orderBy})

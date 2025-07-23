@@ -1,3 +1,6 @@
+import { format } from "date-fns"
+import { formatNaira, formatNumber } from "../utils/format"
+
 export const employee ={
 
   filterConfig(branchOptions){
@@ -28,30 +31,12 @@ export const employee ={
   ],
 
   columns:[
-    {
-      key: 'name',
-      header: 'Name',
-      minWidth: '150px',
-      render: row => `${row.first_name} ${row.last_name}`
-    },
-    { key: 'role',           header: 'Role',            minWidth: '150px' },
-    { key: 'email',          header: 'Email',           minWidth: '200px' },
-    {
-      key: 'branch',
-      header: 'Branch',
-      minWidth: '150px',
-      render: row => row.branch?.name ?? '-' 
-    },
-    {
-      key: 'created_at',
-      header: 'Date Registered',
-      minWidth: '150px',
-      render: row => new Date(row.created_at).toLocaleDateString('en-GB')
-    },
-    {
-      key: 'isActive',
-      header: 'Status',
-      minWidth: '100px',
+    { key: 'name', header: 'Name', minWidth: '150px', render: row => `${row.first_name} ${row.last_name}`},
+    { key: 'role', header: 'Role', minWidth: '150px' },
+    { key: 'email', header: 'Email',minWidth: '200px' },
+    { key: 'branch', header: 'Branch', minWidth: '150px', render: row => row.branch?.name ?? '-' },
+    { key: 'created_at', header: 'Date Registered', minWidth: '150px', render: row => new Date(row.created_at).toLocaleDateString('en-GB')},
+    { key: 'isActive', header: 'Status', minWidth: '100px',
       render: row => {
         const cls = row.is_active
           ? 'bg-green-100 text-green-800'
@@ -200,5 +185,35 @@ export const employee ={
     'Chef',
   ],
 
+  sessionColumn:[
+    { key: 'date', header: 'Date', minWidth: '150px', render: row => format(new Date(row.created_at),'dd-MM-yyyy')},
+    { key: 'clockIn', header: 'Clock-in', minWidth: '150px', render: row =>format(new Date(row.clock_in_time),'hh:mm a')},
+    { key: 'clockOut', header: 'Clock-out', minWidth: '150px', render: row =>format(new Date(row.clock_out_time),'hh:mm a')},
+    { key: 'totalOrder', header: 'Total order', minWidth: '150px',render: (row) => formatNumber(row.total_orders)},
+    { key: 'totalAmount', header: 'Amount Earned', minWidth: '150px',render: (row) => formatNumber(row.total_earned)},
+  ],
+
+  orderColumn:[
+    { key: 'order_code', header: 'Order ID', minWidth: '150px' },
+    { key: "order_channel", header: "Channel", minWidth: "120px"},
+    { key: 'amount', header: 'Amount', minWidth: '150px',render: (row) => formatNaira(row.total_amount)},
+    { key: 'dateAndTime', header: 'Date and Time', minWidth: '150px',render: row => format(new Date(row.placed_at),'dd-MM-yyyy')},
+    { key: 'status', header: 'Status', minWidth: '100px',
+      render: row => {
+        const colors = {
+          completed: 'bg-green-100 text-green-800',
+          cancelled: 'bg-red-100 text-red-800',
+          preparing: 'bg-yellow-100 text-yellow-800',
+          pending: 'bg-blue-100 text-blue-800',
+        }
+        const cls = colors[row.status] || 'bg-gray-100 text-gray-800'
+        return (
+          <span className={`inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium ${cls}`}>
+            {row.status}
+          </span>
+        )
+      }
+    },
+  ]
 
 }

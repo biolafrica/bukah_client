@@ -52,9 +52,7 @@ export default function CustomerDetails({onClose, data}){
             <AISuggestionContainer/>
           )
         }
-
-
-
+        
       </div>
 
     </div>

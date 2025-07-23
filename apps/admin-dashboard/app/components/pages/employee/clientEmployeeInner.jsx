@@ -10,6 +10,7 @@ import * as outline     from '@heroicons/react/24/outline'
 import {useState } from 'react'
 import AddEmployee from './addEmployee'
 import { employee } from '../../../data/employee'
+import MoreEmployee from './moreEmployee'
 
 export default function ClientEmployeeInner({
   segment,
@@ -28,12 +29,14 @@ export default function ClientEmployeeInner({
   const [sideScreenOpen,setSideScreenOpen]=useState(false)
   const [editSideScreenOpen,setEditSideScreenOpen]=useState(false)
   const [addSideScreenOpen,setAddSideScreenOpen]=useState(false)
+  const [moreSideScreenOpen,setMoreSideScreenOpen]=useState(false)
   const [items, setItems] = useState({})
 
   const closeAll=()=>{
     setSideScreenOpen(false)
     setEditSideScreenOpen(false)
     setAddSideScreenOpen(false)
+    setMoreSideScreenOpen(false)
   }
 
   const handleEditScreen = row=>{
@@ -41,12 +44,22 @@ export default function ClientEmployeeInner({
     setSideScreenOpen(true)
     setEditSideScreenOpen(true)
     setAddSideScreenOpen(false)
+    setMoreSideScreenOpen(false)
+  }
+
+  const handleMoreScreen = row=>{
+    setItems(row)
+    setSideScreenOpen(true)
+    setEditSideScreenOpen(false)
+    setAddSideScreenOpen(false)
+    setMoreSideScreenOpen(true)
   }
 
   const handleAddScreen =()=>{
     setSideScreenOpen(true)
     setEditSideScreenOpen(false)
     setAddSideScreenOpen(true)
+    setMoreSideScreenOpen(false)
 
   }
 
@@ -84,6 +97,10 @@ export default function ClientEmployeeInner({
 
             {editSideScreenOpen && (
               <AddEmployee branchOptions={branchOptions} onClose={closeAll} row={items} />
+            )}
+
+            {moreSideScreenOpen && (
+              <MoreEmployee onClose={closeAll} row={items} />
             )}
           
           </div>
@@ -153,7 +170,7 @@ export default function ClientEmployeeInner({
             data={tableData}
             onEdit={handleEditScreen}
             onDelete={(row) => console.log('Delete', row)}
-            moreIcon ={false}
+            onMore={handleMoreScreen}
             currentPage={currentPage}
             pageSize={pageSize}
             totalCount={totalCount}

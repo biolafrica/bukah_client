@@ -6,6 +6,7 @@ const orderFields ={
   orderNumber : z.string().optional(),
   price : z.string().optional(),
   branch : z.string().uuid().optional(),
+  user : z.string().uuid().optional(),
   status : z.enum([
     "pending",
     "accepted", 

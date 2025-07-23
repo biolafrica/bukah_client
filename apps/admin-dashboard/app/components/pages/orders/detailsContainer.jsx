@@ -33,7 +33,7 @@ export default function DetailsContainer({data}){
     { label: 'Date',   value: format(new Date(data.placed_at), 'dd-MM-yyyy') },
     { label: 'Time',   value: format(new Date(data.placed_at), 'hh:mm a') },
     { label: 'Branch', value: data.branch?.name ?? '-' },
-    { label: 'Staff',   value: data.accepted_by?.first_name ?? '-' },
+    { label: 'Staff',   value: data.accepted?.first_name ?? '-' },
     { label: 'Order Channel',  value: data.order_channel },
     { label: 'Payment Method', value: data.payment_method },
   ]
