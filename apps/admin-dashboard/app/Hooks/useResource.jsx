@@ -2,7 +2,7 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 
 
-export function useCrud({ resourceKey, baseUrl, transform = x => x }) {
+export function useCrud({ resourceKey, baseUrl, transform = x => x, }) {
   const qc = useQueryClient()
 
   // Fetch all

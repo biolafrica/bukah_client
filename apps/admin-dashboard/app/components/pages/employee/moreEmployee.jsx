@@ -45,9 +45,9 @@ export default function MoreEmployee({onClose, row}){
             ) : segment === "orderHistory" ? 
 
             (
-              <EmployeeOrderHistory/> ):
+              <EmployeeOrderHistory id={row.id}/> ):
             (
-              <EmployeeAttendanceHistory/>
+              <EmployeeAttendanceHistory id={row.id}/>
             )
           }
 

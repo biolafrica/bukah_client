@@ -34,7 +34,7 @@ export default function EmployeeDetailsCont({data}){
     <div className="text-sm font-normal flex flex-col gap-5">
        
       <div className="employee_container mt-5">
-        <h4 className="mb-2 font-medium">Employee Details</h4>
+        <h4 className="mb-2 font-medium text-base">Employee Details</h4>
 
         <div className="flex items-center gap-3 ">
           <div className="flex flex-col items-center">
@@ -66,7 +66,7 @@ export default function EmployeeDetailsCont({data}){
       </div>
 
       <div className="employee_container mt-5">
-        <h4 className="mb-2 font-medium">Recent Sessions</h4>
+        <h4 className="mb-2 font-medium text-base">Recent Sessions</h4>
 
         {items.length === 0 ? (
           <EmptyState
@@ -76,15 +76,14 @@ export default function EmployeeDetailsCont({data}){
           />
         ):(
           <DataTable
-          columns={employee.orderColumn}
-          data={items}
-          edit={false}
-          deleteIcon={false}
-          onMore={()=>console.log("more")}
-        />
+            columns={employee.orderColumn}
+            data={items}
+            edit={false}
+            deleteIcon={false}
+            onMore={()=>console.log("more")}
+          />
         )}
-      
-
+        
       </div>
 
     
