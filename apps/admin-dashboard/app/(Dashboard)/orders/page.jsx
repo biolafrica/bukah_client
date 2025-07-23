@@ -19,13 +19,6 @@ export default async function Orders({searchParams}){
   const start   = pageIdx * pageSize
   const end     = start + pageSize - 1
 
-  const branchRes = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/common/branches`);
-
-  const branchesJson = await branchRes.json();
-  const branches = branchesJson.data.data;
-
-  const branchOptions = branches.map(b => ({ value: b.id, label: b.name }))
-
 
   const params = new URLSearchParams()
   if (segment !== 'all')   params.set('status', segment)
@@ -60,7 +53,6 @@ export default async function Orders({searchParams}){
       segment={segment}
       search={search}
       dateRange={dateRange}
-      branchOptions={branchOptions}
       filters={{branch, channel, dateRange}}
       sortConfig={ price ? { key: 'price', direction:price } : null}
       tableData={tableData}

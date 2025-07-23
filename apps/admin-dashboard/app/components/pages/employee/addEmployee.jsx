@@ -6,8 +6,9 @@ import { useEmployee } from '../../../hooks/useEmployee';
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
+import { useBranchOptions } from '../../../hooks/useBranchOptions';
 
-export default function AddEmployee({branchOptions, onClose, row}){
+export default function AddEmployee({onClose, row}){
   const router = useRouter()
   const {add, update} = useEmployee()
 
@@ -24,6 +25,16 @@ export default function AddEmployee({branchOptions, onClose, row}){
   const [submitting, setSubmitting] = useState(false)
   const [errorMsg,   setErrorMsg]   = useState(null)
   const [showSuccess, setShowSuccess] = useState(false)
+
+  const {
+    data: branchOptions,
+    isLoading,
+    isError,
+    error,
+  } = useBranchOptions()
+
+  if (isLoading) return <p>Loading branches…</p>
+  if (isError)   return <p>Error: {error.message}</p>
 
   const addEmployeeFormFields = employee.addField(branchOptions)
 

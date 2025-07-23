@@ -1,13 +1,12 @@
+import { ImageUploadField } from '../../common/imageUploadField'
+import { useMenuOptions } from '../../../hooks/useMenuOption'
+
 import React, { useState,} from 'react'
 import { PlusIcon, PencilIcon, TrashIcon as DeleteIcon } from '@heroicons/react/24/outline'
-import { ImageUploadField } from '../../common/imageUploadField'
-import { useOptions } from '../../context/optionsContext'
 
 export default function ComboItemForm({
   onSubmit
 }) {
-
-  const { branchOptions, categoryOptions, singleItemOptions } = useOptions()
 
   // Section 1 state
   const [imageFile,   setImageFile]   = useState(null)
@@ -21,7 +20,12 @@ export default function ComboItemForm({
 
   // Section 2: components
   const [components, setComponents] = useState([])
-  const [editing, setEditing]       = useState(null)
+  const [editing, setEditing] = useState(null)
+
+
+  const { branchOptions, categoryOptions, singleItemOptions, loading, error } = useMenuOptions()
+  if (loading) return <p>Loading options…</p>
+  if (error)  return <p>Error: {error.message}</p>
 
   // Helpers for components
   function startAddComponent() {

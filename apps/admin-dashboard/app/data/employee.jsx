@@ -1,9 +1,20 @@
 import { format } from "date-fns"
 import { formatNaira, formatNumber } from "../utils/format"
+import { useBranchOptions } from "../hooks/useBranchOptions"
 
 export const employee ={
 
-  filterConfig(branchOptions){
+  filterConfig(){
+    const {
+      data: branchOptions,
+      isLoading,
+      isError,
+      error,
+    } = useBranchOptions()
+
+    if (isLoading) return <p>Loading branches…</p>
+    if (isError)   return <p>Error: {error.message}</p>
+
     return[
       { key:'branch', label: 'Branch', type: 'select', options: branchOptions },
       { key: 'isActive', label:'Status', type:   'select',

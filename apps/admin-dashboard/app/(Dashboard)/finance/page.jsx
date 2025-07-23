@@ -19,15 +19,6 @@ export default async function FinancePage({ searchParams }) {
   const start    = pageIdx * pageSize
   const end      = start + pageSize - 1
 
-  // dynamic branch options
-  const branchesRes = await fetch(
-    `${process.env.NEXT_PUBLIC_API_URL}/api/common/branches`
-  )
-
-  const branchesJson   = await branchesRes.json()
-  const branches = branchesJson.data.data;
-
-  const branchOptions  = branches.map(b => ({ value: b.id, label: b.name }))
 
   //Query params
   const params = new URLSearchParams()
@@ -66,7 +57,6 @@ export default async function FinancePage({ searchParams }) {
       totalCount={totalCount}
       currentPage={pageIdx}
       pageSize={pageSize}
-      branchOptions={branchOptions}
       metricData={metric}
     />
   )

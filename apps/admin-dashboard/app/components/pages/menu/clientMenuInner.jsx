@@ -10,8 +10,7 @@ import EmptyState from '../../common/emptyState'
 import { useState } from 'react'
 import AddItems from './addItems'
 import AddComboItems from './addComboItems'
-import ItemDetails from './itemDetails'
-import { useOptions } from '../../context/optionsContext'
+import { useMenuOptions } from '../../../hooks/useMenuOption'
 
 
 export default function ClientMenuInner({
@@ -27,47 +26,39 @@ export default function ClientMenuInner({
   const router = useRouter()
   const params = useSearchParams()
 
-  const { branchOptions, categoryOptions } = useOptions()
-
   const [sideScreenOpen, setSideScreenOpen] = useState(false)
   const [itemSideScreenOpen, setItemSideScreenOpen] = useState(false)
   const [comboSideScreenOpen, setComboSideScreenOpen] = useState(false)
-  const [detailsSideScreenOpen, setDetailsSideScreenOpen] = useState(false)
+
+  const { branchOptions, categoryOptions, loading, error } = useMenuOptions()
+
+  if (loading) return <p>Loading options…</p>
+  if (error)  return <p>Error: {error.message}</p>
+
+  const config = menu.config(branchOptions, categoryOptions)
 
   const closeAll = () => {
     setSideScreenOpen(false)
     setItemSideScreenOpen(false)
     setComboSideScreenOpen(false)
-    setDetailsSideScreenOpen(false)
   }
 
   const handleSingleScreen = () => {
     setSideScreenOpen(true)
     setItemSideScreenOpen(true)
     setComboSideScreenOpen(false)
-    setDetailsSideScreenOpen(false)
   }
 
   const handleComboScreen = () => {
     setSideScreenOpen(true)
     setComboSideScreenOpen(true)
     setItemSideScreenOpen(false)
-    setDetailsSideScreenOpen(false)
-  }
-
-  const handleMoreScreen = (row) => {
-    console.log('details for', row)
-    setSideScreenOpen(true)
-    setDetailsSideScreenOpen(true)
-    setItemSideScreenOpen(false)
-    setComboSideScreenOpen(false)
   }
 
   const handleEdit = (row) => {
     if (row.is_combo) handleComboScreen()
     else              handleSingleScreen()
   }
-
 
   // helper to update URL without full reload
   const updateParams = (patch) => {
@@ -109,10 +100,6 @@ export default function ClientMenuInner({
               <AddComboItems onClose= {closeAll}/>
             )}
 
-            {detailsSideScreenOpen && (
-              <ItemDetails onClose= {closeAll}/>
-            )}
-
           </div>
 
         </div>
@@ -139,14 +126,8 @@ export default function ClientMenuInner({
 
         filterProps={ segment === 'items' && {
           filters,
-          config: [
-            { key:'branch',   label:'Branch',   type:'select', options: branchOptions },
-
-            { key:'category', label:'Category', type:'select', options: categoryOptions },
-          ],
-          
+          config,
           onChange: (k, v) => updateParams({ [k]: v }),
-
           onApply:  () => {},
           onClear:  () => updateParams({ branch: '', category: '' }),
           title:    'Filter Items',
@@ -184,7 +165,7 @@ export default function ClientMenuInner({
           data={tableData}
           onEdit={handleEdit}
           onDelete={()=>console.log("delete")}
-          onMore={handleMoreScreen}
+          moreIcon={false}
           currentPage={currentPage}
           pageSize={pageSize}
           totalCount={totalCount}

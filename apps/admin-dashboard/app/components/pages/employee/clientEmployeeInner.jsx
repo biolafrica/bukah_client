@@ -15,7 +15,6 @@ import MoreEmployee from './moreEmployee'
 export default function ClientEmployeeInner({
   segment,
   searchTerm,
-  branchOptions,
   filters,
   sortConfig,
   tableData,
@@ -63,7 +62,7 @@ export default function ClientEmployeeInner({
 
   }
 
-  const filterConfig = employee.filterConfig(branchOptions);
+  const filterConfig = employee.filterConfig();
 
   const updateParams = (patch) => {
     const next = new URLSearchParams(params.toString())
@@ -92,11 +91,11 @@ export default function ClientEmployeeInner({
           <div className='relative z-65'>
 
             {addSideScreenOpen && (
-              <AddEmployee branchOptions={branchOptions} onClose={closeAll}/>
+              <AddEmployee onClose={closeAll}/>
             )}
 
             {editSideScreenOpen && (
-              <AddEmployee branchOptions={branchOptions} onClose={closeAll} row={items} />
+              <AddEmployee onClose={closeAll} row={items} />
             )}
 
             {moreSideScreenOpen && (

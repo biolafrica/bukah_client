@@ -1,12 +1,11 @@
-import React, { useState } from 'react'
 import Form from '../../common/form'
 import { ImageUploadField } from '../../common/imageUploadField'
 import CloseButton from '../../common/closeButton'
-import { useOptions } from '../../context/optionsContext'
 import { order } from '../../../data/order'
 import { uploadFileAndGetUrl } from '../../../utils/imageStorage'
+import { useMenuOptions } from '../../../hooks/useMenuOption'
 
-
+import React, { useState } from 'react'
 
 export default function AddItems({onClose}){
 
@@ -15,8 +14,11 @@ export default function AddItems({onClose}){
   const [errorMsg, setErrorMsg] = useState(null)
   const [showSuccess, setShowSuccess] = useState(false)
 
+  const { branchOptions, categoryOptions, loading, error } = useMenuOptions()
 
-  const { categoryOptions, branchOptions, } = useOptions()
+  if (loading) return <p>Loading options…</p>
+  if (error)  return <p>Error: {error.message}</p>
+
   const addSingleItemFormFields = order.itemFormFields(categoryOptions,branchOptions)
 
   const initialData = { 

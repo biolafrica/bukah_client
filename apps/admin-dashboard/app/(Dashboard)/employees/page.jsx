@@ -7,10 +7,10 @@ export const dynamic = 'force-dynamic'
 
 export default async function EmployeesPage({ searchParams }) {
   const {
-    segment     = 'employees',  // 'employees' or 'permissions'
+    segment     = 'employees',
     searchTerm  = '',
-    branch      = '',           // branchId
-    isActive    = '',           // 'true' or 'false'
+    branch      = '',           
+    isActive    = '',           
     role        = '',
     name        = '',    
     page        = '0',
@@ -21,16 +21,6 @@ export default async function EmployeesPage({ searchParams }) {
   const start    = pageIdx * pageSize
   const end      = start + pageSize - 1
 
-  // Fetch branch options
-  const branchesRes = await fetch(
-    `${process.env.NEXT_PUBLIC_API_URL}/api/common/branches`
-  )
-  const branchesJson = await branchesRes.json()
-  const branches = branchesJson.data.data; 
-  const branchOptions = branches.map(b => ({
-    value: b.id,
-    label: b.name,
-  }))
 
   // Build params if segment is employees
   let tableData = []
@@ -58,7 +48,6 @@ export default async function EmployeesPage({ searchParams }) {
     <ClientEmployeeInner
       segment={segment}
       searchTerm={searchTerm}
-      branchOptions={branchOptions}
       filters={{ branch, isActive, role }}
       sortConfig={ name ? { key: 'name', direction: name } : null }
       tableData={tableData}

@@ -1,3 +1,4 @@
+import { useBranchOptions } from "../hooks/useBranchOptions"
 import { formatNaira, formatNumber } from "../utils/format"
 import { useMemo, useState } from "react"
 
@@ -51,8 +52,17 @@ export const order = {
     { key: "price", label: "Price" },
   ],
 
-  filterConfig(dateRange, branchOptions){
+  filterConfig(dateRange){
     const [drStart, drEnd] = (dateRange || '').split(',')
+    const {
+      data: branchOptions,
+      isLoading,
+      isError,
+      error,
+    } = useBranchOptions()
+
+    if (isLoading) return <p>Loading branches…</p>
+    if (isError)   return <p>Error: {error.message}</p>
     
     return [
       { key:'branch',label:'Branch',type:'select',options: branchOptions},
@@ -94,7 +104,17 @@ export const order = {
     return { metrics, range, setRange }
   },
 
-  itemFormFields(categoryOptions, branchOptions){
+  itemFormFields(categoryOptions){
+    const {
+      data: branchOptions,
+      isLoading,
+      isError,
+      error,
+    } = useBranchOptions()
+
+    if (isLoading) return <p>Loading branches…</p>
+    if (isError)   return <p>Error: {error.message}</p>
+
     return[
       { name: 'itemName', label: 'Item Name', placeholder:"Enter item name", type: 'text', required: true },
       { name: 'description', label: 'Description', placeholder:"Describe the item", type: 'textarea', required: true, rows:3 },
@@ -129,6 +149,5 @@ export const order = {
 
   },
 
-
-
 }
+

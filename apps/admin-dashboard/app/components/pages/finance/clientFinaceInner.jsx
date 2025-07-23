@@ -23,7 +23,6 @@ export default function ClientFinanceInner({
   totalCount,
   currentPage,
   pageSize,
-  branchOptions,
   metricData,
 }) {
   const router = useRouter()
@@ -32,7 +31,7 @@ export default function ClientFinanceInner({
   const [sideScreenOpen, setSideScreenOpen] = useState(false)
   const [items, setItems] = useState(false)
 
-  const filterConfig = transaction.filterConfig(dateRange, branchOptions);
+  const filterConfig = transaction.filterConfig(dateRange);
 
   const { metrics, range, setRange} = transaction.useFinanceMetrics(metricData)
 

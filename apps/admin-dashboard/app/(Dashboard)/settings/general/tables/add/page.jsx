@@ -29,12 +29,7 @@ export default function AddTables({data}){
   const [errorMsg,   setErrorMsg]   = useState(null)
   const [showSuccess, setShowSuccess] = useState(false)
 
-  const {
-    data: branchOptions,
-    isLoading,
-    isError,
-    error,
-  } = useBranchOptions()
+  const {data: branchOptions, isLoading, isError, error } = useBranchOptions()
 
   if (isLoading) return <p>Loading branches…</p>
   if (isError)   return <p>Error: {error.message}</p>

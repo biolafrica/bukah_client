@@ -1,5 +1,6 @@
 import { useMemo, useState } from "react"
 import { formatNaira } from "../utils/format"
+import { useBranchOptions } from "../hooks/useBranchOptions"
 
 export const transaction = {
   segments:[
@@ -36,19 +37,29 @@ export const transaction = {
     },
   ],
 
-  filterConfig(dateRange, branchOptions){
-  const [drStart, drEnd] = (dateRange || '').split(',')
-  return [
-    {key:'dateRange',label:'Date Created', type:'date-range', value: { from: drStart, to: drEnd }},
-    {key: 'branch', label:'Branch', type: 'select', options: branchOptions },
-    {key: 'method',label: 'Method', type: 'select',
-      options: [
-        { value: 'cash',     label: 'Cash'     },
-        { value: 'transfer', label: 'Transfer' },
-        { value: 'card',     label: 'Card'     },
-      ],
-    },
-  ]
+  filterConfig(dateRange){
+    const {
+      data: branchOptions,
+      isLoading,
+      isError,
+      error,
+    } = useBranchOptions();
+    
+    if (isLoading) return <p>Loading branches…</p>
+    if (isError)   return <p>Error: {error.message}</p>
+
+    const [drStart, drEnd] = (dateRange || '').split(',')
+    return [
+      {key:'dateRange',label:'Date Created', type:'date-range', value: { from: drStart, to: drEnd }},
+      {key: 'branch', label:'Branch', type: 'select', options: branchOptions },
+      {key: 'method',label: 'Method', type: 'select',
+        options: [
+          { value: 'cash',     label: 'Cash'     },
+          { value: 'transfer', label: 'Transfer' },
+          { value: 'card',     label: 'Card'     },
+        ],
+      },
+    ]
 
   },
 

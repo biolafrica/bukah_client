@@ -21,6 +21,13 @@ export const menu = {
   segment: [
     { key: 'items', label: 'Items' },
     { key: 'categories', label: 'Categories' },
-  ]
+  ],
+
+  config(branchOptions,categoryOptions){
+    return [
+      { key:'branch',   label:'Branch',   type:'select', options: branchOptions },
+      { key:'category', label:'Category', type:'select', options: categoryOptions },
+    ]
+  }
 
 }
