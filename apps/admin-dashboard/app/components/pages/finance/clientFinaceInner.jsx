@@ -7,16 +7,17 @@ import EmptyState       from '../../common/emptyState'
 import SegmentedToolbars from '../../common/segment'
 import { transaction } from '../../../data/transaction'
 import MoreTransaction from './moreTransaction'
+import { useBranchOptions } from '../../../hooks/useBranchOptions'
 
 import React, { useState } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import * as outline     from '@heroicons/react/24/outline'
 
 
+
 export default function ClientFinanceInner({
   segment,
   searchId,
-  dateRange,
   filters,
   sortConfig,
   tableData,
@@ -31,8 +32,12 @@ export default function ClientFinanceInner({
   const [sideScreenOpen, setSideScreenOpen] = useState(false)
   const [items, setItems] = useState(false)
 
-  const filterConfig = transaction.filterConfig(dateRange);
+  const {data: branchOptions, isLoading, isError, error} = useBranchOptions();
 
+  if (isLoading) return <p>Loading branches…</p>
+  if (isError)  return <p>Error: {error.message}</p>
+
+  const filterConfig = transaction.filterConfig(branchOptions);
   const { metrics, range, setRange} = transaction.useFinanceMetrics(metricData)
 
   // Helper to update URL params
@@ -121,7 +126,7 @@ export default function ClientFinanceInner({
 
       {tableData.length === 0 ? (
         <EmptyState
-          icon={outline.InboxIcon}
+          icon={outline.WalletIcon}
           title={isQuerying ? 'No results found' : 'No transactions'}
           description={
             isQuerying

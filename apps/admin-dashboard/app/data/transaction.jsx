@@ -37,20 +37,9 @@ export const transaction = {
     },
   ],
 
-  filterConfig(dateRange){
-    const {
-      data: branchOptions,
-      isLoading,
-      isError,
-      error,
-    } = useBranchOptions();
-    
-    if (isLoading) return <p>Loading branches…</p>
-    if (isError)   return <p>Error: {error.message}</p>
-
-    const [drStart, drEnd] = (dateRange || '').split(',')
+  filterConfig(branchOptions){
     return [
-      {key:'dateRange',label:'Date Created', type:'date-range', value: { from: drStart, to: drEnd }},
+      {key:'dateRange',label:'Date Created', type:'date-range'},
       {key: 'branch', label:'Branch', type: 'select', options: branchOptions },
       {key: 'method',label: 'Method', type: 'select',
         options: [

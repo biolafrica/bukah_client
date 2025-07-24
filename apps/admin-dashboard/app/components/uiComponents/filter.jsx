@@ -12,6 +12,18 @@ export default function FilterDropdown({
   const [open, setOpen] = useState(false)
   const ref = useRef(null)
 
+  const [tempFrom, setTempFrom]= useState("")
+  const [tempTo, setTempTo]= useState("")
+  const [dateRangeError, setdateRangeError]= useState(false)
+
+  useEffect(()=>{
+    if (open && filters.dateRange) {  
+      const [f,t] = filters.dateRange.split(',')  
+      setTempFrom(f || '')  
+      setTempTo(t || '')  
+    }  
+  },[open,filters.dateRange])
+
   // Click outside to close
   useEffect(() => {
     const handleClickOutside = e => {
@@ -23,7 +35,7 @@ export default function FilterDropdown({
     return () => document.removeEventListener('mousedown', handleClickOutside)
   }, [])
 
-  const activeCount = Object.values(filters).filter(v => v !== '' && v != null).length
+  const activeCount =  Object.entries(filters).filter(([k,v]) => v != null && v !== '').length  
 
   return (
     <div className="relative inline-block z-45" ref={ref}>
@@ -62,6 +74,7 @@ export default function FilterDropdown({
                 <outline.XMarkIcon className="w-4 h-4" aria-hidden="true" />
               </button>
             </div>
+
             <div className="space-y-4">
               {config.map(filter => {
                 const { key, label, type, options, fromKey, toKey } = filter
@@ -101,19 +114,22 @@ export default function FilterDropdown({
                       <div className="flex gap-2">
                         <input
                           type="date"
-                          value={filters[fromKey] || ''}
-                          onChange={e => onChange(fromKey, e.target.value)}
+                          value={tempFrom}
+                          onChange={e => setTempFrom(e.target.value)} 
                           className="w-1/2 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                         />
 
                         <input
                           type="date"
-                          value={filters[toKey] || ''}
-                          onChange={e => onChange(toKey, e.target.value)}
+                          value={tempTo}
+                          onChange={e => setTempTo(e.target.value)}
                           className="w-1/2 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                         />
                       </div>
+                    
                     )}
+
+                    {dateRangeError && (<h4 className='text-red-500'>select end & start date</h4>)}
                   </div>
                 )
               })}
@@ -124,7 +140,9 @@ export default function FilterDropdown({
               <button
                 type="button"
                 onClick={() => {
+                  setTempFrom(''); setTempTo('')
                   onClear()
+                  setdateRangeError(false)
                 }}
                 className="flex-1 btn btn-inactive transition-colors"
               >
@@ -132,10 +150,15 @@ export default function FilterDropdown({
               </button>
               <button
                 type="button"
-                onClick={() => {
-                  onApply()
-                  setOpen(false)
-                }}
+                onClick={() => {  
+                  if (tempFrom && tempTo) {  
+                    onChange('dateRange', `${tempFrom},${tempTo}`)  
+                  } else {  
+                    setdateRangeError(true)  
+                  }  
+                  onApply()  
+                  setOpen(false)  
+                }}  
                 className="flex-1 btn btn-filled transition-colors"
               >
                 Apply Filters

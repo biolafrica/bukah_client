@@ -52,7 +52,6 @@ export default async function Orders({searchParams}){
     <ClientOrderInner
       segment={segment}
       search={search}
-      dateRange={dateRange}
       filters={{branch, channel, dateRange}}
       sortConfig={ price ? { key: 'price', direction:price } : null}
       tableData={tableData}

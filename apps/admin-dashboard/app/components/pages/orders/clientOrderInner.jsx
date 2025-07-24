@@ -16,7 +16,6 @@ import Alert from "../../common/alert";
 export default function ClientOrderInner({
   segment,
   search,
-  dateRange,
   filters,
   sortConfig,
   tableData,
@@ -41,7 +40,7 @@ export default function ClientOrderInner({
     setSideScreenOpen(true)
   }
 
-  const filterConfig = order.filterConfig(dateRange)
+  const filterConfig = order.filterConfig()
 
   const { metrics, range, setRange} = order.useOrderMetrics(metricData)
 

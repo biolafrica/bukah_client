@@ -16,8 +16,8 @@ import { customer } from '../../../data/customer'
 export default function ClientCustomerInner({
   segment,
   search,
-  dateRange,
   sortConfig,
+  filters,
   tableData,
   totalCount,
   currentPage,
@@ -32,15 +32,7 @@ export default function ClientCustomerInner({
   const [sideScreenOpen, setSideScreenOpen] = useState(false)
   const [moreArray, setMoreArray] = useState(null)
 
-  const close = () => {setSideScreenOpen(false)}
-
-  const handleMore = (row)=>{
-    setMoreArray(row)
-    setSideScreenOpen(true)
-  }
-
-  const filterConfig = customer.filterConfig(dateRange)
-
+  const filterConfig = customer.filterConfig()
   const { metrics, range, setRange} = customer.useCustomerMetrics(metricData)
 
   const updateParams = (patch) => {
@@ -58,6 +50,13 @@ export default function ClientCustomerInner({
     const val = params.get(k) || params.get('segment')
     return val != null && val !== '' && val !== 'all'
   })
+
+  const close = () => {setSideScreenOpen(false)}
+  const handleMore = (row)=>{
+    setMoreArray(row)
+    setSideScreenOpen(true)
+  }
+
 
   return (
     <div className="p-5 pt-30 lg:pl-75">
@@ -103,7 +102,7 @@ export default function ClientCustomerInner({
             onSegmentChange={(key) => updateParams({ segment: key })}
             onSearch={(q) => updateParams({ searchTerm: q })}
             filterProps={{
-              filters:    { dateRange },
+              filters,
               config:     filterConfig,
               onChange:   (k, v) => updateParams({ [k]: v }),
               onApply:    () => {},
@@ -127,7 +126,7 @@ export default function ClientCustomerInner({
 
           {tableData.length === 0 ? (
             <EmptyState
-              icon={outline.InboxIcon}
+              icon={outline.UserGroupIcon}
               title={hasQuery ? 'No results found' : 'No customers yet'}
               description={
                 hasQuery

@@ -24,13 +24,11 @@ export const customer ={
     { key: 'totalSpent', label: 'Total Spent'  }
   ],
 
-  filterConfig(dateRange){
-    const [drStart, drEnd] = (dateRange || '').split(',')
+  filterConfig(){
     return [{
       key:   'dateRange',
       label: 'Date Registered',
       type:  'date-range',
-      value: { from: drStart, to: drEnd },
     }]
   },
 

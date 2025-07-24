@@ -55,7 +55,7 @@ export default async function CustomersPage({ searchParams }) {
     <ClientCustomerInner
       segment={segment}
       search={search}
-      dateRange={dateRange}
+      filters={{ dateRange }}
       sortConfig={totalSpent ? { key: 'totalSpent', direction: totalSpent } : null }
       tableData={tableData}
       totalCount={totalCount}

@@ -50,7 +50,6 @@ export default async function FinancePage({ searchParams }) {
     <ClientFinanceInner
       segment={segment}
       searchId={searchId}
-      dateRange={dateRange}
       filters={{ branch, method }}
       sortConfig={ totalAmount ? { key: 'totalAmount', direction: totalAmount } : null }
       tableData={tableData}

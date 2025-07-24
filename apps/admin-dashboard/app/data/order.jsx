@@ -52,8 +52,7 @@ export const order = {
     { key: "price", label: "Price" },
   ],
 
-  filterConfig(dateRange){
-    const [drStart, drEnd] = (dateRange || '').split(',')
+  filterConfig(){
     const {
       data: branchOptions,
       isLoading,
@@ -67,9 +66,7 @@ export const order = {
     return [
       { key:'branch',label:'Branch',type:'select',options: branchOptions},
       { key:'channel',label:'channel', type:'select', options:this.channelOption},
-      { key:'dateRange',label:'Date Created',type:  'date-range',
-        value: { from: drStart, to: drEnd },
-      },
+      { key:'dateRange',label:'Date Created',type:  'date-range' },
 
     ]
 
