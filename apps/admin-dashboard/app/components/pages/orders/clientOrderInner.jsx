@@ -10,10 +10,12 @@ import EmptyState from "../../common/emptyState";
 import DataTable from "../../common/dataTable";
 import { OrderDetails } from "./orderDetails";
 import Alert from "../../common/alert";
+import LoadingSpinner from "../../common/loadingSpinner";
 
 import { usePaginatedTable } from "../../../hooks/usePaginatedTable";
 import * as outline    from '@heroicons/react/24/outline'
 import { order } from "../../../data/order";
+
 
 
 
@@ -148,7 +150,7 @@ export default function ClientOrderInner({
       />
 
       {isLoading ? (
-        <p className="text-sm text-muted">Loading orders…</p>
+        <LoadingSpinner/>
       ) : !data?.data?.length ? (
         <EmptyState
           icon={outline.InboxIcon}

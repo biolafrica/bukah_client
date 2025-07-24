@@ -77,7 +77,15 @@ export const repos = {
     process.env.NEXT_PUBLIC_RESTAURANT_ID
   ),
 
+  pos: new BaseRepo(
+    "pos_devices",
+    process.env.NEXT_PUBLIC_RESTAURANT_ID
+  ),
 
+  terminals: new BaseRepo(
+    "terminals",
+    process.env.NEXT_PUBLIC_RESTAURANT_ID
+  ),
 
 }
 

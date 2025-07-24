@@ -1,14 +1,16 @@
 "use client"
+import {useState } from "react";
+import { useRouter } from "next/navigation";
+
 import SettingListCard from "../../../../components/pages/settings/settingListCard";
 import BackButton from "../../../../components/common/backButton";
 import SettingsNav from "../../../../components/layout/settingsNav";
 import SettingsHeadingIntro from "../../../../components/pages/settings/settingsHeadingIntro";
 import { AddSection } from "../../../../components/pages/settings/addSettingsItemCard";
 import Alert from "../../../../components/common/alert";
+import LoadingSpinner from "../../../../components/common/loadingSpinner";
 
 import { useTables } from "../../../../hooks/useTables";
-import {useState } from "react";
-import { useRouter } from "next/navigation";
 
 export default function Tables(){
 
@@ -45,7 +47,7 @@ export default function Tables(){
 
   const handleEdit = (id) => router.push(`/settings/general/tables/${id}`)
 
-  if (isLoading) return <p>Loading…</p>
+  if (isLoading) return <LoadingSpinner/>
   if (isError)   return <p>Error: {error.message}</p>
   
   return(

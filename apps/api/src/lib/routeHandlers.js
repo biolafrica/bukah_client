@@ -114,3 +114,19 @@ export function makeDeleteByIdHandler(paramName, deleter, context){
 
 }
 
+export function makeGetListNoSchemaHander(fetcher,context){
+  return async function GET(){
+    try {
+      const data = await fetcher({count:true})
+      return NextResponse.json({data}, {status: 201})
+      
+    } catch (err) {
+      return handleServerError(err,`${context}`)
+    }
+  }
+
+}
+
+
+
+

@@ -1,18 +1,17 @@
 import { makeGetListNoSchemaHander, makePostPayloadHandler } from "../../../src/lib/routeHandlers";
-import { createTableSchema } from "../../../src/tables/schema";
-import { addTable, getAllTables } from "../../../src/tables/service";
+import { createTerminalSchema } from "../../../src/terminals/schema";
+import { addTerminals, getAllTerminals } from "../../../src/terminals/service";
 //import { requireRole } from "@/apps/api/middleware/requireRole";
 
 //export const middleware = requireRole(["admin", "supervisor"])
 
-
 export const GET = makeGetListNoSchemaHander(
-  getAllTables,
-  "fetching tables"
+  getAllTerminals,
+  "fetching terminals"
 )
 
 export const POST = makePostPayloadHandler(
-  addTable,
-  createTableSchema,
-  "adding table"
+  addTerminals,
+  createTerminalSchema,
+  "adding terminal device"
 )

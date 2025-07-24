@@ -9,11 +9,13 @@ import DataTable        from '../../common/dataTable'
 import EmptyState       from '../../common/emptyState'
 import AddEmployee from './addEmployee'
 import MoreEmployee from './moreEmployee'
+import LoadingSpinner from '../../common/loadingSpinner'
 
 import { usePaginatedTable } from '../../../hooks/usePaginatedTable'
 import * as outline     from '@heroicons/react/24/outline'
 import { employee } from '../../../data/employee'
 import Permission from './permission'
+
 
 
 export default function ClientEmployeeInner({
@@ -147,7 +149,7 @@ export default function ClientEmployeeInner({
       {segment === 'permissions' ? (
         <Permission />
       ) : isLoading ? (
-        <p className="text-sm text-muted">Loading employees…</p>
+        <LoadingSpinner/>
       ) : data?.data?.length === 0 ? (
         <EmptyState
           icon={outline.InboxIcon}

@@ -16,6 +16,7 @@ import { usePaginatedTable } from '../../../hooks/usePaginatedTable'
 import { customer } from '../../../data/customer'
 import * as outline     from '@heroicons/react/24/outline'
 import { formatNaira }  from '../../../utils/format'
+import LoadingSpinner from '../../common/loadingSpinner';
 
 
 export default function ClientCustomerInner({
@@ -148,7 +149,7 @@ export default function ClientCustomerInner({
           />
 
           {isLoading ? (
-            <p className="text-sm text-muted">Loading customers…</p>
+            <LoadingSpinner/>
           ) : !data?.data?.length ? (
             <EmptyState
               icon={outline.UserGroupIcon}

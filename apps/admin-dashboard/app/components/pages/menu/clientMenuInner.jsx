@@ -4,16 +4,17 @@ import { useRouter, useSearchParams } from 'next/navigation'
 
 import HeadingIntro    from '../../common/headingIntro'
 import DataTable       from '../../common/dataTable'
-import { menu }        from '../../../data/menu'
 import SegmentedToolbars from '../../common/segment'
 import EmptyState from '../../common/emptyState'
 import AddItems from './addItems'
 import AddComboItems from './addComboItems'
 import LoadingSpinner from '../../common/loadingSpinner'
 
-import { useMenuOptions } from '../../../hooks/useMenuOption'
 import { usePaginatedTable } from '../../../hooks/usePaginatedTable'
+import { useMenuOptions } from '../../../hooks/useMenuOption'
+
 import * as outline from '@heroicons/react/24/outline'
+import { menu }  from '../../../data/menu'
 
 
 export default function ClientMenuInner({
@@ -30,11 +31,6 @@ export default function ClientMenuInner({
   const [sideScreenOpen, setSideScreenOpen] = useState(false);
   const [itemSideScreenOpen, setItemSideScreenOpen] = useState(false);
   const [comboSideScreenOpen, setComboSideScreenOpen] = useState(false);
-
-  const { branchOptions, categoryOptions, loading, error } = useMenuOptions();
-
-  if (loading) return <LoadingSpinner/>;
-  if (error) return <p>Error: {error.message}</p>;
 
   const endpoint = segment === 'items' ? '/api/products' : '/api/product-categories';
 
@@ -66,6 +62,12 @@ export default function ClientMenuInner({
     return val && val !== '';
   });
 
+  const { branchOptions, categoryOptions, loading, error } = useMenuOptions();
+
+  if (loading) return <LoadingSpinner/>;
+  if (error) return <p>Error: {error.message}</p>;
+  const config = menu.config(branchOptions, categoryOptions);
+
   const closeAll = () => {
     setSideScreenOpen(false);
     setItemSideScreenOpen(false);
@@ -89,7 +91,7 @@ export default function ClientMenuInner({
     else handleSingleScreen();
   };
 
-  const config = menu.config(branchOptions, categoryOptions);
+
 
   return (
     <div className="p-5 pt-30 lg:pl-75">
@@ -146,7 +148,7 @@ export default function ClientMenuInner({
       />
 
       {isLoading ? (
-        <p className="text-sm text-muted">Loading menu…</p>
+        <LoadingSpinner/>
       ) : !data?.data?.length ? (
         <EmptyState
           icon={outline.InboxIcon}
