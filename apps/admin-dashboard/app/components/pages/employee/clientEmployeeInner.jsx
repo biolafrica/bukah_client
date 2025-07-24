@@ -1,113 +1,110 @@
 "use client"
 
 import { useRouter, useSearchParams } from 'next/navigation'
+import {useState,useMemo } from 'react'
+
 import HeadingIntro     from '../../common/headingIntro'
 import SegmentedToolbar from '../../common/segment'
 import DataTable        from '../../common/dataTable'
 import EmptyState       from '../../common/emptyState'
-import Permission from './permission'
-import * as outline     from '@heroicons/react/24/outline'
-import {useState } from 'react'
 import AddEmployee from './addEmployee'
-import { employee } from '../../../data/employee'
 import MoreEmployee from './moreEmployee'
+
+import { usePaginatedTable } from '../../../hooks/usePaginatedTable'
+import * as outline     from '@heroicons/react/24/outline'
+import { employee } from '../../../data/employee'
+import Permission from './permission'
+
 
 export default function ClientEmployeeInner({
   segment,
   searchTerm,
   filters,
   sortConfig,
-  tableData,
-  totalCount,
   currentPage,
   pageSize,
 }) {
-  const router = useRouter()
-  const params = useSearchParams()
+  const router = useRouter();
+  const params = useSearchParams();
 
-  const [sideScreenOpen,setSideScreenOpen]=useState(false)
-  const [editSideScreenOpen,setEditSideScreenOpen]=useState(false)
-  const [addSideScreenOpen,setAddSideScreenOpen]=useState(false)
-  const [moreSideScreenOpen,setMoreSideScreenOpen]=useState(false)
-  const [items, setItems] = useState({})
+  const [sideScreenOpen, setSideScreenOpen] = useState(false);
+  const [editSideScreenOpen, setEditSideScreenOpen] = useState(false);
+  const [addSideScreenOpen, setAddSideScreenOpen] = useState(false);
+  const [moreSideScreenOpen, setMoreSideScreenOpen] = useState(false);
+  const [items, setItems] = useState({});
 
-  const closeAll=()=>{
-    setSideScreenOpen(false)
-    setEditSideScreenOpen(false)
-    setAddSideScreenOpen(false)
-    setMoreSideScreenOpen(false)
-  }
+  const queryFilters = useMemo(() => ({
+    ...(searchTerm && { searchTerm }),
+    ...filters,
+    ...(sortConfig?.key && { [sortConfig.key]: sortConfig.direction }),
+  }), [searchTerm, filters, sortConfig]);
 
-  const handleEditScreen = row=>{
-    setItems(row)
-    setSideScreenOpen(true)
-    setEditSideScreenOpen(true)
-    setAddSideScreenOpen(false)
-    setMoreSideScreenOpen(false)
-  }
+  const { data, isLoading } = usePaginatedTable({
+    key: 'employees',
+    endpoint: '/api/users',
+    page: currentPage,
+    pageSize,
+    filters: segment === 'employees' ? queryFilters : {},
+  });
 
-  const handleMoreScreen = row=>{
-    setItems(row)
-    setSideScreenOpen(true)
-    setEditSideScreenOpen(false)
-    setAddSideScreenOpen(false)
-    setMoreSideScreenOpen(true)
-  }
+  const updateParams = (patch) => {
+    const next = new URLSearchParams(params.toString());
+    Object.entries(patch).forEach(([k, v]) => {
+      if (v == null || v === '') next.delete(k);
+      else next.set(k, v);
+    });
+    router.replace(`?${next.toString()}`);
+  };
 
-  const handleAddScreen =()=>{
-    setSideScreenOpen(true)
-    setEditSideScreenOpen(false)
-    setAddSideScreenOpen(true)
-    setMoreSideScreenOpen(false)
+  const closeAll = () => {
+    setSideScreenOpen(false);
+    setEditSideScreenOpen(false);
+    setAddSideScreenOpen(false);
+    setMoreSideScreenOpen(false);
+  };
 
-  }
+  const handleEditScreen = (row) => {
+    setItems(row);
+    setSideScreenOpen(true);
+    setEditSideScreenOpen(true);
+    setAddSideScreenOpen(false);
+    setMoreSideScreenOpen(false);
+  };
+
+  const handleMoreScreen = (row) => {
+    setItems(row);
+    setSideScreenOpen(true);
+    setEditSideScreenOpen(false);
+    setAddSideScreenOpen(false);
+    setMoreSideScreenOpen(true);
+  };
+
+  const handleAddScreen = () => {
+    setSideScreenOpen(true);
+    setEditSideScreenOpen(false);
+    setAddSideScreenOpen(true);
+    setMoreSideScreenOpen(false);
+  };
 
   const filterConfig = employee.filterConfig();
 
-  const updateParams = (patch) => {
-    const next = new URLSearchParams(params.toString())
-    Object.entries(patch).forEach(([k, v]) => {
-      if (v == null || v === '') next.delete(k)
-      else next.set(k, v)
-    })
-    router.replace(`?${next.toString()}`)
-  }
-
-  const isQuerying = [
-    'searchTerm', 'branch', 'isActive', 'role', 'name'
-  ].some((k) => {
-    const val = params.get(k)
-    return val != null && val !== ''
-  })
-
+  const isQuerying = ['searchTerm', 'branch', 'isActive', 'role', 'name'].some((k) => {
+    const val = params.get(k);
+    return val != null && val !== '';
+  });
 
   return (
     <div className="p-5 pt-30 lg:pl-75">
-
       {sideScreenOpen && (
-        <div className='fixed inset-0 z-60 flex'>
-          <div className='absolute inset-0 bg-black opacity-50' onClick={()=> setSideScreenOpen(false)}/>
-
-          <div className='relative z-65'>
-
-            {addSideScreenOpen && (
-              <AddEmployee onClose={closeAll}/>
-            )}
-
-            {editSideScreenOpen && (
-              <AddEmployee onClose={closeAll} row={items} />
-            )}
-
-            {moreSideScreenOpen && (
-              <MoreEmployee onClose={closeAll} row={items} />
-            )}
-          
+        <div className="fixed inset-0 z-60 flex">
+          <div className="absolute inset-0 bg-black opacity-50" onClick={() => setSideScreenOpen(false)} />
+          <div className="relative z-65">
+            {addSideScreenOpen && <AddEmployee onClose={closeAll} />}
+            {editSideScreenOpen && <AddEmployee onClose={closeAll} row={items} />}
+            {moreSideScreenOpen && <MoreEmployee onClose={closeAll} row={items} />}
           </div>
-
         </div>
-
       )}
-
 
       <HeadingIntro
         module="Employee"
@@ -122,62 +119,56 @@ export default function ClientEmployeeInner({
         segments={employee.segment}
         defaultActive={segment}
         onSegmentChange={(key) => updateParams({ segment: key })}
-        search={segment === 'employees' ? true : false }
-        
+        search={segment === 'employees'}
         onSearch={(q) => updateParams({ searchTerm: q })}
-
         filterProps={segment === 'employees' && {
           filters,
-          config:   filterConfig,
+          config: filterConfig,
           onChange: (k, v) => updateParams({ [k]: v }),
-          onApply:  () => {},
-          onClear:  () => updateParams({ branch:'', isActive:'', role:'', searchTerm:'' }),
-          title:    'Filter Employees'
+          onApply: () => {},
+          onClear: () => updateParams({ branch: '', isActive: '', role: '', searchTerm: '' }),
+          title: 'Filter Employees',
         }}
-        sortProps={segment === 'employees' &&{
+        sortProps={segment === 'employees' && {
           options: employee.sortOptions,
           sortConfig,
-          onSort:     (key) => {
+          onSort: (key) => {
             const dir = sortConfig?.key === key && sortConfig.direction === 'ascending'
               ? 'descending'
-              : 'ascending'
-            updateParams({ name: dir })
+              : 'ascending';
+            updateParams({ name: dir });
           },
-          onClear:    () => updateParams({ name: null }),
-          label:      'Sort'
+          onClear: () => updateParams({ name: null }),
+          label: 'Sort',
         }}
-
         searchPlaceholder="Search employee names"
       />
 
       {segment === 'permissions' ? (
         <Permission />
+      ) : isLoading ? (
+        <p className="text-sm text-muted">Loading employees…</p>
+      ) : data?.data?.length === 0 ? (
+        <EmptyState
+          icon={outline.InboxIcon}
+          title={isQuerying ? 'No results found' : 'No employees'}
+          description={
+            isQuerying ? 'Try clearing your filters or search.' : 'No employees to display.'
+          }
+        />
       ) : (
-        tableData.length === 0 ? (
-          <EmptyState
-            icon={outline.InboxIcon}
-            title={isQuerying ? 'No results found' : 'No employees'}
-            description={
-              isQuerying
-                ? 'Try clearing your filters or search.'
-                : 'No employees to display.'
-            }
-          />
-        ) : (
-          <DataTable
-            columns={employee.columns}
-            data={tableData}
-            onEdit={handleEditScreen}
-            onDelete={(row) => console.log('Delete', row)}
-            onMore={handleMoreScreen}
-            currentPage={currentPage}
-            pageSize={pageSize}
-            totalCount={totalCount}
-            onPageChange={(p) => updateParams({ page: p })}
-          />
-        )
+        <DataTable
+          columns={employee.columns}
+          data={data.data}
+          onEdit={handleEditScreen}
+          onDelete={(row) => console.log('Delete', row)}
+          onMore={handleMoreScreen}
+          currentPage={currentPage}
+          pageSize={pageSize}
+          totalCount={data.count}
+          onPageChange={(p) => updateParams({ page: p })}
+        />
       )}
-
     </div>
-  )
+  );
 }

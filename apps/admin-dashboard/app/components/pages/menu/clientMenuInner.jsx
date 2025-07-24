@@ -1,16 +1,19 @@
 'use client'
-
+import { useState, useMemo } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
+
 import HeadingIntro    from '../../common/headingIntro'
 import DataTable       from '../../common/dataTable'
-import * as outline    from '@heroicons/react/24/outline'
 import { menu }        from '../../../data/menu'
 import SegmentedToolbars from '../../common/segment'
 import EmptyState from '../../common/emptyState'
-import { useState } from 'react'
 import AddItems from './addItems'
 import AddComboItems from './addComboItems'
+import LoadingSpinner from '../../common/loadingSpinner'
+
 import { useMenuOptions } from '../../../hooks/useMenuOption'
+import { usePaginatedTable } from '../../../hooks/usePaginatedTable'
+import * as outline from '@heroicons/react/24/outline'
 
 
 export default function ClientMenuInner({
@@ -18,90 +21,85 @@ export default function ClientMenuInner({
   search,
   filters,
   sortConfig,
-  tableData,
-  totalCount,
   currentPage,
   pageSize,
 }) {
-  const router = useRouter()
-  const params = useSearchParams()
+  const router = useRouter();
+  const params = useSearchParams();
 
-  const [sideScreenOpen, setSideScreenOpen] = useState(false)
-  const [itemSideScreenOpen, setItemSideScreenOpen] = useState(false)
-  const [comboSideScreenOpen, setComboSideScreenOpen] = useState(false)
+  const [sideScreenOpen, setSideScreenOpen] = useState(false);
+  const [itemSideScreenOpen, setItemSideScreenOpen] = useState(false);
+  const [comboSideScreenOpen, setComboSideScreenOpen] = useState(false);
 
-  const { branchOptions, categoryOptions, loading, error } = useMenuOptions()
+  const { branchOptions, categoryOptions, loading, error } = useMenuOptions();
 
-  if (loading) return <p>Loading options…</p>
-  if (error)  return <p>Error: {error.message}</p>
+  if (loading) return <LoadingSpinner/>;
+  if (error) return <p>Error: {error.message}</p>;
 
-  const config = menu.config(branchOptions, categoryOptions)
+  const endpoint = segment === 'items' ? '/api/products' : '/api/product-categories';
+
+  const queryFilters = useMemo(() => ({
+    ...(search && { searchTerm: search }),
+    ...(segment === 'items' && filters),
+    ...(sortConfig?.key && { [sortConfig.key]: sortConfig.direction }),
+  }), [search, filters, sortConfig, segment]);
+
+  const { data, isLoading } = usePaginatedTable({
+    key: segment === 'items' ? 'menu-items' : 'menu-categories',
+    endpoint,
+    page: currentPage,
+    pageSize,
+    filters: queryFilters,
+  });
+
+  const updateParams = (patch) => {
+    const next = new URLSearchParams(params.toString());
+    Object.entries(patch).forEach(([k, v]) => {
+      if (!v) next.delete(k);
+      else next.set(k, v);
+    });
+    router.replace(`?${next.toString()}`);
+  };
+
+  const isQuerying = ['search', 'category', 'branch'].some((k) => {
+    const val = params.get(k);
+    return val && val !== '';
+  });
 
   const closeAll = () => {
-    setSideScreenOpen(false)
-    setItemSideScreenOpen(false)
-    setComboSideScreenOpen(false)
-  }
+    setSideScreenOpen(false);
+    setItemSideScreenOpen(false);
+    setComboSideScreenOpen(false);
+  };
 
   const handleSingleScreen = () => {
-    setSideScreenOpen(true)
-    setItemSideScreenOpen(true)
-    setComboSideScreenOpen(false)
-  }
+    setSideScreenOpen(true);
+    setItemSideScreenOpen(true);
+    setComboSideScreenOpen(false);
+  };
 
   const handleComboScreen = () => {
-    setSideScreenOpen(true)
-    setComboSideScreenOpen(true)
-    setItemSideScreenOpen(false)
-  }
+    setSideScreenOpen(true);
+    setComboSideScreenOpen(true);
+    setItemSideScreenOpen(false);
+  };
 
   const handleEdit = (row) => {
-    if (row.is_combo) handleComboScreen()
-    else              handleSingleScreen()
-  }
+    if (row.is_combo) handleComboScreen();
+    else handleSingleScreen();
+  };
 
-  // helper to update URL without full reload
-  const updateParams = (patch) => {
-    const next = new URLSearchParams(params.toString())
-    Object.entries(patch).forEach(([k,v]) => {
-      if (v == null || v === '') next.delete(k)
-      else next.set(k, v)
-    })
-    router.replace(`?${next.toString()}`)
-  }
-
-  const isQuerying = [
-    'search', 'category', 'branch',
-  ].some((k) => {
-    const val = params.get(k)
-    return val != null && val !== ''
-  })
-
+  const config = menu.config(branchOptions, categoryOptions);
 
   return (
     <div className="p-5 pt-30 lg:pl-75">
-
       {sideScreenOpen && (
-        <div className='fixed inset-0 z-60 flex'>
-          <div 
-            className='absolute inset-0 bg-black opacity-50'
-            onClick={closeAll}
-          />
-
-          <div className='relative z-65'>
-
-            {itemSideScreenOpen && (
-              <AddItems 
-                onClose= {closeAll}
-              />
-            )}
-
-            {comboSideScreenOpen && (
-              <AddComboItems onClose= {closeAll}/>
-            )}
-
+        <div className="fixed inset-0 z-60 flex">
+          <div className="absolute inset-0 bg-black opacity-50" onClick={closeAll} />
+          <div className="relative z-65">
+            {itemSideScreenOpen && <AddItems onClose={closeAll} />}
+            {comboSideScreenOpen && <AddComboItems onClose={closeAll} />}
           </div>
-
         </div>
       )}
 
@@ -111,69 +109,66 @@ export default function ClientMenuInner({
         Icon={outline.PlusIcon}
         buttonText="Add Item"
         finalOptions={[
-          {label: "single item", onClick:handleSingleScreen}, 
-          {label: "combo meal", onClick:handleComboScreen}
+          { label: 'single item', onClick: handleSingleScreen },
+          { label: 'combo meal', onClick: handleComboScreen },
         ]}
       />
 
       <SegmentedToolbars
         segments={menu.segment}
         defaultActive={segment}
-
-        onSegmentChange={key => updateParams({ segment: key })}
-
-        onSearch={q => updateParams({ search: q })}
-
-        filterProps={ segment === 'items' && {
-          filters,
-          config,
-          onChange: (k, v) => updateParams({ [k]: v }),
-          onApply:  () => {},
-          onClear:  () => updateParams({ branch: '', category: '' }),
-          title:    'Filter Items',
-        }}
-
+        onSegmentChange={(key) => updateParams({ segment: key })}
+        onSearch={(q) => updateParams({ search: q })}
+        filterProps={
+          segment === 'items' && {
+            filters,
+            config,
+            onChange: (k, v) => updateParams({ [k]: v }),
+            onApply: () => {},
+            onClear: () => updateParams({ branch: '', category: '' }),
+            title: 'Filter Items',
+          }
+        }
         sortProps={{
-          options: segment ==='items' ? menu.sortOptions:[{key:'name', label:'Name'}],
+          options: segment === 'items' ? menu.sortOptions : [{ key: 'name', label: 'Name' }],
           sortConfig,
-          onSort: key => {
-            const dir = sortConfig?.key===key && sortConfig.direction ==='ascending'
-              ? 'descending'
-              : 'ascending'
-            updateParams({ name:dir })
+          onSort: (key) => {
+            const dir =
+              sortConfig?.key === key && sortConfig.direction === 'ascending'
+                ? 'descending'
+                : 'ascending';
+            updateParams({ name: dir });
           },
-          onClear: () => updateParams({  name:null}),
+          onClear: () => updateParams({ name: null }),
           label: 'Sort',
         }}
-
+        searchPlaceholder="Search name"
       />
 
-      {tableData.length === 0 && 
+      {isLoading ? (
+        <p className="text-sm text-muted">Loading menu…</p>
+      ) : !data?.data?.length ? (
         <EmptyState
           icon={outline.InboxIcon}
           title={isQuerying ? 'No results found' : 'No items yet'}
-          description={isQuerying ? 'Try clearing your filters or search terms.' : "No items created yet."}
-        />
-      }
-
-      {tableData.length !== 0 && 
-        <DataTable
-          columns={ segment==='items' 
-            ? menu.itemsColumn
-            : menu.categoriesColumns
+          description={
+            isQuerying ? 'Try clearing your filters or search terms.' : 'No items created yet.'
           }
-          data={tableData}
+        />
+      ) : (
+        <DataTable
+          columns={segment === 'items' ? menu.itemsColumn : menu.categoriesColumns}
+          data={data.data}
           onEdit={handleEdit}
-          onDelete={()=>console.log("delete")}
+          onDelete={() => console.log('delete')}
           moreIcon={false}
           currentPage={currentPage}
           pageSize={pageSize}
-          totalCount={totalCount}
+          totalCount={data.count}
           onPageChange={(newPage) => updateParams({ page: newPage })}
         />
-      }
-
+      )}
     </div>
-  )
+  );
 }
 

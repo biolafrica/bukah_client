@@ -2,63 +2,28 @@ import ClientOrderInner from "../../components/pages/orders/clientOrderInner";
 
 export const dynamic = 'force-dynamic'
 
-export default async function Orders({searchParams}){
+export default async function Orders({ searchParams }) {
   const {
-    segment  = 'all',
-    search   = '',
-    branch   = '',
-    channel = '',
+    segment   = 'all',
+    search    = '',
+    branch    = '',
+    channel   = '',
     dateRange = '',
-    price = '',
-    page = '',
-  } = await searchParams
-  
-  //pagination
-  const pageIdx  = parseInt(page, 10) || 0
-  const pageSize = 10
-  const start   = pageIdx * pageSize
-  const end     = start + pageSize - 1
+    price     = '',
+    page      = '0',
+  } = await searchParams;
 
-
-  const params = new URLSearchParams()
-  if (segment !== 'all')   params.set('status', segment)
-  if (search)    params.set('searchTerm', search)
-  if (channel)  params.set('channel',    channel)
-  if (dateRange) params.set('dateRange', dateRange)
-  if (branch)  params.set('branch', branch)
-  if (price) params.set('price', price)
-
-  params.set('range', `${start},${end}`)
-
-  // Fetch paginated orders
-  const orderRes  = await fetch(
-    `${process.env.NEXT_PUBLIC_API_URL}/api/orders?${params}`
-  )
-
-  const orderJson   = await orderRes.json()
-  const tableData  = orderJson.data.data
-  const totalCount = orderJson.data.count
-
-
-  // Fetch metrics for orders
-  const metricsRes = await fetch(
-    `${process.env.NEXT_PUBLIC_API_URL}/api/orders/metrics`
-  )
-  const metricsJson  = await metricsRes.json();
-  const metric  = metricsJson.data;
-
+  const pageIdx = parseInt(page, 10) || 0;
+  const pageSize = 10;
 
   return (
     <ClientOrderInner
       segment={segment}
       search={search}
-      filters={{branch, channel, dateRange}}
-      sortConfig={ price ? { key: 'price', direction:price } : null}
-      tableData={tableData}
-      totalCount={totalCount}
+      filters={{ branch, channel, dateRange }}
+      sortConfig={price ? { key: 'price', direction: price } : null}
       currentPage={pageIdx}
       pageSize={pageSize}
-      metricData={metric}
     />
-  )
+  );
 }
