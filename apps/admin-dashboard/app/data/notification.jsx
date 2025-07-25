@@ -1,63 +1,57 @@
-export const sections = [
+export function notificationSections (raw, onToggle, onPreview){ 
+  return [
     {
       key: 'customers',
       title: 'Customers',
       items: [
-        {
-          key: 'orderConfirmation',
+        { key: 'order_confirmation',
           label: 'Order Confirmation',
           description: 'Sent immediately after a customer places an order. Includes order summary, order number, and estimated delivery or pickup time',
-          initial: true,                   
-          onToggle: (key, state) => { /* send to API */ },
-          onPreview: (key) => { /* show preview */ },
+          initial: raw.customer_notifications.order_confirmation,                   
+          onToggle: (key, value) => onToggle('customers', key, value),
+          onPreview: (key) => onPreview('customers', key)
         },
-        {
-          key: 'orderCompleted',
+        { key: 'order_completed',
           label: 'Order Completed',
           description: 'Sent when the order has been successfully fulfilled—either picked up or delivered. It may include a thank-you message and request for feedback or review.',
-          initial: true,                        // from backend
-          onToggle: (key, state) => { /* send to API */ },
-          onPreview: (key) => { /* show preview */ },
+          initial: raw.customer_notifications.order_completed,   
+          onToggle: (key, value) => onToggle('customers', key, value),
+          onPreview: (key) => onPreview('customers', key),
         },
-        {
-          key: 'paymentRefund',
+        { key: 'payment_refund',
           label: 'Payment Refund',
           description: 'Notifies the customer that a full or partial refund has been issued, including the amount, original payment method, and expected time to reflect in their account.',
-          initial: true,                        // from backend
-          onToggle: (key, state) => { /* send to API */ },
-          onPreview: (key) => { /* show preview */ },
+          initial: raw.customer_notifications.payment_refund,
+          onToggle: (key, value) => onToggle('customers', key, value),
+          onPreview: (key) => onPreview('customers', key),
         },
-        {
-          key: 'orderCancelled',
+        { key: 'order_cancelled',
           label: 'Order Cancelled',
           description: 'Informs the customer that their order was cancelled, either by them or the restaurant. It includes the reason and any applicable refund information.',
-          initial: true,                        // from backend
-          onToggle: (key, state) => { /* send to API */ },
-          onPreview: (key) => { /* show preview */ },
+          initial: raw.customer_notifications.order_cancelled,
+          onToggle: (key, value) => onToggle('customers', key, value),
+          onPreview: (key) => onPreview('customers', key),
         },
-        {
-          key: 'pickupConfirmation',
+        { key: 'pickup_confirmation',
           label: 'Pickup Confirmation',
           description: 'Alerts the customer that their order is ready at the pickup location. Often includes pickup instructions, order number, and restaurant contact details.',
-          initial: true,                        // from backend
-          onToggle: (key, state) => { /* send to API */ },
-          onPreview: (key) => { /* show preview */ },
+          initial: raw.customer_notifications.pickup_confirmation,
+          onToggle: (key, value) => onToggle('customers', key, value),
+          onPreview: (key) => onPreview('customers', key),
         },
-        {
-          key: 'customerRegistration',
+        { key: 'customer_registration',
           label: 'Customer Registration',
           description: 'Sent when a customer signs up or creates an account. It welcomes them to the platform and may include login details, loyalty program info, or a discount code.',
-          initial: false,                        // from backend
-          onToggle: (key, state) => { /* send to API */ },
-          onPreview: (key) => { /* show preview */ },
+          initial: raw.customer_notifications.customer_registration,
+          onToggle: (key, value) => onToggle('customers', key, value),
+          onPreview: (key) => onPreview('customers', key),
         },
-        {
-          key: 'reservationConfirmation',
+        { key: 'reservation_confirmation',
           label: 'Reservation Confirmation',
           description: 'Confirms a reservation has been booked. Includes date, time, number of guests, and cancellation/modification options.',
-          initial: true,                        // from backend
-          onToggle: (key, state) => { /* send to API */ },
-          onPreview: (key) => { /* show preview */ },
+          initial: raw.customer_notifications.reservation_confirmation, 
+          onToggle: (key, value) => onToggle('customers', key, value),
+          onPreview: (key) => onPreview('customers', key),
         },
       ],
     },
@@ -66,31 +60,29 @@ export const sections = [
       key: 'staff',
       title: 'Staff',
       items: [
-        {
-          key: 'accountCreation',
+        { key: 'account_creation',
           label: 'Account Creation',
           description: 'Sent when a staff member is added to the system. Includes login URL, username/email, temporary password, and role (e.g., cashier, kitchen staff, manager). Also encourages them to change their password after first login.',
-          initial: false,
-          onToggle: (key, state) => { /* send to API */ },
-          onPreview: (key) => { /* show preview */ },
+          initial: raw.staff_notifications.account_creation,
+          onToggle: (key, value) => onToggle('staff', key, value),
+          onPreview: (key) => onPreview('staff', key),
         },
-        {
-          key: 'passwordReset',
+        { key: 'password_reset',
           label: 'Password Reset',
           description: 'Sent when a staff member clicks “Forgot Password.” Contains a secure, time-limited link to reset their password.',
-          initial: false,
-          onToggle: (key, state) => { /* send to API */ },
-          onPreview: (key) => { /* show preview */ },
+          initial: raw.staff_notifications.password_reset_request,
+          onToggle: (key, value) => onToggle('staff', key, value),
+          onPreview: (key) => onPreview('staff', key),
         },
-        {
-          key: 'passwordChange',
+        { key: 'password_change',
           label: 'Password Change',
           description: 'Sent immediately after a staff member updates their password. Confirms the change and provides security tips. Includes contact info in case the change was unauthorized.',
-          initial: true,
-          onToggle: (key, state) => { /* send to API */ },
-          onPreview: (key) => { /* show preview */ },
+          initial: raw.staff_notifications.password_change,
+          onToggle: (key, value) => onToggle('staff', key, value),
+          onPreview: (key) => onPreview('staff', key),
         },
-       
+        
       ],
     },
   ]
+}

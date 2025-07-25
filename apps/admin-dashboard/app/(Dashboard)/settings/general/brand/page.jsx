@@ -1,13 +1,14 @@
 "use client"
+import { useRouter } from "next/navigation"
+import {useState } from "react"
 
+import SettingsNav from "../../../../components/layout/settingsNav"
 import { ColorInput, LogoInput } from "../../../../components/common/logoInputField"
 import BackButton from "../../../../components/common/backButton"
 import SettingsHeadingIntro from "../../../../components/pages/settings/settingsHeadingIntro"
-import SettingsNav from "../../../../components/layout/settingsNav"
 import Alert from "../../../../components/common/alert"
+import LoadingSpinner from "../../../../components/common/loadingSpinner"
 
-import { useRouter } from "next/navigation"
-import {useState } from "react"
 import { useSettings } from "../../../../hooks/useSettings"
 
 
@@ -18,7 +19,7 @@ export default function Brand(){
   const [errorMsg,   setErrorMsg] = useState(null)
   const [showSuccess, setShowSuccess] = useState(false)
 
-  if (isLoading) return <p>Loading…</p>
+  if (isLoading) return <LoadingSpinner/>
   if (isError ) return <p>Failed to load settings</p>
 
 

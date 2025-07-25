@@ -1,14 +1,18 @@
 "use client"
-import SettingsNav from "../../../../components/layout/settingsNav"
-import Form from "../../../../components/common/form"
-import { storeFields } from "../../../../data/formFields"
-import SettingsHeadingIntro from "../../../../components/pages/settings/settingsHeadingIntro"
-import BackButton from "../../../../components/common/backButton"
-import Alert from "../../../../components/common/alert"
 
 import { useRouter } from "next/navigation"
 import {useState } from "react"
+
+import SettingsNav from "../../../../components/layout/settingsNav"
+import Form from "../../../../components/common/form"
+import SettingsHeadingIntro from "../../../../components/pages/settings/settingsHeadingIntro"
+import BackButton from "../../../../components/common/backButton"
+import Alert from "../../../../components/common/alert"
+import LoadingSpinner from "../../../../components/common/loadingSpinner"
+
 import { useSettings } from "../../../../hooks/useSettings"
+import { storeFields } from "../../../../data/formFields"
+
 
 export default function Store(){
 
@@ -18,9 +22,8 @@ export default function Store(){
   const [errorMsg,   setErrorMsg]   = useState(null)
   const [showSuccess, setShowSuccess] = useState(false)
 
-  if (isLoading) return <p>Loading…</p>
+  if (isLoading) return <LoadingSpinner/>
   if (isError ) return <p>Failed to load settings</p>
-  console.log(raw)
 
   const initialValues = {
     businessName:   raw.name ?? "",

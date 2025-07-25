@@ -1,13 +1,17 @@
 "use client"
 
+import {useState } from "react"
+import { useRouter } from "next/navigation"
+
 import SettingsNav from "../../../../components/layout/settingsNav"
 import SettingsHeadingIntro from "../../../../components/pages/settings/settingsHeadingIntro"
 import BackButton from "../../../../components/common/backButton"
 import WeeklySchedule from "../../../../components/pages/settings/businessHourTable"
-import {useState } from "react"
+import LoadingSpinner from "../../../../components/common/loadingSpinner"
 import Alert from "../../../../components/common/alert"
-import { useRouter } from "next/navigation"
+
 import { useSettings } from "../../../../hooks/useSettings"
+
 
 
 export default function Hours(){
@@ -18,7 +22,7 @@ export default function Hours(){
   const [errorMsg,   setErrorMsg]   = useState(null)
   const [showSuccess, setShowSuccess] = useState(false)
 
-  if (isLoading) return <p>Loading…</p>
+  if (isLoading) return <LoadingSpinner/>
   if (isError ) return <p>Failed to load settings</p>
 
   const initialSchedules = raw.business_hours ?? null

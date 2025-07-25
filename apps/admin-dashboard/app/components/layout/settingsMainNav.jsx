@@ -72,7 +72,7 @@ export function NotificationSection({ title, items }) {
             label={item.label}
             description={item.description}
             initial={item.initial}
-            onToggle={state => item.onToggle(item.key, state)}
+            onToggle={value => item.onToggle(item.key, value)}
             onPreview={() => item.onPreview(item.key)}
           />
         ))}
@@ -80,7 +80,6 @@ export function NotificationSection({ title, items }) {
     </div>
   )
 }
-
 
 export function NotificationSettings({ sections }) {
   return (
