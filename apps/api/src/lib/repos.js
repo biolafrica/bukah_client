@@ -87,6 +87,16 @@ export const repos = {
     process.env.NEXT_PUBLIC_RESTAURANT_ID
   ),
 
+  plans: new BaseRepo(
+    "restaurant_plan_subscription",
+    process.env.NEXT_PUBLIC_RESTAURANT_ID
+  ),
+
+  billing: new BaseRepo(
+    "billing_histories",
+    process.env.NEXT_PUBLIC_RESTAURANT_ID
+  ),
+
 }
 
 
