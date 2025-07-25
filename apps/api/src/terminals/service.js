@@ -1,7 +1,10 @@
 import { repos } from "../lib/repos";
 
 export async function getAllTerminals({count =true}){
-  return repos.terminals.findAll({count})
+  const joins = {
+    branch: "branches(name)"
+  }
+  return repos.terminals.findAll({count,joins})
 }
 
 export async function getTerminalsById(tableId){

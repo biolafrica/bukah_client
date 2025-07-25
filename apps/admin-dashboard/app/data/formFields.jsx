@@ -42,8 +42,8 @@ export const taxFields = [
 
 export const addTerminalFields = [
   { name: 'name', label: 'Name', type: 'text', required: true },
-  { name: 'posTerminal', label: 'POS Terminal', type: 'text', required: true },
   { name: 'branch', label: 'Branch', type: 'text', required: true },
+  { name: 'ipAddress', label: 'IP Address', type: 'text', required: true },
 ]
 
 export const addPOSFields = [
@@ -82,6 +82,45 @@ export function tableField(branchOptions){
     { name: 'capacity', label: 'Capacity', type: 'text', required: true },
     { name: 'section', label: 'Section', type: 'text', required: true },
     { name: 'serviceCharge', label: 'Service Charge', type: 'number', required: true },
+    { name: 'branchId', label: 'Branch', type: 'select',
+      options: [
+        { value: '', label: 'Choose branch' },
+        ...branchOptions.map(branch => ({
+          value: branch.value,
+          label: branch.label
+        }))
+        
+      ],
+      required: true 
+    },
+  ]
+
+}
+
+export function terminalFields(branchOptions){ 
+  return [
+    { name: 'name', label: 'Name', type: 'text', required: true },
+    { name: 'ipAddress', label: 'IP Address', type: 'text', required: true },
+    { name: 'branchId', label: 'Branch', type: 'select',
+      options: [
+        { value: '', label: 'Choose branch' },
+        ...branchOptions.map(branch => ({
+          value: branch.value,
+          label: branch.label
+        }))
+        
+      ],
+      required: true 
+    },
+  ]
+}
+
+export function posFields(branchOptions){
+  return[
+    { name: 'name', label: 'Name', type: 'text', required: true },
+    { name: 'posProvider', label: 'POS Provider', type: 'text', required: true },
+    { name: 'accountName', label: 'Account Name', type: 'text', required: true },
+    { name: 'accountNumber', label: 'Account Number', type: 'text', required: true },
     { name: 'branchId', label: 'Branch', type: 'select',
       options: [
         { value: '', label: 'Choose branch' },

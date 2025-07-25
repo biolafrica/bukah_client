@@ -1,5 +1,3 @@
-// hooks/useTables.js
-
 import { transformTable } from '../lib/transformer'
 import { useCrud } from './useResource'
 

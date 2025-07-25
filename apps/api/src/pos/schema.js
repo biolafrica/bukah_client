@@ -7,7 +7,7 @@ export const createPOSSchema = z.object({
   account_name: z.string().min(1, "account name is required"),
   account_number: z
   .string()
-  .length(11, "account number must be exactly 10 digits")
+  .length(10, "account number must be exactly 10 digits")
   .regex(/^\d+$/, "account number can only contain digits"),
   pos_provider: z.string().min(1, "pos bank name is required"),
 })

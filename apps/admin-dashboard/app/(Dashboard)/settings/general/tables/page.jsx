@@ -13,9 +13,7 @@ import LoadingSpinner from "../../../../components/common/loadingSpinner";
 import { useTables } from "../../../../hooks/useTables";
 
 export default function Tables(){
-
   const router = useRouter()
-  const { items, isLoading, isError, error, remove } = useTables()
  
   const [errorMsg,   setErrorMsg]   = useState(null)
   const [showSuccess, setShowSuccess] = useState(false)
@@ -26,6 +24,8 @@ export default function Tables(){
     button:"Add Table",
     link : '/settings/general/tables/add'
   }
+
+  const { items, isLoading, isError, error, remove } = useTables()
 
   const handleDelete = async (id) => {
     try {
