@@ -1,23 +1,10 @@
-"use client"
-import {useState } from "react";
-import { useRouter } from "next/navigation";
-
-import SettingListCard from "../../../../components/pages/settings/settingListCard";
 import BackButton from "../../../../components/common/backButton";
 import SettingsNav from "../../../../components/layout/settingsNav";
 import SettingsHeadingIntro from "../../../../components/pages/settings/settingsHeadingIntro";
 import { AddSection } from "../../../../components/pages/settings/addSettingsItemCard";
-import Alert from "../../../../components/common/alert";
-import LoadingSpinner from "../../../../components/common/loadingSpinner";
-
-import { useTables } from "../../../../hooks/useTables";
+import TableClientInner from "../../../../components/pages/table/tableClientInner";
 
 export default function Tables(){
-  const router = useRouter()
- 
-  const [errorMsg,   setErrorMsg]   = useState(null)
-  const [showSuccess, setShowSuccess] = useState(false)
-
   const data= {
     head: "Add New Tables",
     subHead: "Add tables to your restaurant here",
@@ -25,53 +12,9 @@ export default function Tables(){
     link : '/settings/general/tables/add'
   }
 
-  const { items, isLoading, isError, error, remove } = useTables()
-
-  const handleDelete = async (id) => {
-    try {
-      await remove(id)
-      setShowSuccess(true)
-      setTimeout(() => {
-        setShowSuccess(false)
-        router.push('/settings/general/tables')
-      }, 2000)
-     
-    } catch (err) {
-      setErrorMsg(
-        err.message.includes("foreign key")
-          ? "Can't delete assigned table"
-          : err.message
-      )
-    }
-  }
-
-  const handleEdit = (id) => router.push(`/settings/general/tables/${id}`)
-
-  if (isLoading) return <LoadingSpinner/>
-  if (isError)   return <p>Error: {error.message}</p>
-  
   return(
     <>
-      {errorMsg && (
-        <Alert
-          type="error"
-          heading="Error"
-          subheading={errorMsg}
-          duration={5000}
-          onClose={() => setErrorMsg(null)}
-        />
-      )}
-
-      {showSuccess && (
-        <Alert
-          type="success"
-          heading="Successfull"
-          subheading="Table deleted succesfully"
-          duration={2000}
-          onClose={() => setShowSuccess(false)}
-        />
-      )}
-
+     
       <div className="tables_cont p-5 pt-30 lg:pl-75">
 
         <SettingsHeadingIntro/>
@@ -88,9 +31,7 @@ export default function Tables(){
               <BackButton info="Table Management"/>
               <AddSection data={data}/>
 
-              <div>
-                <SettingListCard data={items} onDelete={handleDelete} onEdit={handleEdit} />
-              </div>
+             <TableClientInner/>
               
             </div>
 

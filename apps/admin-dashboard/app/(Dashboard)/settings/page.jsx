@@ -8,9 +8,7 @@ export default async function Settings() {
     { key: 'hours',  href: '/settings/general/hours',label: 'Business Hours',description: 'Manage your opening hours' },
     { key: 'brand',  href: '/settings/general/brand',label: 'Brand Customization',description: 'Edit your brand logo and colors'},
     { key:'tables', href:'/settings/general/tables',label:'Table Management',description: 'Manage tables & service charges'},
-    { key: 'tax', href: '/settings/general/tax', label: 'Tax',description:'Set your tax percentage'},
   ];
-
 
   return (
 

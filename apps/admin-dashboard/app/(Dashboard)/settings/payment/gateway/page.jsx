@@ -1,16 +1,9 @@
-'use client'
+import PaymentGatewayClientInner from "../../../../components/pages/settings/paymentGatewayClientInner";
 import BackButton from "../../../../components/common/backButton";
-import Form from "../../../../components/common/form";
 import SettingsNav from "../../../../components/layout/settingsNav";
 import SettingsHeadingIntro from "../../../../components/pages/settings/settingsHeadingIntro";
-import { gatewayFields } from "../../../../data/formFields";
 
 export default function Gateway(){
-  const initialData = { publicKey: '',secretKey: '',callbackURL: '',gatewayName:''}
-
-  async function handleSubmit(values) {
-    // call API
-  }
 
   return(
     <div className="tax_cont p-5 pt-30 lg:pl-75">
@@ -26,16 +19,8 @@ export default function Gateway(){
 
           <div className=" w-full lg:w-3/4 border p-5 rounded-md border-border-text">
             <BackButton info="Payment Gateway"/>
+            <PaymentGatewayClientInner/>
 
-            <div className="xl:w-2/3">
-              <Form   
-                fields={gatewayFields}
-                initialValues={initialData}
-                validate={()=>[]} 
-                onSubmit={handleSubmit}
-                submitLabel="Save"
-              />
-            </div>
           </div>
 
         </div>

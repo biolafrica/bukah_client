@@ -1,19 +1,17 @@
 import { repos } from "../lib/repos";
 
 export function getBillingHistories(){
-
   const range = [0,11]
   const joins = {
-    plan: "plans(type)", 
+    plan: "plans(type,target)", 
   }
-
-  return repos.plans.findAll({range, joins})
+  return repos.billing.findAll({range, joins})
 }
 
 export function getBillingById(billingId){
   const joins = {
-    plan: "plans(type)", 
+    plan: "plans(type,target)", 
   }
-  return repos.product.findById(billingId, joins)
+  return repos.billing.findById(billingId, joins)
 }
  

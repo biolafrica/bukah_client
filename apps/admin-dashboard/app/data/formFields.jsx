@@ -36,10 +36,6 @@ export const bankFields = [
   { name: 'accountNumber', label: 'Account Number', type: 'text', required: true },
 ]
 
-export const taxFields = [
-  { name: 'tax', label: 'Tax(Add tax % if applicable)', type: 'number', required: false },
-]
-
 export const addTerminalFields = [
   { name: 'name', label: 'Name', type: 'text', required: true },
   { name: 'branch', label: 'Branch', type: 'text', required: true },
