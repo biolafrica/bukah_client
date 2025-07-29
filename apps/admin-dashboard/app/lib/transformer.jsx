@@ -1,3 +1,4 @@
+import { format } from "date-fns"
 import { formatNaira } from "../utils/format"
 
 export function transformTable(raw) {
@@ -26,3 +27,14 @@ export function transformTerminal(raw) {
     subHead: raw.ip_address,
   }
 }
+
+export function transformBranchList(raw){
+  return{
+    id: raw.id,
+    name: `${raw.first_name} ${raw.last_name}`,
+    role: raw.role,
+    countText: `last login ${format(new Date(raw.last_login), 'dd-MM-yyyy')}|${format(new Date(raw.last_login), 'hh:mm a')}`
+  }
+
+}
+

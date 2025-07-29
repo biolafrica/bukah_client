@@ -16,7 +16,7 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en-GB" style={{transitionProperty: "none", marginRight: "0px"}}>
-      <body className= "text-pri-text bg-laybg-text font-urbanist">
+      <body className= "text-pri-text bg-laybg-text font-urbanist font-normal">
         {children}
       </body>
     </html>

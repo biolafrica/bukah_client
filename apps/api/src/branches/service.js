@@ -1,4 +1,6 @@
 import { repos } from "../lib/repos";
+import { startOfDay, subDays } from 'date-fns';
+import { buildWindows } from "../lib/windows";
 
 export async function getAllBranches({
   range = [0, 9] 
@@ -42,3 +44,128 @@ export async function deactivateBranch(branchId){
 export async function activateBranch(branchId){
   return repos.branch.reactivate(branchId)
 }
+
+
+export async function getBranchMetrics(branchId) {
+  const todayStart = startOfDay(new Date());
+
+  const buildWindow = (daysBack) => ({
+    current: {
+      from: subDays(todayStart, daysBack),
+      to: subDays(todayStart, -1), // inclusive today
+    },
+    previous: {
+      from: subDays(todayStart, daysBack * 2),
+      to: subDays(todayStart, daysBack),
+    }
+  });
+
+  const windows = {
+    today: buildWindows(0),
+    last7: buildWindow(7),
+    last30: buildWindow(30)
+  };
+
+  const result = {
+    'Transactions': {},
+    'Orders':       {},
+    'Customers':    {}
+  };
+
+  for (const [key, { current, previous }] of Object.entries(windows)) {
+ 
+    const totalCurrentTx = await repos.transaction.sumColumn({
+      table:     'transactions',
+      column:    'total_amount',
+      dateRange: current,
+      filters:   { branch_id: branchId }
+    });
+
+    const totalPreviousTx = await repos.transaction.sumColumn({
+      table:     'transactions',
+      column:    'total_amount',
+      dateRange: previous,
+      filters:   { branch_id: branchId }
+    });
+
+    result['Transactions'][key] = {
+      current: totalCurrentTx,
+      previous: totalPreviousTx
+    };
+
+  
+    const totalCurrentOrders = await repos.order.countRows({
+      table:     'orders',
+      dateField: 'placed_at',
+      dateRange: current,
+      filters:   { branch_id: branchId }
+    });
+
+    const totalPreviousOrders = await repos.order.countRows({
+      table:     'orders',
+      dateField: 'placed_at',
+      dateRange: previous,
+      filters:   { branch_id: branchId }
+    });
+
+    result['Orders'][key] = {
+      current: totalCurrentOrders,
+      previous: totalPreviousOrders
+    };
+
+    // Customers (count)
+    const totalCurrentCustomers = await repos.customer.countRows({
+      table:     'customers',
+      dateField: 'created_at',
+      dateRange: current,
+      filters:   { branch_id: branchId }
+    });
+
+    const totalPreviousCustomers = await repos.customer.countRows({
+      table:     'customers',
+      dateField: 'created_at',
+      dateRange: previous,
+      filters:   { branch_id: branchId }
+    });
+
+    result['Customers'][key] = {
+      current: totalCurrentCustomers,
+      previous: totalPreviousCustomers
+    };
+  }
+
+  return result;
+}
+
+export async function getBranchTotals(branchId) {
+  try {
+    const [totalTransactionAmount, orderCount, customerCount] = await Promise.all([
+      repos.transaction.sumColumn({
+        table: 'transactions',
+        column: 'total_amount',
+        filters: { branch_id: branchId }
+      }),
+      repos.order.countRows({
+        table: 'orders',
+        filters: { branch_id: branchId }
+      }),
+      repos.customer.countRows({
+        table: 'customers',
+        filters: { branch_id: branchId }
+      })
+    ]);
+
+    return {
+      transactions:totalTransactionAmount,
+      orders: orderCount,
+      customers: customerCount
+    };
+    
+  } catch (error) {
+    console.error("Failed to fetch branch totals:", error);
+    throw error;
+  }
+}
+
+
+

@@ -137,7 +137,7 @@ export class BaseRepo{
     return data
   }
 
-  async sumColumn({table,column, dateRange = {}, filters = {}}){
+  async sumColumn({table, column, dateRange = {}, filters = {}}){
     let query = supabase
     .from(this.table)
     .select(column, { head: false })
@@ -203,7 +203,6 @@ export class BaseRepo{
     if(error) throw new Error(`${this.table} deactivation failed: ${error.message}`)
     return data
   }
-
 
   async reactivate(id){
     const {data, error} = await supabase

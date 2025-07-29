@@ -42,24 +42,21 @@ export async function getTransactionById(transactionId){
 }
 
 export async function getTransactionMetrics() {
-  // define the start‐of‐today boundary
   const todayStart = startOfDay(new Date())
 
-  // helper to build each window
   const buildWindow = (daysBack) => ({
     current:  { from: subDays(todayStart, daysBack), to: todayStart },
     previous: { from: subDays(todayStart, daysBack * 2), to: subDays(todayStart, daysBack) }
   })
 
   const windows = {
-    today: buildWindow(0),     // from todayStart → tomorrow (handled below)
+    today: buildWindow(0),
     last7: buildWindow(7),
     last30: buildWindow(30)
   }
 
-  // fix “today” window so that current covers just [todayStart → tomorrow)
-  windows.today.current.to = subDays(todayStart, -1)   // one day ahead
-  windows.today.previous = {                             // yesterday only
+  windows.today.current.to = subDays(todayStart, -1)  
+  windows.today.previous = {                         
     from: subDays(todayStart, 1),
     to:   todayStart
   }
@@ -72,7 +69,6 @@ export async function getTransactionMetrics() {
 
   for (const [key, { current, previous }] of Object.entries(windows)) {
 
-    // sum total sales
     const salesCurr = await repos.transaction.sumColumn({
       table:     'transactions',
       column:    'total_amount',
@@ -84,7 +80,6 @@ export async function getTransactionMetrics() {
       dateRange: previous
     })
 
-    // sum only refunded
     const refundCurr = await repos.transaction.sumColumn({
       table:     'transactions',
       column:    'total_amount',

@@ -111,7 +111,6 @@ export default function Home() {
     { id: 3, name: 'Ada Lovelace', role: 'Bartender', countText: formatNaira(80000) },
     { id: 4, name: 'Ada Lovelace', role: 'Waiter', countText: formatNaira(70000) },
     { id: 5, name: 'Ada Lovelace', role: 'Bartender', countText: formatNaira(20000) },
- 
   ]
 
   return (

@@ -53,6 +53,7 @@ export default function EmployeeDetailsCont({data}){
             ))}
           </div>
         </div>
+        
       </div>
 
       <div className="metric_container border border-border-text rounded-md p-3 flex felx-1 ">
@@ -85,7 +86,6 @@ export default function EmployeeDetailsCont({data}){
         )}
         
       </div>
-
     
     </div>
   )

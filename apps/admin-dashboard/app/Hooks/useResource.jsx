@@ -15,7 +15,6 @@ export function useCrud({ resourceKey, baseUrl, transform = x => x, }) {
         throw new Error(json.error || `Failed to load ${resourceKey}`)
       }
       const payload = await res.json()
-      // adjust this to your API shape:
       const rawList = payload.data?.data ?? payload[resourceKey] ?? []
       return rawList.map(transform)
     }

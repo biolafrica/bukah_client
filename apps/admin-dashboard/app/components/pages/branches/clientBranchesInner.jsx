@@ -6,13 +6,13 @@ import { useRouter, useSearchParams } from 'next/navigation'
 import HeadingIntro from '../../common/headingIntro'
 import DataTable    from '../../common/dataTable'
 import EmptyState   from '../../common/emptyState'
+import LoadingSpinner from '../../common/loadingSpinner';
 import AddBranches from './addBranches'
+import BranchDetails from './branchDetails';
 
 import { usePaginatedTable } from '../../../hooks/usePaginatedTable'
 import * as outline from '@heroicons/react/24/outline'
 import { branch } from '../../../data/branch'
-
-
 
 export default function ClientBranchesInner({ currentPage, pageSize }) {
   const router = useRouter();
@@ -21,6 +21,8 @@ export default function ClientBranchesInner({ currentPage, pageSize }) {
   const [sideScreenOpen, setSideScreenOpen] = useState(false);
   const [editSideScreenOpen, setEditSideScreenOpen] = useState(false);
   const [addSideScreenOpen, setAddSideScreenOpen] = useState(false);
+  const [moreSideScreenOpen, setMoreSideScreenOpen] = useState(false);
+
   const [items, setItems] = useState({});
 
   const { data, isLoading } = usePaginatedTable({
@@ -44,6 +46,7 @@ export default function ClientBranchesInner({ currentPage, pageSize }) {
     setSideScreenOpen(false);
     setEditSideScreenOpen(false);
     setAddSideScreenOpen(false);
+    setMoreSideScreenOpen(false);
   };
 
   const handleEditScreen = (row) => {
@@ -51,13 +54,23 @@ export default function ClientBranchesInner({ currentPage, pageSize }) {
     setSideScreenOpen(true);
     setEditSideScreenOpen(true);
     setAddSideScreenOpen(false);
+    setMoreSideScreenOpen(false);
   };
 
   const handleAddScreen = () => {
     setSideScreenOpen(true);
     setEditSideScreenOpen(false);
     setAddSideScreenOpen(true);
+    setMoreSideScreenOpen(false)
   };
+
+  const handleMoreScreen =(row)=>{
+    setItems(row);
+    setSideScreenOpen(true);
+    setEditSideScreenOpen(false);
+    setAddSideScreenOpen(false);
+    setMoreSideScreenOpen(true)
+  }
 
   const hasQuery = !isLoading && data?.data?.length === 0;
 
@@ -69,6 +82,7 @@ export default function ClientBranchesInner({ currentPage, pageSize }) {
           <div className="relative z-65">
             {addSideScreenOpen && <AddBranches onClose={closeAll} />}
             {editSideScreenOpen && <AddBranches onClose={closeAll} row={items} />}
+            {moreSideScreenOpen && <BranchDetails onClose={closeAll} row={items} />}
           </div>
         </div>
       )}
@@ -83,7 +97,9 @@ export default function ClientBranchesInner({ currentPage, pageSize }) {
           onButtonClick={handleAddScreen}
         />
 
-        {!data?.data?.length ? (
+        {isLoading ? (
+          <LoadingSpinner/>
+        ) :!data?.data?.length ? (
           <EmptyState
             icon={outline.BuildingStorefrontIcon}
             title={hasQuery ? 'No branches found' : 'No branches'}
@@ -95,7 +111,7 @@ export default function ClientBranchesInner({ currentPage, pageSize }) {
             data={data.data}
             onEdit={handleEditScreen}
             onDelete={() => console.log('delete')}
-            moreIcon={false}
+            onMore={handleMoreScreen}
             currentPage={currentPage}
             pageSize={pageSize}
             totalCount={data.count}
