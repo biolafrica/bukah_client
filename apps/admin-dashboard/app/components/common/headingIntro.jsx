@@ -1,3 +1,5 @@
+"use client"
+
 import * as outline from "@heroicons/react/24/outline"
 import { useEffect, useRef, useState } from "react"
 
@@ -5,7 +7,7 @@ import { useEffect, useRef, useState } from "react"
 export default function HeadingIntro({
   module,
   moduleIntro,
-  Icon,
+  Icon = outline.ChevronDownIcon,
   buttonText,
   branches = false,
   branchOptions = [],         // [{ value, label }]

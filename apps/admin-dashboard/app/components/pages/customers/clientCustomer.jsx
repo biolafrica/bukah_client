@@ -65,7 +65,6 @@ export default function ClientCustomerInner({
     endpoint: '/api/customers/metrics',
   })
 
-
   const filterConfig = customer.filterConfig();
   const { metrics, range, setRange } = useMetricTransformer(customerMetrics, { formatStrategy: "number" });
 

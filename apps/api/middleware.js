@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server'
 
 const ALLOWED = [
-  'http://localhost:3002',
+  'http://localhost:3001',
   process.env.FRONTEND_URL
 ].filter(Boolean)
 

@@ -1,6 +1,7 @@
+import { format } from "date-fns"
 import { useBranchOptions } from "../hooks/useBranchOptions"
-import { formatNaira, formatNumber } from "../utils/format"
-import { useMemo, useState } from "react"
+import { formatNaira,} from "../utils/format"
+
 
 
 export const order = {
@@ -10,7 +11,7 @@ export const order = {
     { key: 'branch', header: 'Branch', minWidth: '150px',render: row => row.branch?.name ?? '-' },
     { key: 'staff', header: 'Staff', minWidth: '150px',render: row => row.accepted?.first_name ?? '-' },
     { key: 'amount', header: 'Amount', minWidth: '150px',render: (row) => formatNaira(row.total_amount)},
-    { key: 'dateAndTime', header: 'Date and Time', minWidth: '150px',render: row => new Date(row.placed_at).toLocaleString('en-GB') },
+    { key: 'dateAndTime', header: 'Date and Time', minWidth: '150px',render: row => format(new Date(row.placed_at),'dd-MM-yyyy')},
     { key: 'status', header: 'Status', minWidth: '100px',
       render: row => {
         const colors = {

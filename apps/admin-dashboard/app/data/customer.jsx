@@ -1,5 +1,4 @@
-import { useMemo, useState } from "react";
-import { formatNaira, formatNumber } from "../utils/format";
+import { formatNaira,} from "../utils/format";
 
 export const customer ={
 

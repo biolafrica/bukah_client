@@ -17,7 +17,8 @@ export default function ListingCard({ title, items }) {
   }
 
   return (
-    <div className="text-pri-text p-[16px] border border-border-text rounded-md bg-white mb-5 min-w-[300px]">
+    <div className="text-pri-text p-[16px] border border-border-text rounded-md bg-white mb-5 min-w-[100px]">
+
       <h4 className="mb-5 text-sec-text text-sm">{title}</h4>
 
       <ol className="flex flex-col gap-5">
