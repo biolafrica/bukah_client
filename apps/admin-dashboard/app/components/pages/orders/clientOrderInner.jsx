@@ -15,6 +15,8 @@ import LoadingSpinner from "../../common/loadingSpinner";
 import { usePaginatedTable } from "../../../hooks/usePaginatedTable";
 import * as outline    from '@heroicons/react/24/outline'
 import { order } from "../../../data/order";
+import { useMetricTransformer } from "../../../hooks/useMetricsTransformer";
+import { useMetricResource } from "../../../hooks/useMetricResources";
 
 
 
@@ -72,16 +74,13 @@ export default function ClientOrderInner({
     filters: queryFilters,
   });
 
-  const { data: metricData } = useQuery({
-    queryKey: ['orders-metrics'],
-    queryFn: async () => {
-      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/orders/metrics`);
-      if (!res.ok) throw new Error("Failed to fetch order metrics");
-      return (await res.json()).data;
-    }
-  });
+  const { data: orderMetrics, isLoading:metricLoading } = useMetricResource({
+    resourceKey: 'orders-metrics',
+    endpoint: '/api/orders/metrics',
+  })
 
-  const { metrics, range, setRange } = order.useOrderMetrics(metricData);
+  const { metrics, range, setRange } = useMetricTransformer(orderMetrics, { formatStrategy: "number" });
+
 
   return (
     <div className="p-5 pt-30 lg:pl-75">

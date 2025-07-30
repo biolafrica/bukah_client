@@ -10,7 +10,7 @@ export function useEmployee(){
 
 export function useEmployeeSessions(userId){
   return useCrud({
-    resourceKey: "employee_sessions",
-    baseUrl: `/api/users/${userId}/sessions`
+    resourceKey: "users",
+    baseUrl: `/api/users/${userId}/sessions`,
   })
 }

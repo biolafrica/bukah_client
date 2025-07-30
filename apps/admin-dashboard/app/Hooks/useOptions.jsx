@@ -14,7 +14,7 @@ export function useOptions({ queryKey, url, mapItem, config = {} }) {
       const raw  = json.data?.data || []
       return raw.map(mapItem)
     },
-    // default: refetch every 5 minutes, keep cache for 10 minutes
+    
     staleTime: 5 * 60 * 1000,
     cacheTime: 10 * 60 * 1000,
     ...config,

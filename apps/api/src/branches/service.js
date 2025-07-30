@@ -46,7 +46,7 @@ export async function activateBranch(branchId){
 }
 
 
-export async function getBranchMetrics(branchId) {
+export async function getBranchMetrics({ branchId = null } = {}) {
   const todayStart = startOfDay(new Date());
 
   const buildWindow = (daysBack) => ({
@@ -61,7 +61,7 @@ export async function getBranchMetrics(branchId) {
   });
 
   const windows = {
-    today: buildWindows(0),
+    today: buildWindow(0),
     last7: buildWindow(7),
     last30: buildWindow(30)
   };
@@ -72,20 +72,24 @@ export async function getBranchMetrics(branchId) {
     'Customers':    {}
   };
 
+  // Helper to build filter object conditionally
+  const maybeFilter = (field, value) => (value != null ? { [field]: value } : {});
+
   for (const [key, { current, previous }] of Object.entries(windows)) {
- 
+    const txFilters = maybeFilter('branch_id', branchId);
+
     const totalCurrentTx = await repos.transaction.sumColumn({
-      table:     'transactions',
-      column:    'total_amount',
+      table: 'transactions',
+      column: 'total_amount',
       dateRange: current,
-      filters:   { branch_id: branchId }
+      filters: txFilters
     });
 
     const totalPreviousTx = await repos.transaction.sumColumn({
-      table:     'transactions',
-      column:    'total_amount',
+      table: 'transactions',
+      column: 'total_amount',
       dateRange: previous,
-      filters:   { branch_id: branchId }
+      filters: txFilters
     });
 
     result['Transactions'][key] = {
@@ -93,19 +97,20 @@ export async function getBranchMetrics(branchId) {
       previous: totalPreviousTx
     };
 
-  
+    const orderFilters = maybeFilter('branch_id', branchId);
+
     const totalCurrentOrders = await repos.order.countRows({
-      table:     'orders',
+      table: 'orders',
       dateField: 'placed_at',
       dateRange: current,
-      filters:   { branch_id: branchId }
+      filters: orderFilters
     });
 
     const totalPreviousOrders = await repos.order.countRows({
-      table:     'orders',
+      table: 'orders',
       dateField: 'placed_at',
       dateRange: previous,
-      filters:   { branch_id: branchId }
+      filters: orderFilters
     });
 
     result['Orders'][key] = {
@@ -113,19 +118,20 @@ export async function getBranchMetrics(branchId) {
       previous: totalPreviousOrders
     };
 
-    // Customers (count)
+    const customerFilters = maybeFilter('branch_id', branchId);
+
     const totalCurrentCustomers = await repos.customer.countRows({
-      table:     'customers',
+      table: 'customers',
       dateField: 'created_at',
       dateRange: current,
-      filters:   { branch_id: branchId }
+      filters: customerFilters
     });
 
     const totalPreviousCustomers = await repos.customer.countRows({
-      table:     'customers',
+      table: 'customers',
       dateField: 'created_at',
       dateRange: previous,
-      filters:   { branch_id: branchId }
+      filters: customerFilters
     });
 
     result['Customers'][key] = {
@@ -136,6 +142,7 @@ export async function getBranchMetrics(branchId) {
 
   return result;
 }
+
 
 export async function getBranchTotals(branchId) {
   try {

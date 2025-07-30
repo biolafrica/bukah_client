@@ -128,6 +128,7 @@ export default function Home() {
       <div className="flex gap-5">
 
         <div className="flex-1 lg:w-4/7">
+
           {/* Transaction Metrics components */}
           <MetricsContainer
             metrics={[
@@ -138,10 +139,14 @@ export default function Home() {
             ]}
           />
 
-          <div className="h-[419px] border border-border-text rounded-md mb-5 bg-white"></div>
+          {/* Sales Graph components */}
+          <div className="h-[419px] border border-border-text rounded-md mb-5 bg-white">
+
+          </div>
 
           {/* Table Component */}
           <DataTable columns={columns} data={data} onEdit={handleEdit} onDelete={handleDelete}/>
+          
         </div>
 
         <div className=" hidden lg:block lg:w-2/7 pt-5 ">

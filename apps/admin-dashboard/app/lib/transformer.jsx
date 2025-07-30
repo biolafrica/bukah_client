@@ -38,3 +38,15 @@ export function transformBranchList(raw){
 
 }
 
+export function transformSession(raw){
+  return{
+    id: raw.id,
+    date: format(new Date(raw.created_at),'dd-MM-yyyy'),
+    clockIn: format(new Date(raw.clock_in_time),'hh:mm a'),
+    clockOut: format(new Date(raw.clock_out_time),'hh:mm a'),
+    totalOrder:formatNumber(raw.total_orders), 
+    totalAmount: formatNumber(raw.total_earned),
+  }
+
+}
+

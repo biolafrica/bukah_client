@@ -17,6 +17,8 @@ import { customer } from '../../../data/customer'
 import * as outline     from '@heroicons/react/24/outline'
 import { formatNaira }  from '../../../utils/format'
 import LoadingSpinner from '../../common/loadingSpinner';
+import { useMetricTransformer } from '../../../hooks/useMetricsTransformer';
+import { useMetricResource } from '../../../hooks/useMetricResources';
 
 
 export default function ClientCustomerInner({
@@ -57,17 +59,15 @@ export default function ClientCustomerInner({
     }
   });
 
-  const { data: metricData } = useQuery({
-    queryKey: ['customers-metrics'],
-    queryFn: async () => {
-      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/customers/metrics`);
-      if (!res.ok) throw new Error('Failed to fetch metrics');
-      return (await res.json()).data;
-    }
-  });
+
+  const { data: customerMetrics, isLoading:metricLoading } = useMetricResource({
+    resourceKey: 'customers-metrics',
+    endpoint: '/api/customers/metrics',
+  })
+
 
   const filterConfig = customer.filterConfig();
-  const { metrics, range, setRange } = customer.useCustomerMetrics(metricData);
+  const { metrics, range, setRange } = useMetricTransformer(customerMetrics, { formatStrategy: "number" });
 
   const updateParams = (patch) => {
     const next = new URLSearchParams(params.toString());

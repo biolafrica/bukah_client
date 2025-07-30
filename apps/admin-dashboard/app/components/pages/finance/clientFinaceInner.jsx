@@ -1,7 +1,6 @@
 "use client"
 import { useState, useMemo } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation'
-import { useQuery } from '@tanstack/react-query';
 
 import HeadingIntro     from '../../common/headingIntro'
 import MetricsContainer from '../../common/metricsCont'
@@ -16,6 +15,8 @@ import { useBranchOptions } from '../../../hooks/useBranchOptions'
 
 import * as outline     from '@heroicons/react/24/outline'
 import { transaction } from '../../../data/transaction'
+import { useMetricTransformer } from '../../../hooks/useMetricsTransformer';
+import { useMetricResource } from '../../../hooks/useMetricResources';
 
 
 
@@ -52,20 +53,14 @@ export default function ClientFinanceInner({
     filters: queryFilters,
   });
 
-
-  const { data: metricData } = useQuery({
-    queryKey: ['transactions-metrics'],
-    queryFn: async () => {
-      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/transactions/metrics`);
-      if (!res.ok) throw new Error('Failed to fetch metrics');
-      const json = await res.json();
-      return json.data;
-    }
-  });
-
+  const { data: transactionMetrics, isLoading:metricLoading } = useMetricResource({
+    resourceKey: 'transactions-metrics',
+    endpoint: '/api/transactions/metrics',
+  })
 
   const filterConfig = transaction.filterConfig(branchOptions || []);
-  const { metrics, range, setRange } = transaction.useFinanceMetrics(metricData);
+  const { metrics, range, setRange } = useMetricTransformer(transactionMetrics, { formatStrategy: "naira" });
+
 
   const updateParams = (patch) => {
     const next = new URLSearchParams(params.toString());
