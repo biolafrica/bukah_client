@@ -1,5 +1,5 @@
 import { format } from "date-fns"
-import { formatNaira } from "../utils/format"
+import { formatNaira, formatNumber } from "../utils/format"
 
 export function transformTable(raw) {
   return {
@@ -50,3 +50,21 @@ export function transformSession(raw){
 
 }
 
+export function transformTopStaff(raw){
+  return{
+    id: raw.id,
+    name: raw.first_name,
+    role: raw.role,
+    countText: formatNaira(raw.total_sales || 0),
+  }
+}
+
+export function transformTopSellingProducts(raw) {
+  return raw.map((item) => ({
+    id: item.product_id,
+    name: item.product_name,
+    role: item.category_name,
+    countText: `${item.total_sold} order${item.total_sold === 1 ? '' : 's'}`,
+    avatarUrl: item.product_image ?? '/images/food.png',
+  }))
+}

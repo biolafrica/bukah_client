@@ -25,7 +25,6 @@ export async function getAllStaffWithBranches({
   return repos.user.findAll({filters,joins,search,range,orderBy})
 }
 
-
 export async function getStaffById(userId){
   const joins = { branch: 'branches(name, id)' }
 
@@ -149,4 +148,13 @@ export function fetchSupervisors(){
 
   return repos.user.findAll({filters,range,select})
 
+}
+
+export async function getTopSellingStaff({ 
+  range = [0,9],
+}={}){
+  const orderBy = {total_sales : "descending"}
+  let select = "id,first_name,last_name,role,total_sales"
+
+  return repos.user.findAll({range,orderBy, select})
 }

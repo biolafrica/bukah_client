@@ -1,33 +1,24 @@
 "use client"
 
 import { format } from "date-fns"
-import { useMetricResource } from "../../../hooks/useMetricResources"
-import { useMetricTransformer } from "../../../hooks/useMetricsTransformer"
+import Link from "next/link"
+import { useDashboard } from "../../../hooks/useDashboards"
 
-import { formatNaira, formatNumber } from "../../../utils/format"
 import DataTable from "../../common/dataTable"
 import ListingCard from "../../common/listCard"
 import MetricsContainer from "../../common/metricsCont"
 import Carousel from "../../uiComponents/carousel"
-import Link from "next/link"
-import { useOrders } from "../../../hooks/useOrder"
+import LoadingSpinner from "../../common/loadingSpinner"
+
+import { formatNaira} from "../../../utils/format"
+
 
 export default function ClientHomeInner(){
+  const {metrics, range, setRange, items, users, products, loading, error} = useDashboard();
 
-  const handleEdit =(row)=>{}
-  const handleDelete =(row)=>{}
-
-  const { data: generalMetrics, isLoading:metricLoading } = useMetricResource({
-    resourceKey: 'general-metrics',
-    endpoint: '/api/common/metrics',
-  })
-
-  const { metrics, range, setRange } = useMetricTransformer(generalMetrics, { formatStrategy: "suto" });
-
-  const { items, isLoading, isError, error } = useOrders()
-  if (isLoading) return <p>loading....</p>
-  if (isError)   return <p>Error: {error.message}</p>
-
+  if (loading) return <LoadingSpinner/>
+  if (error)   return <p>Error: {error.message}</p>
+ 
   const suggestions = [
     {
       id: 1,
@@ -83,18 +74,10 @@ export default function ClientHomeInner(){
     { id: 5, name: 'Jollof Rice', role: 'Main', countText: '100 orders', avatarUrl: '/images/food.png'},
   ];
 
-  const topStaff = [
-    { id: 1, name: 'Chinedu Daniel', role: 'Waiter', countText: formatNaira(120000) },
-    { id: 2, name: 'Ada Lovelace', role: 'Waiter', countText: formatNaira(100000) },
-    { id: 3, name: 'Ada Lovelace', role: 'Bartender', countText: formatNaira(80000) },
-    { id: 4, name: 'Ada Lovelace', role: 'Waiter', countText: formatNaira(70000) },
-    { id: 5, name: 'Ada Lovelace', role: 'Bartender', countText: formatNaira(20000) },
-  ];
-
   return(
     <div className="flex gap-5">
      
-      <div className="w-full xl:w-5/7">
+      <div className="w-full xl:w-5/8">
 
         {/* Transaction Metrics components */}
         <MetricsContainer
@@ -120,17 +103,17 @@ export default function ClientHomeInner(){
           <DataTable 
             columns={columns} 
             data={items} 
-            onEdit={handleEdit} 
-            onDelete={handleDelete}
+            onEdit={()=>console.log("edit")} 
+            onDelete={()=>console.log("delete")}
           />
         </div>
         
       </div>
 
-      <div className=" hidden lg:block xl:w-2/7 pt-5 pr-3 ">
+      <div className=" hidden lg:block xl:w-3/8 pt-5 pr-3 ">
         <Carousel items={suggestions} interval={7000}/>
-        <ListingCard title="Best Selling Food" items={topSelling}/>
-        <ListingCard title="Sales By Staff" items={topStaff}/>
+        <ListingCard title="Best Selling Food" items={products}/>
+        <ListingCard title="Sales By Staff" items={users}/>
       </div>
 
     </div>
