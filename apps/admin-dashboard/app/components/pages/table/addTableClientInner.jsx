@@ -1,15 +1,22 @@
 "use client"
 
 import { useState } from "react"
-import { tableField } from "../../../data/formFields"
-import { useBranchOptions } from "../../../hooks/useBranchOptions"
 import { useRouter } from "next/navigation";
-import { useTables } from "../../../hooks/useTables";
+
 import Alert from "../../common/alert";
 import Form from "../../common/form";
 import LoadingSpinner from "../../common/loadingSpinner";
 
+import { useTables } from "../../../hooks/useTables";
+import { useBranchOptions } from "../../../hooks/useBranchOptions"
+
+import { tableField } from "../../../data/formFields"
+
 export default function AddTableClientInner({data}){
+  const [submitting, setSubmitting] = useState(false)
+  const [errorMsg,   setErrorMsg]   = useState(null)
+  const [showSuccess, setShowSuccess] = useState(false)
+
   const router = useRouter()
 
   const { add, update} = useTables();
@@ -22,10 +29,6 @@ export default function AddTableClientInner({data}){
     serviceCharge: data?.service_charge?.toString()  || '',
     branchId: data?.branch_id || ""
   }
-
-  const [submitting, setSubmitting] = useState(false)
-  const [errorMsg,   setErrorMsg]   = useState(null)
-  const [showSuccess, setShowSuccess] = useState(false)
 
   const {data: branchOptions, isLoading, isError, error } = useBranchOptions()
 

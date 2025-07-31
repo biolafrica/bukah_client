@@ -40,10 +40,12 @@ export async function addStaff({ first_name, last_name, email, role, branch_id, 
   let authUser = null
   if (['supervisor','manager'].includes(role.toLowerCase())) {
     const { data, error } = await supabase.auth.admin.inviteUserByEmail(email, {
+      //redirectTo: `https://${tenantSlug}.bukah.co/auth/callback`,
       data: {
         first_name,
         last_name,
-        role
+        role,
+        //invited_by : user.sender_name ||'Your Company Name'
       }
     })
     if (error) throw new Error(`Auth signup failed: ${error.message}`)
