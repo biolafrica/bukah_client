@@ -66,14 +66,6 @@ export default function ClientHomeInner(){
     },
   ];
 
-  const topSelling = [
-    { id: 1, name: 'Jollof Rice', role: 'Main', countText: '100 orders', avatarUrl: '/images/food.png'},
-    { id: 2, name: 'Jollof Rice', role: 'Main', countText: '100 orders', avatarUrl: '/images/food.png'},
-    { id: 3, name: 'Jollof Rice', role: 'Main', countText: '100 orders', avatarUrl: '/images/food.png'},
-    { id: 4, name: 'Jollof Rice', role: 'Main', countText: '100 orders', avatarUrl: '/images/food.png'},
-    { id: 5, name: 'Jollof Rice', role: 'Main', countText: '100 orders', avatarUrl: '/images/food.png'},
-  ];
-
   return(
     <div className="flex gap-5">
      

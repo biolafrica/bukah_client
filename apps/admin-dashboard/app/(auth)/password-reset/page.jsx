@@ -85,7 +85,7 @@ export default function PasswordReset(){
 
       <div
         className="relative h-screen w-full bg-cover bg-center text-white p-10"
-        style={{ backgroundImage: "url('/images/background.png')" }}
+        style={{ backgroundImage: "url('/admin/images/background.png')" }}
       >
 
         <div className="flex items-center justify-center gap-3 mb-15">

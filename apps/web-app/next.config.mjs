@@ -1,12 +1,9 @@
-// apps/web/next.config.mjs
 import common from '../../next.config.mjs'
 
-export default {
+/** @type {import('next').NextConfig} */
+const config = {
   ...common,
-  supabase: {
-    cookieOptions: {
-      ...common.supabase.cookieOptions,
-      name: 'sb-web-session'
-    }
-  }
+  basePath: '',
 }
+
+export default config

@@ -65,6 +65,6 @@ export function transformTopSellingProducts(raw) {
     name: item.product_name,
     role: item.category_name,
     countText: `${item.total_sold} order${item.total_sold === 1 ? '' : 's'}`,
-    avatarUrl: item.product_image ?? '/images/food.png',
+    avatarUrl: item.product_image ?? '/admin/images/food.png',
   }))
 }

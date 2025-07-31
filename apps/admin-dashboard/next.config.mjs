@@ -1,12 +1,10 @@
-// apps/admin/next.config.mjs
 import common from '../../next.config.mjs'
 
-export default {
+/** @type {import('next').NextConfig} */
+const config = {
   ...common,
-  supabase: {
-    cookieOptions: {
-      ...common.supabase.cookieOptions,
-      name: 'sb-admin-session',       // app-specific override
-    }
-  }
+  basePath: '/admin',
 }
+
+export default config
+

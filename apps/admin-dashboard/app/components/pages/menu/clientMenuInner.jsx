@@ -64,7 +64,7 @@ export default function ClientMenuInner({
 
   const { branchOptions, categoryOptions, loading, error } = useMenuOptions();
 
-  if (loading) return <LoadingSpinner/>;
+  //if (loading) return <LoadingSpinner/>;
   if (error) return <p>Error: {error.message}</p>;
   const config = menu.config(branchOptions, categoryOptions);
 
