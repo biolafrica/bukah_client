@@ -28,7 +28,7 @@ export async function updateSession(request) {
     ? process.env.LOCAL_DEFAULT_TENANT || 'kanko'
     : host.split('.')[0];
 
-  const publicRoutes = ['/login', '/reset-password', '/auth'];
+  const publicRoutes = ['/login', '/password-reset','/email-reset', '/auth/callback'];
   const isPublicRoute = publicRoutes.some(route =>
     request.nextUrl.pathname.startsWith(route)
   );
@@ -37,16 +37,20 @@ export async function updateSession(request) {
     data: { user },
   } = await supabase.auth.getUser();
 
-  // Redirect unauthenticated admin users
+  console.log('Middleware User:' , user);
+  console.log('Is Public Route:', isPublicRoute);
+  console.log('Current Path:', request.nextUrl.pathname)
+
+ 
   if (!user && !isPublicRoute) {
     const url = request.nextUrl.clone();
     url.pathname = '/login';
     return NextResponse.redirect(url);
   }
 
-  // Authenticated user checks
+
   if (user) {
-    const userTenantSlug = user.user_metadata?.tenant_slug;
+    const userTenantSlug = user.app_metadata?.tenantSlug;
     const userRole = user.user_metadata?.role;
 
     if ((!userTenantSlug || userTenantSlug !== subdomain || !ADMIN_ROLES.includes(userRole))
