@@ -14,7 +14,6 @@ export default function AuthCallback() {
 
     async function init() {
       try {
-        // Exchanging code for session
         const { error, data } = await supabase.auth.exchangeCodeForSession()
         console.log("session data", data)
 

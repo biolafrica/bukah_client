@@ -1,5 +1,4 @@
-import { createClient } from "@supabase/supabase-js"
-
+import { createClient } from "../../../../packages/utils/supabase/client.mjs"
 
 export async function uploadFileAndGetUrl(
   file,
@@ -9,17 +8,16 @@ export async function uploadFileAndGetUrl(
   metadata = {}
 ) {
 
-  const supabase = createClient( 
-    process.env.NEXT_PUBLIC_SUPABASE_URL,  
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY,
-  )
+  const supabase = createClient()
 
   if (file.size > maxSize) {
+    console.log("file too large")
     throw new Error(`File must be under ${Math.round(maxSize/1024/1024)} MB`)
   }
 
   const ext = file.name.split('.').pop()
   const filename = `${pathPrefix}_${Date.now()}.${ext}`
+  console.log("file name", filename)
 
   const { error: upErr } = await supabase
     .storage
@@ -31,6 +29,7 @@ export async function uploadFileAndGetUrl(
     })
 
   if (upErr) {
+    console.log("upload error", upErr.message)
     throw new Error(`Upload failed: ${upErr.message}`)
   }
 
@@ -40,6 +39,7 @@ export async function uploadFileAndGetUrl(
     .getPublicUrl(filename)
 
   if (urlErr) {
+    console.log("url error", urlErr.message)
     throw new Error(`Cannot retrieve public URL: ${urlErr.message}`)
   }
 

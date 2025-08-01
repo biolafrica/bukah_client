@@ -1,15 +1,18 @@
 "use client"
 
-import { CircleStackIcon } from "@heroicons/react/24/solid";
-import Form from "../../components/common/form";
-import { signInFields } from "../../data/formFields";
-import Link from "next/link";
 import { useState } from "react";
-import Alert from "../../components/common/alert";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { createClient } from "../../utils/supabase/client";
 
+import Form from "../../components/common/form";
+import { signInFields } from "../../data/formFields";
+import Alert from "../../components/common/alert";
+
+import { CircleStackIcon } from "@heroicons/react/24/solid";
+
 export default function Login(){
+  
   const [submitting, setSubmitting] = useState(false)
   const [errorMsg,   setErrorMsg]   = useState(null)
   const [showSuccess, setShowSuccess] = useState(false)
@@ -24,6 +27,11 @@ export default function Login(){
 
   const validateSignInInfo=(values)=>{
     const errors = {}
+    const password = (values.password ?? '').trim()
+
+    if (password.length >= 6 ) {
+      errors.password = 'password must be at least 6 digits.'
+    }
 
     if (!values.email.match(/^[^@]+@[^@]+\.[^@]+$/))
       errors.email = 'Invalid email address'

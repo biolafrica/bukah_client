@@ -1,11 +1,21 @@
+'use client'
+
+import React, { useState } from 'react'
+import { useRouter } from 'next/navigation'
+
 import Form from '../../common/form'
 import { ImageUploadField } from '../../common/imageUploadField'
 import CloseButton from '../../common/closeButton'
-import { order } from '../../../data/order'
-import { uploadFileAndGetUrl } from '../../../utils/imageStorage'
-import { useMenuOptions } from '../../../hooks/useMenuOption'
 
-import React, { useState } from 'react'
+import { uploadFileAndGetUrl } from '../../../utils/imageStorage'
+import { menu } from '../../../data/menu'
+
+
+import { useMenuOptions } from '../../../hooks/useMenuOption'
+import Alert from '../../common/alert'
+
+
+
 
 export default function AddItems({onClose}){
 
@@ -14,12 +24,13 @@ export default function AddItems({onClose}){
   const [errorMsg, setErrorMsg] = useState(null)
   const [showSuccess, setShowSuccess] = useState(false)
 
+  const router = useRouter()
+
   const { branchOptions, categoryOptions, loading, error } = useMenuOptions()
 
-  if (loading) return <p>Loading options…</p>
   if (error)  return <p>Error: {error.message}</p>
 
-  const addSingleItemFormFields = order.itemFormFields(categoryOptions,branchOptions)
+  const addSingleItemFormFields = menu.itemFormFields(categoryOptions, branchOptions)
 
   const initialData = { 
     itemName: "",
@@ -42,34 +53,49 @@ export default function AddItems({onClose}){
     setErrorMsg(null)
 
     try {
-      
-      const {publicUrl} = uploadFileAndGetUrl(
-        imageFile,
-        'products',
-        'item',
-        2 * 1024 * 1024,
-        { restaurantId: process.env.NEXT_PUBLIC_RESTAURANT_ID }
-      )
+      let publicUrl
 
-      const payload = {
-        name:         values.itemName,
-        description:  values.description,
-        price:        Number(values.price),
-        category_id:  values.category,
-        branch_id:    values.branch,
-        preparation_time: Number(values.cookingTime || 0),
-        ingredient:   values.ingredient,
-        image_url:    publicUrl
+      try {
+        const uploadResult = await uploadFileAndGetUrl(
+          imageFile,
+          'products',
+          'item',
+          2 * 1024 * 1024,
+          { restaurantId: process.env.NEXT_PUBLIC_RESTAURANT_ID }
+        )
+        publicUrl = uploadResult.publicUrl
+      } catch (uploadErr) {
+        setErrorMsg("Image upload failed: " + uploadErr.message)
+        return
       }
 
-      const res  = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/products`,
-        {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(payload)
-        }
-      )
+      if (!publicUrl) {
+        setErrorMsg("Image upload failed: no public URL returned")
+        return
+      }
+
+      console.log("Uploaded image:", publicUrl)
+
+      const payload = {
+        name: values.itemName,
+        description: values.description,
+        price: Number(values.price),
+        category_id: values.category,
+        branch_id: values.branch,
+        preparation_time: Number(values.cookingTime || 0),
+        ingredient: values.ingredient,
+        image_url: publicUrl,
+        is_combo: false,
+        is_active: true,
+        available: true,
+        restaurant_id: process.env.NEXT_PUBLIC_RESTAURANT_ID
+      }
+
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/products`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      })
 
       const json = await res.json()
       if (!res.ok) throw new Error(json.error || 'Unknown error')
@@ -78,10 +104,11 @@ export default function AddItems({onClose}){
       setTimeout(() => {
         setShowSuccess(false)
         onClose()
-        router.refresh()
+        router.push("/menu")
       }, 2000)
 
     } catch (err) {
+      console.error("Final form error:", err)
       setErrorMsg(err.message)
     } finally {
       setSubmitting(false)
@@ -103,7 +130,7 @@ export default function AddItems({onClose}){
         <Alert
           type="success"
           heading="Item added!"
-          subheading="Closing form…"
+          subheading="Item added successfully"
           duration={2000}
           onClose={() => setShowSuccess(false)}
         />
