@@ -7,7 +7,7 @@ export const createProductSchema = z.object({
   name : z.string().min(1, "Product name is required"),
   price : z.number().positive("Product price must be > 0"),
   is_combo : z.boolean(),
-  preparation_time : z.number().positive("Preparation time must be > 0"),
+  preparation_time : z.number().positive("Preparation time must be > 0").optional(),
   category_id : z.string().uuid("Invalid Restaurant ID"),
   available: z.boolean(),
   is_active : z.boolean(),

@@ -15,8 +15,6 @@ import { useMenuOptions } from '../../../hooks/useMenuOption'
 import Alert from '../../common/alert'
 
 
-
-
 export default function AddItems({onClose}){
 
   const [imageFile, setImageFile] = useState(null)

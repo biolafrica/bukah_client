@@ -8,6 +8,7 @@ import SegmentedToolbars from '../../common/segment'
 import EmptyState from '../../common/emptyState'
 import AddItems from './addItems'
 import AddComboItems from './addComboItems'
+import AddCategory from './addCategory'
 import LoadingSpinner from '../../common/loadingSpinner'
 
 import { usePaginatedTable } from '../../../hooks/usePaginatedTable'
@@ -15,6 +16,7 @@ import { useMenuOptions } from '../../../hooks/useMenuOption'
 
 import * as outline from '@heroicons/react/24/outline'
 import { menu }  from '../../../data/menu'
+
 
 
 export default function ClientMenuInner({
@@ -31,6 +33,7 @@ export default function ClientMenuInner({
   const [sideScreenOpen, setSideScreenOpen] = useState(false);
   const [itemSideScreenOpen, setItemSideScreenOpen] = useState(false);
   const [comboSideScreenOpen, setComboSideScreenOpen] = useState(false);
+  const [categorySideScreenOpen, setCategorySideScreenOpen] = useState(false);
 
   const endpoint = segment === 'items' ? '/api/products' : '/api/product-categories';
 
@@ -72,25 +75,34 @@ export default function ClientMenuInner({
     setSideScreenOpen(false);
     setItemSideScreenOpen(false);
     setComboSideScreenOpen(false);
+    setCategorySideScreenOpen(false)
   };
 
   const handleSingleScreen = () => {
     setSideScreenOpen(true);
     setItemSideScreenOpen(true);
     setComboSideScreenOpen(false);
+    setCategorySideScreenOpen(false)
   };
 
   const handleComboScreen = () => {
     setSideScreenOpen(true);
     setComboSideScreenOpen(true);
     setItemSideScreenOpen(false);
+    setCategorySideScreenOpen(false)
+  };
+
+  const handleCategoryScreen = () => {
+    setSideScreenOpen(true);
+    setComboSideScreenOpen(false);
+    setItemSideScreenOpen(false);
+    setCategorySideScreenOpen(true)
   };
 
   const handleEdit = (row) => {
     if (row.is_combo) handleComboScreen();
     else handleSingleScreen();
   };
-
 
 
   return (
@@ -101,19 +113,21 @@ export default function ClientMenuInner({
           <div className="relative z-65">
             {itemSideScreenOpen && <AddItems onClose={closeAll} />}
             {comboSideScreenOpen && <AddComboItems onClose={closeAll} />}
+            {categorySideScreenOpen && <AddCategory onClose={closeAll} />}
           </div>
         </div>
       )}
 
       <HeadingIntro
-        module="Items"
-        moduleIntro="Create, update, organize menu items"
+        module={segment === "items" ? "Items" : "Categories"}
+        moduleIntro={segment === "items" ? "Create, update, organize menu items" : "Group and manage your items under intuitive categories for better organization"}
         Icon={outline.PlusIcon}
-        buttonText="Add Item"
-        finalOptions={[
+        buttonText={segment === "items" ? "Add Item" : "Add category"}
+        finalOptions={segment === "items" && ([
           { label: 'single item', onClick: handleSingleScreen },
           { label: 'combo meal', onClick: handleComboScreen },
-        ]}
+        ])}
+        onButtonClick={segment !== "items" && handleCategoryScreen}
       />
 
       <SegmentedToolbars

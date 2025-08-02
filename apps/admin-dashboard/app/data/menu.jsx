@@ -65,4 +65,9 @@ export const menu = {
 
   },
 
+  categoryFormFields :[
+    { name: 'name', label: 'Name', placeholder:"Enter category name", type: 'text', required: true },
+    { name: 'description', label: 'Description', placeholder:"Describe the category", type: 'textarea', required: true, rows:3 },
+  ]
+
 }
