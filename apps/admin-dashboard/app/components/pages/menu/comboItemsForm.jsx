@@ -24,7 +24,6 @@ export default function ComboItemForm({
 
 
   const { branchOptions, categoryOptions, singleItemOptions, loading, error } = useMenuOptions()
-  if (loading) return <p>Loading options…</p>
   if (error)  return <p>Error: {error.message}</p>
 
   // Helpers for components
@@ -82,10 +81,14 @@ export default function ComboItemForm({
   function handleSubmit(e) {
     e.preventDefault()
     const payload = {
-      image: imageFile,
-      name, description,
-      basePrice, branch, category,
-      cookingTime, ingredient,
+      image_url: imageFile,
+      name,
+      description,
+      price: basePrice,
+      branch_id : branch, 
+      category_id : category,
+      preparation_time:cookingTime, 
+      ingredient,
       components
     }
     onSubmit(payload)
@@ -262,7 +265,7 @@ export default function ComboItemForm({
         </div>
       ) : (
         components.map(comp => (
-          <div key={comp.id} className="p-4 border border-border-text bg-sec-text rounded-lg mb-4 flex justify-between items-center">
+          <div key={comp.id} className="p-4 border border-border-text bg-laybg-text rounded-lg mb-4 flex justify-between items-center">
 
             <div>
               <div className="flex items-center gap-2">

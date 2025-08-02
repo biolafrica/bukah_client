@@ -1,4 +1,3 @@
-import { useBranchOptions } from "../hooks/useBranchOptions"
 import { formatNaira } from "../utils/format"
 
 export const menu = {
