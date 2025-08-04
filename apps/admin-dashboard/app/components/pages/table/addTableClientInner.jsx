@@ -18,7 +18,6 @@ export default function AddTableClientInner({data}){
   const [showSuccess, setShowSuccess] = useState(false)
 
   const router = useRouter()
-
   const { add, update} = useTables();
 
   const isEdit = Boolean(data)

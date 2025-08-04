@@ -23,7 +23,7 @@ export const menu = {
     { key: 'categories', label: 'Categories' },
   ],
 
-  config(branchOptions,categoryOptions){
+  config(branchOptions, categoryOptions){
     return [
       { key:'branch',   label:'Branch',   type:'select', options: branchOptions },
       { key:'category', label:'Category', type:'select', options: categoryOptions },
@@ -32,9 +32,12 @@ export const menu = {
 
   itemFormFields(categoryOptions, branchOptions){
      return[
-      { name: 'itemName', label: 'Item Name', placeholder:"Enter item name", type: 'text', required: true },
+      { name: 'name', label: 'Name', placeholder:"Enter item name", type: 'text', required: true },
+
       { name: 'description', label: 'Description', placeholder:"Describe the item", type: 'textarea', required: true, rows:3 },
+
       { name: 'price', label: 'Price(&#8358;)', placeholder:"0.00", type: 'number', required: true,},
+      
       { name: 'category', label: 'Category', type: 'select',
         options: [
           { value: '', label: 'Choose category' },
@@ -59,7 +62,8 @@ export const menu = {
       required: true  
       },
 
-      { name: 'cookingTime', label: 'Cooking Time(minutes)', placeholder:"How long does it take to prepare?", type: 'text', required: false},
+      { name: 'preparation_time', label: 'Preparation Time(minutes)', placeholder:"How long does it take to prepare?", type: 'text', required: false},
+
       { name: 'ingredient', label: '  Ingredient', placeholder:"What are the ingredient used?", type: 'text', required: false},
     ];
 

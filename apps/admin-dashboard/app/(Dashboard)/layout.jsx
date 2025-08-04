@@ -15,8 +15,8 @@ export default function DashboardLayout({children}){
     <div className="flex flex-col">
       <Header onMenuClick={() => setSidebarOpen(prev => !prev)}/>
       
-     
       <div className="flex ">
+        
         <aside className="hidden lg:block">
           <Sider/> 
         </aside>

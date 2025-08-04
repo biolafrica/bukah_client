@@ -34,6 +34,7 @@ export default function ClientMenuInner({
   const [itemSideScreenOpen, setItemSideScreenOpen] = useState(false);
   const [comboSideScreenOpen, setComboSideScreenOpen] = useState(false);
   const [categorySideScreenOpen, setCategorySideScreenOpen] = useState(false);
+  const [item, setItem]= useState(null)
 
   const endpoint = segment === 'items' ? '/api/products' : '/api/product-categories';
 
@@ -69,6 +70,8 @@ export default function ClientMenuInner({
 
   //if (loading) return <LoadingSpinner/>;
   if (error) return <p>Error: {error.message}</p>;
+  console.log("category options ,", categoryOptions)
+  
   const config = menu.config(branchOptions, categoryOptions);
 
   const closeAll = () => {
@@ -100,6 +103,7 @@ export default function ClientMenuInner({
   };
 
   const handleEdit = (row) => {
+    setItem(row)
     if (row.is_combo) handleComboScreen();
     else handleSingleScreen();
   };
@@ -111,7 +115,7 @@ export default function ClientMenuInner({
         <div className="fixed inset-0 z-60 flex">
           <div className="absolute inset-0 bg-black opacity-50" onClick={closeAll} />
           <div className="relative z-65">
-            {itemSideScreenOpen && <AddItems onClose={closeAll} />}
+            {itemSideScreenOpen && <AddItems onClose={closeAll} data={item} />}
             {comboSideScreenOpen && <AddComboItems onClose={closeAll} />}
             {categorySideScreenOpen && <AddCategory onClose={closeAll} />}
           </div>
