@@ -100,7 +100,7 @@ export default function ClientAddItemInner({data}){
       {errorMsg && (
         <Alert
           type="error"
-          heading="Could not add item"
+          heading={`Could not ${isEdit ? "update!": "add"} item`}
           subheading={errorMsg}
           duration={5000}
           onClose={() => setErrorMsg(null)}
@@ -110,8 +110,8 @@ export default function ClientAddItemInner({data}){
       {showSuccess && (
         <Alert
           type="success"
-          heading="Item added!"
-          subheading="Item added successfully"
+          heading={`Item ${isEdit ? "updated!": "added!"}`}
+          subheading={`Item ${isEdit ? "updated!": "added!"} successfully`}
           duration={2000}
           onClose={() => setShowSuccess(false)}
         />

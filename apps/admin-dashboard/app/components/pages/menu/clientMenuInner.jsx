@@ -108,6 +108,11 @@ export default function ClientMenuInner({
     else handleSingleScreen();
   };
 
+  const handleCategoryEdit = (row)=>{
+    setItem(row)
+    handleCategoryScreen()
+  }
+
 
   return (
     <div className="p-5 pt-30 lg:pl-75">
@@ -117,7 +122,7 @@ export default function ClientMenuInner({
           <div className="relative z-65">
             {itemSideScreenOpen && <AddItems onClose={closeAll} data={item} />}
             {comboSideScreenOpen && <AddComboItems onClose={closeAll} />}
-            {categorySideScreenOpen && <AddCategory onClose={closeAll} />}
+            {categorySideScreenOpen && <AddCategory onClose={closeAll} data={item} />}
           </div>
         </div>
       )}
@@ -179,7 +184,7 @@ export default function ClientMenuInner({
         <DataTable
           columns={segment === 'items' ? menu.itemsColumn : menu.categoriesColumns}
           data={data.data}
-          onEdit={handleEdit}
+          onEdit={segment === 'items' ? handleEdit : handleCategoryEdit}
           onDelete={() => console.log('delete')}
           moreIcon={false}
           currentPage={currentPage}
