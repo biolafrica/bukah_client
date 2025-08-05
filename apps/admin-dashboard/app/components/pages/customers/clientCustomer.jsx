@@ -49,7 +49,7 @@ export default function ClientCustomerInner({
     filters: queryFilters,
   });
 
-  const { data: topData } = useQuery({
+  const { data: topData, isLoading:listLoading } = useQuery({
     queryKey: ['customers-tops'],
     queryFn: async () => {
       const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/customers/tops`);
@@ -57,7 +57,6 @@ export default function ClientCustomerInner({
       return (await res.json()).data;
     }
   });
-
 
   const { data: customerMetrics, isLoading:metricLoading } = useMetricResource({
     resourceKey: 'customers-metrics',
@@ -185,7 +184,9 @@ export default function ClientCustomerInner({
                   role: c.is_registered ? 'Registered' : 'Guest',
                   countText: `${c.total_orders} orders`,
                 }))}
+                loading = {listLoading}
               />
+
               <ListingCard
                 title="Top Customers - Highest Spenders"
                 items={topData.top_spenders.data.map((c) => ({
@@ -194,6 +195,7 @@ export default function ClientCustomerInner({
                   role: c.is_registered ? 'Registered' : 'Guest',
                   countText: formatNaira(c.total_spent),
                 }))}
+                loading ={listLoading}
               />
             </>
           )}

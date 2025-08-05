@@ -8,15 +8,12 @@ import DataTable from "../../common/dataTable"
 import ListingCard from "../../common/listCard"
 import MetricsContainer from "../../common/metricsCont"
 import Carousel from "../../uiComponents/carousel"
-import LoadingSpinner from "../../common/loadingSpinner"
-
 import { formatNaira} from "../../../utils/format"
 
 
 export default function ClientHomeInner(){
   const {metrics, range, setRange, items, users, products, loading, error} = useDashboard();
 
-  if (loading) return <LoadingSpinner/>
   if (error)   return <p>Error: {error.message}</p>
  
   const suggestions = [
@@ -106,8 +103,8 @@ export default function ClientHomeInner(){
 
       <div className=" hidden lg:block xl:w-3/8 pt-5 pr-3 ">
         <Carousel items={suggestions} interval={7000}/>
-        <ListingCard title="Best Selling Food" items={products}/>
-        <ListingCard title="Sales By Staff" items={users}/>
+        <ListingCard title="Best Selling Food" items={products} loading={loading}/>
+        <ListingCard title="Sales By Staff" items={users} loading={loading}/>
       </div>
 
     </div>
