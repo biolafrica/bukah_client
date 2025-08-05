@@ -10,7 +10,6 @@ export default function Alert({
 }) {
   const [visible, setVisible] = useState(true)
 
-  // auto-dismiss
   useEffect(() => {
     if (duration > 0) {
       const timer = setTimeout(() => handleClose(), duration)
@@ -47,16 +46,14 @@ export default function Alert({
 
   return (
     <div className={`${bg} fixed top-4 left-4 z-70 shadow rounded-[12px] p-4 flex items-start gap-3 text-white`}>      
-      {/* Type icon */}
+    
       <TypeIcon className="w-6 h-6" style={{ color: iconColor }} />
 
-      {/* Text */}
       <div className="flex-grow">
         <h4 className="font-medium">{heading}</h4>
         {subheading && <p className="text-sm mt-1">{subheading}</p>}
       </div>
 
-      {/* Close */}
       <button
         onClick={handleClose}
         aria-label="Close alert"
