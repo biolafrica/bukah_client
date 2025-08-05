@@ -116,6 +116,7 @@ export default function ClientOrderInner({
         range={range}
         onRangeChange={setRange}
         ranges={['today', 'last7', 'last30']}
+        loading={metricLoading}
       />
 
       <SegmentedToolbars
@@ -147,7 +148,7 @@ export default function ClientOrderInner({
         searchPlaceholder="Search order ID"
       />
 
-      {!data?.data?.length ? (
+      {!data?.data?.length === 0 ? (
         <EmptyState
           icon={outline.InboxIcon}
           title={isQuerying ? 'No results found' : 'No order yet'}
@@ -160,13 +161,13 @@ export default function ClientOrderInner({
       ) : (
         <DataTable
           columns={order.columns}
-          data={data.data}
+          data={data?.data || []}
           edit={false}
           onDelete={() => console.log("delete")}
           onMore={handleMore}
           currentPage={currentPage}
           pageSize={pageSize}
-          totalCount={data.count}
+          totalCount={data?.count || []}
           onPageChange={(newPage) => updateParams({ page: newPage })}
           loading={isLoading}
         />

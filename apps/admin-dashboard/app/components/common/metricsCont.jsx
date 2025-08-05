@@ -25,6 +25,7 @@ export default function MetricsContainer({
   range = 'Today',
   onRangeChange = () => {},
   ranges = ['Today', 'Last 7 Days', 'Last 30 Days'],
+  loading = false
 }) {
   const [open, setOpen] = useState(false)
   const ref = useRef(null)
@@ -39,6 +40,16 @@ export default function MetricsContainer({
     document.addEventListener('mousedown', handleOutside)
     return () => document.removeEventListener('mousedown', handleOutside)
   }, [])
+
+  if(loading){
+    return (
+      <div className="flex flex-col gap-3 min-w-[200px] animate-pulse border border-border-text rounded-md">
+        <div className="h-4 bg-gray-200 rounded w-1/2"></div>
+        <div className="h-6 bg-gray-300 rounded w-3/4"></div>
+        <div className="h-4 bg-gray-200 rounded w-2/3"></div>
+      </div>
+    )
+  }
 
   return (
     <div className="bg-white border border-border-text rounded-md p-3 my-5 flex items-center gap-5">

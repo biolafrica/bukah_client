@@ -181,13 +181,13 @@ export default function ClientMenuInner({
       ) : (
         <DataTable
           columns={segment === 'items' ? menu.itemsColumn : menu.categoriesColumns}
-          data={data.data}
+          data={data?.data || []}
           onEdit={segment === 'items' ? handleEdit : handleCategoryEdit}
           onDelete={() => console.log('delete')}
           moreIcon={false}
           currentPage={currentPage}
           pageSize={pageSize}
-          totalCount={data.count}
+          totalCount={data?.count || 0}
           onPageChange={(newPage) => updateParams({ page: newPage })}
           loading={isLoading}
         />

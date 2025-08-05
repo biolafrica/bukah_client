@@ -112,6 +112,7 @@ export default function ClientCustomerInner({
         range={range}
         onRangeChange={setRange}
         ranges={['today', 'last7', 'last30']}
+        loading={metricLoading}
       />
 
       <div className="flex gap-5">
@@ -146,7 +147,7 @@ export default function ClientCustomerInner({
             searchPlaceholder="Search customers"
           />
 
-          {!data?.data?.length ? (
+          {!data?.data?.length === 0 ? (
             <EmptyState
               icon={outline.UserGroupIcon}
               title={hasQuery ? 'No results found' : 'No customers yet'}
@@ -159,13 +160,13 @@ export default function ClientCustomerInner({
           ) : (
             <DataTable
               columns={customer.columns}
-              data={data.data}
+              data={data?.data || []}
               edit={false}
               onDelete={() => console.log('delete')}
               onMore={handleMore}
               currentPage={currentPage}
               pageSize={pageSize}
-              totalCount={data.count}
+              totalCount={data?.count || 0}
               onPageChange={(p) => updateParams({ page: p })}
               loading={isLoading}
             />

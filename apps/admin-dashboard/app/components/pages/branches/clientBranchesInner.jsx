@@ -96,7 +96,7 @@ export default function ClientBranchesInner({ currentPage, pageSize }) {
           onButtonClick={handleAddScreen}
         />
 
-        {!data?.data?.length ? (
+        {!data?.data?.length === 0 ? (
           <EmptyState
             icon={outline.BuildingStorefrontIcon}
             title={hasQuery ? 'No branches found' : 'No branches'}
@@ -105,13 +105,13 @@ export default function ClientBranchesInner({ currentPage, pageSize }) {
         ) : (
           <DataTable
             columns={branch.columns}
-            data={data.data}
+            data={data?.data || []}
             onEdit={handleEditScreen}
             onDelete={() => console.log('delete')}
             onMore={handleMoreScreen}
             currentPage={currentPage}
             pageSize={pageSize}
-            totalCount={data.count}
+            totalCount={data?.count || []}
             onPageChange={(p) => updateParams({ page: p })}
             loading={isLoading}
           />

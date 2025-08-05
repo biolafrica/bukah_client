@@ -35,7 +35,6 @@ export default function BillingClientInner(){
   ];
 
   const { items, isLoading, isError, error, } = useBilling()
-
   if (isError)  return <p>Error: {error.message}</p>
 
   return(

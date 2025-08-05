@@ -107,6 +107,7 @@ export default function ClientFinanceInner({
         range={range}
         onRangeChange={setRange}
         ranges={['today', 'last7', 'last30']}
+        loading ={metricLoading}
       />
 
       <SegmentedToolbars
@@ -137,7 +138,7 @@ export default function ClientFinanceInner({
         searchPlaceholder="Search Reference ID"
       />
 
-      {!data?.data?.length ? (
+      {!data?.data?.length === 0 ? (
         <EmptyState
           icon={outline.WalletIcon}
           title={isQuerying ? 'No results found' : 'No transactions'}
@@ -148,7 +149,7 @@ export default function ClientFinanceInner({
       ) : (
         <DataTable
           columns={transaction.colums}
-          data={data.data}
+          data={data?.data || []}
           deleteIcon={false}
           edit={false}
           exportIcon
@@ -156,7 +157,7 @@ export default function ClientFinanceInner({
           onMore={handleMoreScreen}
           currentPage={currentPage}
           pageSize={pageSize}
-          totalCount={data.count}
+          totalCount={data?.count || 0}
           onPageChange={(p) => updateParams({ page: p })}
           loading ={tableLoading}
         />

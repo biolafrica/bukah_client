@@ -77,6 +77,7 @@ export default function ClientHomeInner(){
           range={range}
           onRangeChange={setRange}
           ranges={['today', 'last7', 'last30']}
+          loading ={loading}
         />
 
         {/* Sales Graph components */}
