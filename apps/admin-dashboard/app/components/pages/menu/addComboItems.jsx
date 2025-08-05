@@ -7,35 +7,44 @@ import Alert from "../../common/alert";
 import CloseButton from "../../common/closeButton";
 import ComboItemForm from "./comboItemsForm";
 import { uploadFileAndGetUrl } from "../../../utils/imageStorage";
+import { useComboMenu, useFetchCombo } from "../../../hooks/useMenu";
+import TableLoading from "../../common/tableLoading";
 
 
-export default function AddComboItems({onClose}){
+export default function AddComboItems({onClose, id}){
   const [errorMsg, setErrorMsg] = useState(null)
   const [showSuccess, setShowSuccess] = useState(false)
 
   const router = useRouter()
+  const { add, update} = useComboMenu();
+
+  const {error, data, isLoading} = useFetchCombo(id);
+  if (error) return <p>Error: {error.message}</p>;
 
   const handleSubmit = async(values)=>{
     setErrorMsg(null)
 
     try {
-      let publicUrl
+      let publicUrl = values.image_url;
 
-      try {
-        const uploadResult = await uploadFileAndGetUrl(
-          values.image_url,
-          'products',
-          'combo_item',
-          2 * 1024 * 1024,
-          { restaurantId: process.env.NEXT_PUBLIC_RESTAURANT_ID }
-        );
-        publicUrl = uploadResult.publicUrl
-        
-      } catch (uploadErr) {
-        console.log("upload error",uploadErr)
-        setErrorMsg("Image upload failed: " + uploadErr.message)
-        return
+      if (values.image_url instanceof File) {
+        try {
+          const uploadResult = await uploadFileAndGetUrl(
+            values.image_url,
+            'products',
+            'combo_item',
+            2 * 1024 * 1024,
+            { restaurantId: process.env.NEXT_PUBLIC_RESTAURANT_ID }
+          );
+          publicUrl = uploadResult.publicUrl
+          
+        } catch (uploadErr) {
+          console.log("upload error",uploadErr)
+          setErrorMsg("Image upload failed: " + uploadErr.message)
+          return
+        }
       }
+
       if (!publicUrl) {
 
         setErrorMsg("Image upload failed: no public URL returned")
@@ -47,16 +56,12 @@ export default function AddComboItems({onClose}){
         image_url :publicUrl,
         restaurant_id:process.env.NEXT_PUBLIC_RESTAURANT_ID
       }
-      console.log("payload", payload)
 
-      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/products/combo`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload)
-      })
-
-      const json = await res.json()
-      if (!res.ok) throw new Error(json.error || 'Unknown error')
+      if(id){
+        await update({id, ...payload})
+      }else{
+        await add(payload)
+      }
 
       setShowSuccess(true)
       setTimeout(() => {
@@ -66,8 +71,11 @@ export default function AddComboItems({onClose}){
       }, 2000)
         
     } catch (err) {
+      console.log(error)
       setErrorMsg(err.message)
     }
+    
+
   }
 
   return(
@@ -100,7 +108,8 @@ export default function AddComboItems({onClose}){
           onCancelClick={onClose}
         />
 
-        <ComboItemForm onSubmit={handleSubmit}/>
+        {isLoading && <TableLoading/>}
+        {!isLoading && (<ComboItemForm onSubmit={handleSubmit} initialValue={data} setErrorMsg={setErrorMsg}/>)}
 
       </div>
 

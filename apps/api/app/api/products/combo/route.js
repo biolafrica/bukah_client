@@ -7,7 +7,6 @@ export async function POST(request){
     const payload = await request.json();
 
     const { error } = await supabase.rpc('create_combo_product', { payload })
-    console.log(error)
 
     if(error){
       return NextResponse.json({error : error.message}, {status: 400})

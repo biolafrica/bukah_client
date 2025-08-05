@@ -10,6 +10,10 @@ export async function uploadFileAndGetUrl(
 
   const supabase = createClient()
 
+  if (!file || !file.name) {
+    throw new Error('No valid file provided for upload')
+  }
+
   if (file.size > maxSize) {
     console.log("file too large")
     throw new Error(`File must be under ${Math.round(maxSize/1024/1024)} MB`)

@@ -1,4 +1,5 @@
 'use client'
+
 import { useState, useMemo } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
 
@@ -9,14 +10,12 @@ import EmptyState from '../../common/emptyState'
 import AddItems from './addItems'
 import AddComboItems from './addComboItems'
 import AddCategory from './addCategory'
-import LoadingSpinner from '../../common/loadingSpinner'
 
 import { usePaginatedTable } from '../../../hooks/usePaginatedTable'
 import { useMenuOptions } from '../../../hooks/useMenuOption'
 
 import * as outline from '@heroicons/react/24/outline'
 import { menu }  from '../../../data/menu'
-
 
 
 export default function ClientMenuInner({
@@ -68,9 +67,7 @@ export default function ClientMenuInner({
 
   const { branchOptions, categoryOptions, loading, error } = useMenuOptions();
 
-  //if (loading) return <LoadingSpinner/>;
   if (error) return <p>Error: {error.message}</p>;
-  console.log("category options ,", categoryOptions)
   
   const config = menu.config(branchOptions, categoryOptions);
 
@@ -79,6 +76,7 @@ export default function ClientMenuInner({
     setItemSideScreenOpen(false);
     setComboSideScreenOpen(false);
     setCategorySideScreenOpen(false)
+    setItem(null)
   };
 
   const handleSingleScreen = () => {
@@ -113,7 +111,6 @@ export default function ClientMenuInner({
     handleCategoryScreen()
   }
 
-
   return (
     <div className="p-5 pt-30 lg:pl-75">
       {sideScreenOpen && (
@@ -121,7 +118,7 @@ export default function ClientMenuInner({
           <div className="absolute inset-0 bg-black opacity-50" onClick={closeAll} />
           <div className="relative z-65">
             {itemSideScreenOpen && <AddItems onClose={closeAll} data={item} />}
-            {comboSideScreenOpen && <AddComboItems onClose={closeAll} />}
+            {comboSideScreenOpen && <AddComboItems onClose={closeAll} id={item?.id || null } />}
             {categorySideScreenOpen && <AddCategory onClose={closeAll} data={item} />}
           </div>
         </div>
@@ -170,7 +167,7 @@ export default function ClientMenuInner({
         searchPlaceholder="Search name"
       />
 
-      {!data?.data?.length ? (
+      {!data?.data?.length === 0 ? (
         <EmptyState
           icon={outline.InboxIcon}
           title={isQuerying ? 'No results found' : 'No items yet'}
