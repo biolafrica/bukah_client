@@ -8,7 +8,6 @@ import DataTable        from '../../common/dataTable'
 import EmptyState       from '../../common/emptyState'
 import SegmentedToolbars from '../../common/segment'
 import MoreTransaction from './moreTransaction'
-import LoadingSpinner from '../../common/loadingSpinner';
 
 import { usePaginatedTable } from '../../../hooks/usePaginatedTable'
 import { useBranchOptions } from '../../../hooks/useBranchOptions'
@@ -35,7 +34,7 @@ export default function ClientFinanceInner({
   const [items, setItems] = useState(null);
 
   const { data: branchOptions, isLoading, isError, error } = useBranchOptions();
-
+  if (isError) return <p>Error: {error.message}</p>;
 
   const queryFilters = useMemo(() => ({
     ...(segment !== 'all' && { type: segment }),
@@ -80,8 +79,7 @@ export default function ClientFinanceInner({
     setSideScreenOpen(true);
   };
 
-  if (isLoading) return <LoadingSpinner/>;
-  if (isError) return <p>Error: {error.message}</p>;
+ 
 
   return (
     <div className="p-5 pt-30 lg:pl-75">
@@ -160,6 +158,7 @@ export default function ClientFinanceInner({
           pageSize={pageSize}
           totalCount={data.count}
           onPageChange={(p) => updateParams({ page: p })}
+          loading ={tableLoading}
         />
       )}
     </div>

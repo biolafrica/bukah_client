@@ -16,7 +16,6 @@ import { usePaginatedTable } from '../../../hooks/usePaginatedTable'
 import { customer } from '../../../data/customer'
 import * as outline     from '@heroicons/react/24/outline'
 import { formatNaira }  from '../../../utils/format'
-import LoadingSpinner from '../../common/loadingSpinner';
 import { useMetricTransformer } from '../../../hooks/useMetricsTransformer';
 import { useMetricResource } from '../../../hooks/useMetricResources';
 
@@ -147,9 +146,7 @@ export default function ClientCustomerInner({
             searchPlaceholder="Search customers"
           />
 
-          {isLoading ? (
-            <LoadingSpinner/>
-          ) : !data?.data?.length ? (
+          {!data?.data?.length ? (
             <EmptyState
               icon={outline.UserGroupIcon}
               title={hasQuery ? 'No results found' : 'No customers yet'}
@@ -170,6 +167,7 @@ export default function ClientCustomerInner({
               pageSize={pageSize}
               totalCount={data.count}
               onPageChange={(p) => updateParams({ page: p })}
+              loading={isLoading}
             />
           )}
         </div>

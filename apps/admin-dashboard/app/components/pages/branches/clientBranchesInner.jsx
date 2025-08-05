@@ -6,7 +6,6 @@ import { useRouter, useSearchParams } from 'next/navigation'
 import HeadingIntro from '../../common/headingIntro'
 import DataTable    from '../../common/dataTable'
 import EmptyState   from '../../common/emptyState'
-import LoadingSpinner from '../../common/loadingSpinner';
 import AddBranches from './addBranches'
 import BranchDetails from './branchDetails';
 
@@ -97,9 +96,7 @@ export default function ClientBranchesInner({ currentPage, pageSize }) {
           onButtonClick={handleAddScreen}
         />
 
-        {isLoading ? (
-          <LoadingSpinner/>
-        ) :!data?.data?.length ? (
+        {!data?.data?.length ? (
           <EmptyState
             icon={outline.BuildingStorefrontIcon}
             title={hasQuery ? 'No branches found' : 'No branches'}
@@ -116,6 +113,7 @@ export default function ClientBranchesInner({ currentPage, pageSize }) {
             pageSize={pageSize}
             totalCount={data.count}
             onPageChange={(p) => updateParams({ page: p })}
+            loading={isLoading}
           />
         )}
       </div>

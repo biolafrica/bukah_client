@@ -53,6 +53,12 @@
     }
   }
 
+  @keyframes shimmer {
+    100% {
+      background-position: -200% 0;
+    }
+  }
+
   /* ─── BUTTONS ─────────────────────────────────────────────────────────── */
   .btn {
     display: inline-flex;

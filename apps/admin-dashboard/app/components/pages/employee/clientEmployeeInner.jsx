@@ -9,13 +9,11 @@ import DataTable        from '../../common/dataTable'
 import EmptyState       from '../../common/emptyState'
 import AddEmployee from './addEmployee'
 import MoreEmployee from './moreEmployee'
-import LoadingSpinner from '../../common/loadingSpinner'
 
 import { usePaginatedTable } from '../../../hooks/usePaginatedTable'
 import * as outline     from '@heroicons/react/24/outline'
 import { employee } from '../../../data/employee'
 import Permission from './permission'
-
 
 
 export default function ClientEmployeeInner({
@@ -48,6 +46,7 @@ export default function ClientEmployeeInner({
     pageSize,
     filters: segment === 'employees' ? queryFilters : {},
   });
+
 
   const updateParams = (patch) => {
     const next = new URLSearchParams(params.toString());
@@ -97,6 +96,7 @@ export default function ClientEmployeeInner({
 
   return (
     <div className="p-5 pt-30 lg:pl-75">
+
       {sideScreenOpen && (
         <div className="fixed inset-0 z-60 flex">
           <div className="absolute inset-0 bg-black opacity-50" onClick={() => setSideScreenOpen(false)} />
@@ -148,8 +148,6 @@ export default function ClientEmployeeInner({
 
       {segment === 'permissions' ? (
         <Permission />
-      ) : isLoading ? (
-        <LoadingSpinner/>
       ) : data?.data?.length === 0 ? (
         <EmptyState
           icon={outline.InboxIcon}
@@ -161,14 +159,15 @@ export default function ClientEmployeeInner({
       ) : (
         <DataTable
           columns={employee.columns}
-          data={data.data}
+          data={data?.data || []}
           onEdit={handleEditScreen}
           onDelete={(row) => console.log('Delete', row)}
           onMore={handleMoreScreen}
           currentPage={currentPage}
           pageSize={pageSize}
-          totalCount={data.count}
+          totalCount={data?.count || 0}
           onPageChange={(p) => updateParams({ page: p })}
+          loading ={isLoading}
         />
       )}
     </div>

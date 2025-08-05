@@ -170,9 +170,7 @@ export default function ClientMenuInner({
         searchPlaceholder="Search name"
       />
 
-      {isLoading ? (
-        <LoadingSpinner/>
-      ) : !data?.data?.length ? (
+      {!data?.data?.length ? (
         <EmptyState
           icon={outline.InboxIcon}
           title={isQuerying ? 'No results found' : 'No items yet'}
@@ -191,6 +189,7 @@ export default function ClientMenuInner({
           pageSize={pageSize}
           totalCount={data.count}
           onPageChange={(newPage) => updateParams({ page: newPage })}
+          loading={isLoading}
         />
       )}
     </div>

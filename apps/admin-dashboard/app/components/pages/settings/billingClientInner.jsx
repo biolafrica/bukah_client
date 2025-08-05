@@ -1,14 +1,12 @@
 "use client"
 
-import { format } from "date-fns";
-import { formatNaira } from "../../../utils/format";
-
-import LoadingSpinner from "../../common/loadingSpinner";
-import DataTable from "../../common/dataTable";
-
-import { useBilling } from "../../../hooks/useBilling";
 import Link from "next/link";
+import { format } from "date-fns";
+
+import { formatNaira } from "../../../utils/format";
+import { useBilling } from "../../../hooks/useBilling";
 import { CreditCardIcon } from "@heroicons/react/24/solid";
+import DataTable from "../../common/dataTable";
 
 export default function BillingClientInner(){
 
@@ -38,7 +36,6 @@ export default function BillingClientInner(){
 
   const { items, isLoading, isError, error, } = useBilling()
 
-  if (isLoading) return <LoadingSpinner/>
   if (isError)  return <p>Error: {error.message}</p>
 
   return(
@@ -83,6 +80,7 @@ export default function BillingClientInner(){
       deleteIcon ={false}
       edit={false}
       onMore={()=>console.log("more")}
+      loading={isLoading}
     />
 
     <div className="flex items-center justify-between mt-4 border border-border-text rounded-md p-3">

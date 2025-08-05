@@ -97,6 +97,7 @@ export default function ClientHomeInner(){
             data={items} 
             onEdit={()=>console.log("edit")} 
             onDelete={()=>console.log("delete")}
+            loading = {loading}
           />
         </div>
         

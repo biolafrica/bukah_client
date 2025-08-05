@@ -68,7 +68,6 @@ export default function AddComboItems({onClose}){
     } catch (err) {
       setErrorMsg(err.message)
     }
-  
   }
 
   return(

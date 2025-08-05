@@ -1,5 +1,4 @@
 "use client"
-import { useQuery } from "@tanstack/react-query";
 import { useSearchParams, useRouter } from "next/navigation";
 import { useState,useMemo } from "react";
 
@@ -148,9 +147,7 @@ export default function ClientOrderInner({
         searchPlaceholder="Search order ID"
       />
 
-      {isLoading ? (
-        <LoadingSpinner/>
-      ) : !data?.data?.length ? (
+      {!data?.data?.length ? (
         <EmptyState
           icon={outline.InboxIcon}
           title={isQuerying ? 'No results found' : 'No order yet'}
@@ -171,6 +168,7 @@ export default function ClientOrderInner({
           pageSize={pageSize}
           totalCount={data.count}
           onPageChange={(newPage) => updateParams({ page: newPage })}
+          loading={isLoading}
         />
       )}
     </div>
