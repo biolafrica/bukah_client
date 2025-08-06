@@ -1,11 +1,10 @@
-import NotificationAlert from "../../components/common/notification";
+import AIAgent from "../../components/common/aiAgent";
 
 export default function Register(){
- 
   return(
     <div>
       <h4>Register</h4>
-      <NotificationAlert/>
+      <AIAgent/>
     </div>
   )
 }

@@ -1,4 +1,7 @@
 {
-  "extends": "../../jsconfig.base.json"
+  "extends": "../../jsconfig.base.json",
+  "compilerOptions": {
+    // override baseUrl so that @/ maps to the monorepo root
+    "baseUrl": "../.."
+  }
 }
-

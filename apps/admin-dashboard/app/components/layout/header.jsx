@@ -2,7 +2,7 @@ import * as outline from "@heroicons/react/24/outline"
 import * as solid from "@heroicons/react/24/solid"
 import Link from "next/link";
 
-export default function Header({onMenuClick}){
+export default function Header({onMenuClick, toggleAIAgentPanel, toggleNotificationPanel}){
   return(
     <header className="border-b border-gray-100 fixed top-0 inset-x-0 z-60 bg-white">
 
@@ -32,14 +32,25 @@ export default function Header({onMenuClick}){
 
         </div>
 
-        <div className="flex items-center gap-3 px-4">
-          <outline.BellIcon className="w-6 h-6"/>
-          <outline.CubeIcon className="hidden lg:block w-6 h-6"/>
+        <div className="flex items-center gap-3 px-4 ">
+
+          <button onClick={toggleNotificationPanel}>
+            <solid.BellIcon 
+              className="w-6 h-6 transition-transform cursor-pointer duration-300 hover:-rotate-5"
+            />
+          </button>
+
+          <button onClick={toggleAIAgentPanel} className="relative group">
+            <solid.UserIcon 
+              className="hidden lg:block w-6 h-6 transition-transform cursor-pointer duration-300 group-hover:-rotate-5 text-on-pri-cont"
+            />
+          </button>
+
         </div>
 
         <div className="flex items-center gap-2 pr-4">
           <span
-            className="flex w-10 h-10 items-center justify-center rounded-full bg-green-100 text-base font-bold"
+            className="flex w-10 h-10 items-center justify-center rounded-full bg-green-100 text-base font-bold cursor-pointer"
             aria-label="User initials"
           >
             DB
@@ -49,6 +60,7 @@ export default function Header({onMenuClick}){
             <span className="text-gray-900 text-sm font-normal ">Deji Badamosi</span>
             <span className="text-xs text-gray-400">Admin</span>
           </div>
+          
         </div>
         
       </div>
