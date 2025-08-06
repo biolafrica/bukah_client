@@ -28,6 +28,13 @@ const items = [
     solidIcon: solid.CurrencyDollarIcon,
   },
   {
+    key: 'Account',
+    label: 'Account Settings',
+    href: '/settings/account',
+    outlineIcon: outline.UserIcon,
+    solidIcon: solid.UserIcon,
+  },
+  {
     key: 'notification',
     label: 'Notifications',
     href: '/settings/notification',

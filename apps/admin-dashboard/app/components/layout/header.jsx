@@ -49,12 +49,13 @@ export default function Header({onMenuClick, toggleAIAgentPanel, toggleNotificat
         </div>
 
         <div className="flex items-center gap-2 pr-4">
-          <span
+          <Link
             className="flex w-10 h-10 items-center justify-center rounded-full bg-green-100 text-base font-bold cursor-pointer"
             aria-label="User initials"
+            href='/settings/account/profile'
           >
             DB
-          </span>
+          </Link>
 
           <div className="hidden lg:flex flex-col leading-snug">
             <span className="text-gray-900 text-sm font-normal ">Deji Badamosi</span>

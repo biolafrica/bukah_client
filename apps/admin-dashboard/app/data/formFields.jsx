@@ -5,12 +5,25 @@ export const storeFields = [
   { name: 'tagline', label: 'Tagline', type: 'text', required: false , placeholder: "your restaurant tagline"},
   { name: 'phoneNumber', label: 'Phone Number', type: 'text', required: true },
   { name: 'tax', label: 'Tax(%)', type: 'number', required: false },
-
   { name: 'twitterLink', label: 'Twitter Link', type: 'text', required: false },
   { name: 'facebookLink', label: 'Facebook Link', type: 'text', required: false },
   { name: 'instagramLink', label: 'Instagram Link', type: 'text', required: false },
   { name: 'tiktokLink', label: 'Tiktok Link', type: 'text', required: false },
   { name: 'prefix', label: 'Prefix(Two letters before your OrderID)', type: 'text', required: true },
+]
+
+export const profileFields =[
+  { name: 'first_name', label: 'First Name', type: 'text', required: true },
+  { name: 'last_name', label: 'Last Name', type: 'text', required: true },
+  { name: 'email', label: 'Email', type: 'email', required: true },
+  { name: 'phone_number', label: 'Phone Number', type: 'text', required: true },
+  { name: 'role', label: 'role', type: 'text', required: true },
+]
+
+export const setPasswordFields =[
+  { name: 'cuurent_password', label: 'Current Password', type: 'password', required: true },
+  { name: 'new_password', label: 'New Password', type: 'password', required: true },
+  { name: 'confirm_password', label: 'Confirm Password', type: 'password', required: true },
 ]
 
 export const initial = [

@@ -20,7 +20,6 @@ export default function Form({
     handleSubmit,
   } = useForm({ initialValues, validate, onSubmit })
 
-  // Determine if form is valid: no errors and all required fields filled
   const isFormValid =
     Object.keys(errors).length === 0 &&
     fields.filter(f => f.required).every(f => {
